@@ -119,7 +119,7 @@
                     x:Name="JoinButton"
                     Text="JOIN"
                     BackgroundColor="#525252"
-                    Command="{Binding SendTestMessageCommand}"
+                    Command="{Binding SendMessageTestCommand}"
                     TextColor="#FBB969"
                     IsEnabled="False"/>
                 
