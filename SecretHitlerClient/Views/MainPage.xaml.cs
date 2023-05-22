@@ -1,13 +1,12 @@
-﻿using SecretHitler.ViewModel;
+using SecretHitler.ViewModel;
 
 namespace SecretHitler.Views;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage(MainViewModel vm)
+	public MainPage(MainPageViewModel vm)
 	{
-        InitializeComponent();
-        BindingContext = vm;
+		InitializeComponent();
+		BindingContext = vm;
 	}
 }
-

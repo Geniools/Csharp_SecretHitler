@@ -4,10 +4,12 @@ using SecretHitler.Model;
 
 namespace SecretHitler.Services
 {
-    class SignalRService
+    public class SignalRService
     {
         private readonly string _baseUrl = "http://localhost";
         private readonly HubConnection _hubConnection;
+
+        public event Action<string> UpdateUsername;
 
         public SignalRService()
         {
@@ -19,7 +21,7 @@ namespace SecretHitler.Services
 
             // Create the connection
             this._hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{this._baseUrl}5142/gameHub")
+                .WithUrl($"{this._baseUrl}:5142/gameHub")
                 .Build();
 
             // This function must contain all event handlers
@@ -35,6 +37,12 @@ namespace SecretHitler.Services
             this._hubConnection.InvokeAsync("JoinGame", player);
         }
 
+        public void SendMessageToAll(string username, string lobbyCode)
+        {
+            // Invoke the server method to send a message to all players
+            this._hubConnection.SendAsync("SendMessageToAll", username, lobbyCode);
+        }
+
         public void StartGame()
         {
             // Invoke the server method to start the game
@@ -43,6 +51,11 @@ namespace SecretHitler.Services
 
         private void RegisterEventHandlers()
         {
+            this._hubConnection.On<string, string>("ReceiveMessage", (username, lobbyCode) =>
+            {
+                this.UpdateUsername?.Invoke(username);
+            });
+
             // Register event handlers for server callbacks
             this._hubConnection.On("GameStarted", GameStarted);
             this._hubConnection.On<string>("GameEnded", GameEnded);

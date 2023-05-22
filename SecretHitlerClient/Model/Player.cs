@@ -1,7 +1,7 @@
 ﻿
 namespace SecretHitler.Model
 {
-    class Player
+    public class Player
     {
         private string _username;
         private SecretRole _role;
