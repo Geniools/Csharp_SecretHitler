@@ -1,7 +1,7 @@
 ﻿
 namespace SecretHitler.Model
 {
-    class GameStatus
+    public class GameStatus
     {
         private readonly HashSet<Player> _playersEligibleChancelor;
         private readonly HashSet<Player> _playersEligiblePresident;

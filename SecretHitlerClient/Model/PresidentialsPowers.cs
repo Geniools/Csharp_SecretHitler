@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SecretHitler.Model
 {
-    enum PresidentialsPowers
+    public enum PresidentialsPowers
     {
         InvestigateLoyalty,
         CallSpecialElection,

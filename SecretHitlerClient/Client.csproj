@@ -86,4 +86,6 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<Import Project="..\SecretHitlerShared\SecretHitlerShared.projitems" Label="Shared" />
+
 </Project>

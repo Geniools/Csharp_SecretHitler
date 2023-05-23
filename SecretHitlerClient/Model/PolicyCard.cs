@@ -1,7 +1,7 @@
 ﻿
 namespace SecretHitler.Model
 {
-    class PolicyCard
+    public class PolicyCard
     {
         private PartyMembership _party;
     }

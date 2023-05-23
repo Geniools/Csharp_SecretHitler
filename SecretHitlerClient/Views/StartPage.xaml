@@ -4,63 +4,49 @@
              x:Class="SecretHitler.Views.StartPage"
              xmlns:viewmodel="clr-namespace:SecretHitler.ViewModel"
              x:DataType="viewmodel:StartPageViewModel"
-             Title="Game">
-    
-    <ContentPage.BindingContext>
+             Title="StartPage">
+
+    <!--<ContentPage.BindingContext>
         <viewmodel:StartPageViewModel />
-    </ContentPage.BindingContext>
-    
+    </ContentPage.BindingContext>-->
+
     <Grid BackgroundColor="#FBB969">
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/> 
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="2.5*"/>
+            <ColumnDefinition Width="1.5*"/>
         </Grid.ColumnDefinitions>
 
         <Grid 
-            Grid.Column="4" 
-            Grid.ColumnSpan="5"
-            Grid.Row="2" 
-            Grid.RowSpan="4"
+            Grid.Row="1"
+            Grid.Column="1"
             BackgroundColor="#855E42"
             Padding="20"
             RowSpacing="10"
             >
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             
-            <Frame 
-                BackgroundColor="#FBB969" 
-                HeightRequest="50" 
+            <!--<Frame 
+                BackgroundColor="Transparent" 
+                BorderColor="Transparent"
+                Margin="0"
                 Padding="0"
+                HeightRequest="50" 
                 WidthRequest="300">
                 
             <Label 
@@ -78,20 +64,29 @@
                 FontSize="Large" 
                 FontAttributes="Bold" 
                 TextColor="Black"
-                HorizontalTextAlignment="Center"/>
+                HorizontalTextAlignment="Center"/>-->
+
+            <Label
+                Grid.Row="1"
+                Text="Join or create a game:"
+                FontSize="40"
+                FontAttributes="Bold"
+                TextColor="Black"
+                HorizontalTextAlignment="Center"
+                />
             
-            <Label 
+            <!--<Label 
                 Grid.Row="2" 
-                Text="{Binding PlayerJoined}"
+                Text="{Binding PlayerJoinedLabel}"
                 FontSize="Large"
                 FontAttributes="Bold" 
                 TextColor="Black" 
-                HorizontalTextAlignment="Center"/>
+                HorizontalTextAlignment="Center"/>-->
             
             <Entry 
                 Grid.Row="3" 
-                x:Name="TxtUserName" 
-                Placeholder="Username" 
+                x:Name="UserNameEntry"
+                Placeholder="Username"
                 TextColor="Black" 
                 Text="{Binding Username}"
                 BackgroundColor="White" 
@@ -99,18 +94,16 @@
             
             <Entry 
                 Grid.Row="4" 
-                x:Name="TxtLobbyCode" 
+                x:Name="LobbyCodeEntry"
                 Placeholder="Lobby Code" 
                 TextColor="Black" 
                 Text="{Binding LobbyCode}"
                 BackgroundColor="White" 
                 IsSpellCheckEnabled="False" 
                 ClearButtonVisibility="WhileEditing"/>
-            
-            <Grid Grid.Row="5" 
-                  ColumnSpacing="10"
-                  >
-                
+
+            <Grid Grid.Row="5" ColumnSpacing="10">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -121,9 +114,9 @@
                     x:Name="JoinButton"
                     Text="JOIN"
                     BackgroundColor="#525252"
-                    Command="{Binding SendMessageCommand}"
                     TextColor="#FBB969"
-                    IsEnabled="False"/>
+                    IsEnabled="{Binding IsJoinButtonEnabled}"
+                    Command="{Binding JoinLobbyCommand}"/>
                 
                 <Button 
                     Grid.Column="1" 
@@ -131,7 +124,8 @@
                     Text="CREATE" 
                     BackgroundColor="#525252"
                     TextColor="#FBB969"
-                    IsEnabled="False"/>
+                    IsEnabled="{Binding IsCreateButtonEnabled}"
+                    Command="{Binding CreateLobbyCommand}"/>
             </Grid>
         </Grid>
     </Grid>

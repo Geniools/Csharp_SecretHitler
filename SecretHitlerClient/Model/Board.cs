@@ -1,7 +1,7 @@
 ﻿
 namespace SecretHitler.Model
 {
-    class Board
+    public class Board
     {
         private readonly HashSet<PolicyCard> _drawDeck;
         private byte _playedLiberalCards;

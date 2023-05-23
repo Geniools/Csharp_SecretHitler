@@ -12,22 +12,31 @@ public partial class StartPageViewModel : ViewModel
     private string _lobbyCode;
 
     [ObservableProperty]
-    private string _playerJoined;
+    private string _playerJoinedLabel;
 
-    public StartPageViewModel()
+    [ObservableProperty]
+    private bool _isJoinButtonEnabled;
+    
+    [ObservableProperty]
+    private bool _isCreateButtonEnabled;
+
+    public StartPageViewModel(GameManager gameManager) : base(gameManager)
     {
-        this.SignalRService.UpdateUsername += this.UpdateUsername;
+        this.IsJoinButtonEnabled = true;
+        this.IsCreateButtonEnabled = true;
     }
 
     [RelayCommand]
-    private void SendMessage()
-    { 
-        // Send a message to the server
-        this.SignalRService.SendMessageToAll(this.Username, this.LobbyCode);
+    private void JoinLobby()
+    {
+        // Join a lobby
+        this.GameManager.SignalRService.JoinLobby(this.Username, this.LobbyCode);
     }
 
-    private void UpdateUsername(string username)
+    [RelayCommand]
+    private void CreateLobby()
     {
-        this.PlayerJoined = username;
+        // Create a lobby
+        this.GameManager.SignalRService.CreateLobby(this.Username, this.LobbyCode);
     }
 }

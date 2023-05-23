@@ -1,7 +1,7 @@
 ﻿
 namespace SecretHitler.Model
 {
-    class Chat
+    public class Chat
     {
         private Dictionary<Player, string> _messages;
 

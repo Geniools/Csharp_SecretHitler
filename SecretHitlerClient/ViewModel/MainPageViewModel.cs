@@ -2,8 +2,10 @@
 
 namespace SecretHitler.ViewModel
 {
-    public class MainPageViewModel: ObservableObject
+    public class MainPageViewModel : ViewModel
     {
-
+        protected MainPageViewModel(GameManager gameManager) : base(gameManager)
+        {
+        }
     }
 }

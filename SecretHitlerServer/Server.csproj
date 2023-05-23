@@ -12,9 +12,5 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
   <Import Project="..\SecretHitlerShared\SecretHitlerShared.projitems" Label="Shared" />
 </Project>

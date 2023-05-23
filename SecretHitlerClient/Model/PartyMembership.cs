@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SecretHitler.Model
 {
-    enum PartyMembership
+    public enum PartyMembership
     {
         Fascist,
         Liberal

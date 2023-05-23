@@ -5,13 +5,12 @@ namespace SecretHitler.ViewModel
 {
     public class ViewModel : ObservableObject
     {
-        private readonly SignalRService _signalRService;
-        protected SignalRService SignalRService => this._signalRService;
+        protected GameManager GameManager { get; private set; }
 
-        protected ViewModel()
+        protected ViewModel(GameManager gameManager)
         {
             // Initialize the SignalR service
-            this._signalRService = new SignalRService();
+            this.GameManager = gameManager;
         }
     }
 }

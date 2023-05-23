@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using SecretHitler.Services;
 using SecretHitler.ViewModel;
 using SecretHitler.Views;
 
@@ -18,14 +19,13 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
-
-        builder.Services.AddSingleton<StartPage>();
-        builder.Services.AddSingleton<StartPageViewModel>();
-
-        builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<StartPageViewModel>();
-        
+            })
+            .Services
+            .AddViewModels()
+            .AddViews()
+            .AddSingleton<SignalRService>()
+            .AddSingleton<GameManager>();
+    
         #if DEBUG
         	builder.Logging.AddDebug();
         #endif

@@ -11,7 +11,6 @@
     <ShellContent
         Title="Game"
         ContentTemplate="{DataTemplate views:StartPage}"
-        Icon="{OnPlatform 'icon_notes.png', iOS='icon_notes_ios.png', MacCatalyst='icon_notes_ios.png'}"
-        Route="MainPage" />
+        Route="StartPage" />
 
 </Shell>

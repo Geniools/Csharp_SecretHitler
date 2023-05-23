@@ -1,9 +1,12 @@
 ﻿
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+
 namespace SecretHitler.Model
 {
-    class Game
+    public class Game
     {
-        private readonly HashSet<Player> _players;
+        public ObservableCollection<Player> Players { get; }
         private Board _board;
         private Chat _chat;
         private GameStatus _gameStatus;
@@ -15,7 +18,7 @@ namespace SecretHitler.Model
         public Game(Board board)
         {
             this._board = board;
-            this._players = new HashSet<Player>();
+            this.Players = new ObservableCollection<Player>();
             this._chat = new Chat();
             this._gameStatus = new GameStatus();
         }

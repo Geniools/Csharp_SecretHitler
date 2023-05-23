@@ -1,15 +1,19 @@
-﻿
-using Microsoft.AspNetCore.SignalR.Client;
-using SecretHitler.Model;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+
+using Player = SecretHitlerShared.Player;
 
 namespace SecretHitler.Services
 {
     public class SignalRService
     {
+        // Names of server callbacks
+        private const string PlayerConnectedName = "PlayerConnected";
+        private const string SessionStartedName = "SessionStarted";
+
         private readonly string _baseUrl = "http://localhost";
         private readonly HubConnection _hubConnection;
 
-        public event Action<string> UpdateUsername;
+        public event Action<Player> PlayerConnected;
 
         public SignalRService()
         {
@@ -30,17 +34,17 @@ namespace SecretHitler.Services
             // Start the connection
             this._hubConnection.StartAsync();
         }
-
-        public void JoinGame(Player player)
+        private void RegisterEventHandlers()
         {
-            // Invoke the server method to join the game
-            this._hubConnection.InvokeAsync("JoinGame", player);
-        }
+            // Register event handlers for server callbacks
+            this._hubConnection.On("GameStarted", GameStarted);
+            this._hubConnection.On<string>("GameEnded", GameEnded);
 
-        public void SendMessageToAll(string username, string lobbyCode)
-        {
-            // Invoke the server method to send a message to all players
-            this._hubConnection.SendAsync("SendMessageToAll", username, lobbyCode);
+            // Handle the PlayerConnected event
+            this._hubConnection.On<Player>(PlayerConnectedName, (player) =>
+            {
+                this.PlayerConnected?.Invoke(player);
+            });
         }
 
         public void StartGame()
@@ -49,26 +53,26 @@ namespace SecretHitler.Services
             this._hubConnection.InvokeAsync("StartGame");
         }
 
-        private void RegisterEventHandlers()
-        {
-            this._hubConnection.On<string, string>("ReceiveMessage", (username, lobbyCode) =>
-            {
-                this.UpdateUsername?.Invoke(username);
-            });
-
-            // Register event handlers for server callbacks
-            this._hubConnection.On("GameStarted", GameStarted);
-            this._hubConnection.On<string>("GameEnded", GameEnded);
-        }
-
         private void GameStarted()
         {
-            // Handle the "GameStarted" event received from the server
+            throw new NotImplementedException();
         }
 
         private void GameEnded(string winner)
         {
-            // Handle the "GameEnded" event received from the server
+            throw new NotImplementedException();
+        }
+
+        internal void JoinLobby(string username, string lobbyCode)
+        {
+            Player player = new Player(username, lobbyCode);
+            this._hubConnection.SendAsync("PlayerConnect", player);
+        }
+
+        internal void CreateLobby(string username, string lobbyCode)
+        {
+            Player player = new Player(username, lobbyCode);
+            this._hubConnection.SendAsync("PlayerConnect", player);
         }
     }
 }
