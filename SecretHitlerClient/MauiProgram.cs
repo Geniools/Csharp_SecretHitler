@@ -23,7 +23,7 @@ public static class MauiProgram
             .Services
             .AddViewModels()
             .AddViews()
-            .AddSingleton<SignalRService>()
+            .AddTransient<SignalRService>()
             .AddSingleton<GameManager>();
     
         #if DEBUG

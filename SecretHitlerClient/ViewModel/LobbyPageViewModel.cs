@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SecretHitler.Model;
 
 namespace SecretHitler.ViewModel
@@ -10,9 +11,15 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private ObservableCollection<Player> _players;
 
-        protected LobbyPageViewModel(GameManager gameManager) : base(gameManager)
+        public LobbyPageViewModel(GameManager gameManager) : base(gameManager)
         {
-            this.Players = this.GameManager.game.Players;
+            this.Players = this.GameManager.Players;
+        }
+
+        [RelayCommand]
+        private async Task StartGame()
+        {
+            await this.GameManager.StartGame();
         }
     }
 }

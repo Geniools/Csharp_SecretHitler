@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using SecretHitler.Model;
+using SecretHitlerShared;
 
-using Player = SecretHitlerShared.Player;
 
 namespace SecretHitler.Services
 {
@@ -9,16 +10,21 @@ namespace SecretHitler.Services
         // Names of server callbacks
         private const string PlayerConnectedName = "PlayerConnected";
         private const string SessionStartedName = "SessionStarted";
+        private const string StartGameName = "StartGame";
+        private const string EndGameName = "EndGame";
 
-        private readonly string _baseUrl = "http://localhost";
+        private readonly string _baseUrl;
         private readonly HubConnection _hubConnection;
 
         public event Action<Player> PlayerConnected;
 
-        public SignalRService()
+
+        public SignalRService(string baseUrl)
         {
+            this._baseUrl = baseUrl;
+
             // Android can't connect to localhost
-            if (DeviceInfo.Platform == DevicePlatform.Android)
+            if (baseUrl.Equals("http://localhost") && DeviceInfo.Platform == DevicePlatform.Android)
             {
                 this._baseUrl = "http://10.0.2.2";
             }
@@ -27,52 +33,36 @@ namespace SecretHitler.Services
             this._hubConnection = new HubConnectionBuilder()
                 .WithUrl($"{this._baseUrl}:5142/gameHub")
                 .Build();
-
-            // This function must contain all event handlers
-            this.RegisterEventHandlers();
-
-            // Start the connection
-            this._hubConnection.StartAsync();
         }
-        private void RegisterEventHandlers()
-        {
-            // Register event handlers for server callbacks
-            this._hubConnection.On("GameStarted", GameStarted);
-            this._hubConnection.On<string>("GameEnded", GameEnded);
 
+        public SignalRService() : this("http://localhost"){}
+
+        private async Task StartConnection()
+        {
+            // This function must contain all event handlers
             // Handle the PlayerConnected event
-            this._hubConnection.On<Player>(PlayerConnectedName, (player) =>
+            this._hubConnection.On<PlayerShared>(PlayerConnectedName, playerShared =>
             {
+                Player player = new Player(playerShared.Username);
                 this.PlayerConnected?.Invoke(player);
             });
+
+            // Start the connection
+            await this._hubConnection.StartAsync();
+        }
+        
+        internal async Task JoinLobby(string username, string lobbyCode)
+        {
+            await this.StartConnection();
+            PlayerShared player = new PlayerShared(username, lobbyCode);
+            await this._hubConnection.SendAsync("PlayerConnect", player);
         }
 
-        public void StartGame()
+        internal async Task CreateLobby(string username, string lobbyCode)
         {
-            // Invoke the server method to start the game
-            this._hubConnection.InvokeAsync("StartGame");
-        }
-
-        private void GameStarted()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void GameEnded(string winner)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void JoinLobby(string username, string lobbyCode)
-        {
-            Player player = new Player(username, lobbyCode);
-            this._hubConnection.SendAsync("PlayerConnect", player);
-        }
-
-        internal void CreateLobby(string username, string lobbyCode)
-        {
-            Player player = new Player(username, lobbyCode);
-            this._hubConnection.SendAsync("PlayerConnect", player);
+            await this.StartConnection();
+            PlayerShared player = new PlayerShared(username, lobbyCode);
+            await _hubConnection.SendAsync("PlayerConnect", player);
         }
     }
 }

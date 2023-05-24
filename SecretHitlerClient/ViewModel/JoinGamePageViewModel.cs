@@ -3,7 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SecretHitler.ViewModel
 {
-    class JoinGamePageViewModel: ObservableObject
+    public partial class JoinGamePageViewModel : ViewModel
     {
+        public JoinGamePageViewModel(GameManager gameManager) : base(gameManager)
+        {
+        }
     }
 }

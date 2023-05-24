@@ -6,10 +6,6 @@
              x:DataType="viewmodel:LobbyPageViewModel"
              Title="LobbyPage">
 
-    <!--<ContentPage.BindingContext>
-        <viewmodel:LobbyPageViewModel />
-    </ContentPage.BindingContext>-->
-
     <Frame
         HorizontalOptions="Center"
         VerticalOptions="Center"
@@ -28,12 +24,11 @@
                 BindableLayout.ItemsSource="{Binding Players}"
                 Grid.Row="1"
                 Spacing="10">
-
                 <BindableLayout.ItemTemplate>
                     <DataTemplate>
                         <Grid>
                             <Label
-                                Text="Player 1"
+                                Text="Test text here"
                                 FontSize="16"
                                 VerticalOptions="Center" />
 
@@ -61,7 +56,7 @@
                 x:Name="StartButton"
                 Grid.Row="3"
                 Text="Start"
-                Command="{Binding }" />
+                Command="{Binding StartGameCommand}" />
         </Grid>
     </Frame>
 

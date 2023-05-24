@@ -14,29 +14,25 @@ public partial class StartPageViewModel : ViewModel
     [ObservableProperty]
     private string _playerJoinedLabel;
 
-    [ObservableProperty]
-    private bool _isJoinButtonEnabled;
-    
-    [ObservableProperty]
-    private bool _isCreateButtonEnabled;
-
-    public StartPageViewModel(GameManager gameManager) : base(gameManager)
-    {
-        this.IsJoinButtonEnabled = true;
-        this.IsCreateButtonEnabled = true;
-    }
+    public StartPageViewModel(GameManager gameManager) : base(gameManager) { }
 
     [RelayCommand]
-    private void JoinLobby()
+    private async Task JoinLobby()
     {
         // Join a lobby
-        this.GameManager.SignalRService.JoinLobby(this.Username, this.LobbyCode);
+        await this.GameManager.SignalRService.JoinLobby(this.Username, this.LobbyCode);
+        
+        // Navigate to the join game page
+        await Shell.Current.GoToAsync("JoinGamePage");
     }
 
     [RelayCommand]
-    private void CreateLobby()
+    private async Task CreateLobby()
     {
         // Create a lobby
-        this.GameManager.SignalRService.CreateLobby(this.Username, this.LobbyCode);
+        await this.GameManager.SignalRService.CreateLobby(this.Username, this.LobbyCode);
+        
+        // Navigate to the lobby page
+        await Shell.Current.GoToAsync("LobbyPage");
     }
 }

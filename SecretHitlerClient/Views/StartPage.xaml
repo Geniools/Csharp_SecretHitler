@@ -6,10 +6,6 @@
              x:DataType="viewmodel:StartPageViewModel"
              Title="StartPage">
 
-    <!--<ContentPage.BindingContext>
-        <viewmodel:StartPageViewModel />
-    </ContentPage.BindingContext>-->
-
     <Grid BackgroundColor="#FBB969">
 
         <Grid.RowDefinitions>
@@ -40,31 +36,6 @@
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            
-            <!--<Frame 
-                BackgroundColor="Transparent" 
-                BorderColor="Transparent"
-                Margin="0"
-                Padding="0"
-                HeightRequest="50" 
-                WidthRequest="300">
-                
-            <Label 
-                Text="Waiting..." 
-                TextColor="Black"
-                FontSize="Large" 
-                FontAttributes="Bold" 
-                HorizontalTextAlignment="Center"
-                VerticalTextAlignment="Center"/>
-            </Frame>
-            
-            <Label 
-                Grid.Row="1" 
-                Text="Players:"
-                FontSize="Large" 
-                FontAttributes="Bold" 
-                TextColor="Black"
-                HorizontalTextAlignment="Center"/>-->
 
             <Label
                 Grid.Row="1"
@@ -75,13 +46,13 @@
                 HorizontalTextAlignment="Center"
                 />
             
-            <!--<Label 
+            <Label 
                 Grid.Row="2" 
                 Text="{Binding PlayerJoinedLabel}"
                 FontSize="Large"
                 FontAttributes="Bold" 
                 TextColor="Black" 
-                HorizontalTextAlignment="Center"/>-->
+                HorizontalTextAlignment="Center"/>
             
             <Entry 
                 Grid.Row="3" 
@@ -115,7 +86,7 @@
                     Text="JOIN"
                     BackgroundColor="#525252"
                     TextColor="#FBB969"
-                    IsEnabled="{Binding IsJoinButtonEnabled}"
+                    IsEnabled="False"
                     Command="{Binding JoinLobbyCommand}"/>
                 
                 <Button 
@@ -124,7 +95,7 @@
                     Text="CREATE" 
                     BackgroundColor="#525252"
                     TextColor="#FBB969"
-                    IsEnabled="{Binding IsCreateButtonEnabled}"
+                    IsEnabled="True"
                     Command="{Binding CreateLobbyCommand}"/>
             </Grid>
         </Grid>

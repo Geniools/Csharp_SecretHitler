@@ -1,12 +1,11 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using SecretHitlerShared;
 
 namespace Server.Hubs
 {
     public class GameHub : Hub
     {
-        public async Task PlayerConnected(Player player)
+        public async Task PlayerConnected(PlayerShared player)
         {
             // Add the player to the group
             await Groups.AddToGroupAsync(Context.ConnectionId, player.LobbyCode);

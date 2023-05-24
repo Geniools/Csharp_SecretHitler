@@ -4,7 +4,7 @@ namespace SecretHitler.ViewModel
 {
     public class MainPageViewModel : ViewModel
     {
-        protected MainPageViewModel(GameManager gameManager) : base(gameManager)
+        public MainPageViewModel(GameManager gameManager) : base(gameManager)
         {
         }
     }
