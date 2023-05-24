@@ -11,7 +11,7 @@ namespace Server.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, player.LobbyCode);
 
             // Notify other players that a player has connected
-            await Clients.Group(player.LobbyCode).SendAsync("PlayerConnected", player.Username);
+            await Clients.Group(player.LobbyCode).SendAsync("PlayerConnected", player);
         }
     }
 }

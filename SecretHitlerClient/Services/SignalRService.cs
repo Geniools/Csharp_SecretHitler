@@ -55,14 +55,14 @@ namespace SecretHitler.Services
         {
             await this.StartConnection();
             PlayerShared player = new PlayerShared(username, lobbyCode);
-            await this._hubConnection.SendAsync("PlayerConnect", player);
+            await this._hubConnection.SendAsync(PlayerConnectedName, player);
         }
 
         internal async Task CreateLobby(string username, string lobbyCode)
         {
             await this.StartConnection();
             PlayerShared player = new PlayerShared(username, lobbyCode);
-            await _hubConnection.SendAsync("PlayerConnect", player);
+            await _hubConnection.SendAsync(PlayerConnectedName, player);
         }
     }
 }
