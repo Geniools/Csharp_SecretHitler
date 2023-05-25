@@ -12,30 +12,34 @@ namespace SecretHitler.Services
         private const string SessionStartedName = "SessionStarted";
         private const string StartGameName = "StartGame";
         private const string EndGameName = "EndGame";
+        private const string ChatMessageName = "ChatMessage";
+        private const string ElectionVoteName = "ElectionVote";
 
-        private readonly string _baseUrl;
+        // Connection to the server
         private readonly HubConnection _hubConnection;
 
+        // Events
         public event Action<Player> PlayerConnected;
 
 
-        public SignalRService(string baseUrl)
+        public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
-            this._baseUrl = baseUrl;
-
-            // Android can't connect to localhost
+            // Android can't connect to localhost (for some reason)
             if (baseUrl.Equals("http://localhost") && DeviceInfo.Platform == DevicePlatform.Android)
             {
-                this._baseUrl = "http://10.0.2.2";
+                baseUrl = "http://10.0.2.2";
+            }
+
+            if (portNr != 80 && portNr != 443)
+            {
+                baseUrl += $":{portNr}";
             }
 
             // Create the connection
             this._hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{this._baseUrl}:5142/gameHub")
+                .WithUrl($"{baseUrl}/{hubName}")
                 .Build();
         }
-
-        public SignalRService() : this("http://localhost"){}
 
         private async Task StartConnection()
         {
@@ -47,7 +51,12 @@ namespace SecretHitler.Services
                 this.PlayerConnected?.Invoke(player);
             });
 
-            // Start the connection
+            //Start the connection
+            //Shell.Current.Dispatcher.Dispatch(async () =>
+            //{
+            //    await this._hubConnection.StartAsync();
+            //});
+
             await this._hubConnection.StartAsync();
         }
         

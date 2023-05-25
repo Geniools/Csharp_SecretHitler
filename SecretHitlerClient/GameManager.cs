@@ -19,7 +19,7 @@ namespace SecretHitler
 
         public GameManager()
         {
-            this.SignalRService = new SignalRService();
+            this.SignalRService = new SignalRService("gameHub", "https://secrethitler.azurewebsites.net");
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
 
