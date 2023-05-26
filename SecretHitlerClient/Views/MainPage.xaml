@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SecretHitler.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:SecretHitler.ViewModel"
+             xmlns:model="clr-namespace:SecretHitler.Model"
+             x:DataType="viewmodel:MainPageViewModel"
+             Title="MainPage">
+
+    <StackLayout>
+         <!--Board Layout--> 
+        <Grid>
+             <!--Game Board 
+             Add your game board layout here, including spaces for players, policies, and other game elements--> 
+        </Grid>
+
+         <!--Players--> 
+        <ScrollView Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal">
+                 <!--Player Icons--> 
+                <CollectionView ItemsSource="{Binding Players}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Player}">
+                            <StackLayout>
+                                <Image Source="{Binding Role}" WidthRequest="50" HeightRequest="50" />
+                                <Label Text="{Binding Username}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </ScrollView>
+
+         <!--Voting--> 
+        <StackLayout Orientation="Horizontal" VerticalOptions="End">
+            <Label Text="Vote: " />
+            <Button Text="Ja"  />
+            <Button Text="Nein" />
+        </StackLayout>
+
+         <!--Elected Policies--> 
+        <StackLayout>
+            <Label Text="Elected Policies:" />
+            <CollectionView ItemsSource="{Binding ElectedPolicies}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
+                        <Label Text="{Binding}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
