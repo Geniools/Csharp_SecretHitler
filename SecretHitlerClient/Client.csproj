@@ -49,6 +49,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiFont Remove="Resources\Fonts\Plain Germanica.ttf" />
+	  <MauiFont Remove="Resources\Fonts\Shadowed Germanica.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\icon_about.png" />
 	  <None Remove="Resources\Images\icon_about_ios.png" />
 	  <None Remove="Resources\Images\icon_notes.png" />

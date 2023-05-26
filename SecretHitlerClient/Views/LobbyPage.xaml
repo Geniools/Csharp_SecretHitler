@@ -6,59 +6,73 @@
              xmlns:model="clr-namespace:SecretHitler.Model"
              x:DataType="viewmodel:LobbyPageViewModel"
              Title="LobbyPage">
+    <Grid BackgroundColor="#FBB969">
 
-    <Frame
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        WidthRequest="300"
-        HeightRequest="500">
+        <Frame
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            WidthRequest="300"
+            HeightRequest="500"
+            BackgroundColor="#855E42">
 
-        <Grid
-            RowDefinitions="50,*,60,50"
-            RowSpacing="10"
-            Margin="10">
+            <Grid
+                RowDefinitions="50,*,60,50"
+                RowSpacing="10"
+                Margin="10"
+                >
 
-            <Label
-                x:Name="CreatingTitleLabel" />
-
-            <VerticalStackLayout
-                BindableLayout.ItemsSource="{Binding Players}"
-                Grid.Row="1"
-                Spacing="10">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:Player}">
-                        <Grid>
-                            <Label
-                                Text="{Binding Username}"
-                                FontSize="16"
-                                VerticalOptions="Center" />
-
-                            <Image
-                                Source="dotnet_bot.svg"
-                                HorizontalOptions="End" />
-                        </Grid>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </VerticalStackLayout>
-
-            <HorizontalStackLayout
-                Grid.Row="2">
                 <Label
-                    Text="Waiting for players to join"
-                    VerticalOptions="Center" />
+                    x:Name="CreatingTitleLabel" />
+                <!--make the page like the main page-->
+                <!--same color and font-->
+                <VerticalStackLayout
+                    BindableLayout.ItemsSource="{Binding Players}"
+                    Grid.Row="1"
+                    Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Player}">
+                            <Grid>
+                                <Label
+                                    Text="{Binding Username}"
+                                    FontSize="18"
+                                    VerticalOptions="Center"
+                                    TextColor="#000000"
+                                    TextTransform="Uppercase"
+                                 />
 
-                <ActivityIndicator
-                    IsRunning="True"
-                    VerticalOptions="Center"
-                    Margin="10,0,0,0" />
-            </HorizontalStackLayout>
+                                <Image
+                                    Source="dotnet_bot.svg"
+                                    HorizontalOptions="End" />
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
 
-            <Button
-                x:Name="StartButton"
-                Grid.Row="3"
-                Text="Start"
-                Command="{Binding StartGameCommand}" />
-        </Grid>
-    </Frame>
+                <HorizontalStackLayout
+                    Grid.Row="2">
+                    <!--Making the alignment centered with Horizontal/Verticaltxtalignment-->
+                    <!--Change maube Horizantalstacklayout to grid -> play with it, avoid padding-->
 
+                    <Label
+                        Text="Waiting for players to join"
+                        VerticalOptions="Center"
+                        Padding="0, 0, 0 ,40"
+                        HorizontalTextAlignment="Center"/>
+
+                    <ActivityIndicator
+                        IsRunning="True"
+                        VerticalOptions="Center"
+                        Margin="10,0,0,0" />
+                </HorizontalStackLayout>
+
+                <Button
+                    x:Name="StartButton"
+                    Grid.Row="3"
+                    Text="Start"
+                    Command="{Binding StartGameCommand}"
+                    BackgroundColor="#525252"
+                    TextColor="#FBB969"/>
+            </Grid>
+        </Frame>
+    </Grid>
 </ContentPage>
