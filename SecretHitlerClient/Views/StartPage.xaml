@@ -69,8 +69,8 @@
                 Placeholder="Lobby Code" 
                 TextColor="Black" 
                 Text="{Binding LobbyCode}"
-                BackgroundColor="White" 
-                IsSpellCheckEnabled="False" 
+                BackgroundColor="White"
+                IsSpellCheckEnabled="False"
                 ClearButtonVisibility="WhileEditing"/>
 
             <Grid Grid.Row="5" ColumnSpacing="10">

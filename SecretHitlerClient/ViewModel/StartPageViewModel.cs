@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SecretHitler.Views;
 
 namespace SecretHitler.ViewModel;
 
@@ -27,10 +28,10 @@ public partial class StartPageViewModel : ViewModel
         }
 
         // Join a lobby
-        await this.GameManager.SignalRService.JoinLobby(this.Username, this.LobbyCode);
+        await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
         
         // Navigate to the join game page
-        await Shell.Current.GoToAsync("JoinGamePage");
+        await Shell.Current.GoToAsync(nameof(JoinGamePage));
     }
 
     [RelayCommand]
@@ -44,10 +45,10 @@ public partial class StartPageViewModel : ViewModel
         }
 
         // Create a lobby
-        await this.GameManager.SignalRService.CreateLobby(this.Username, this.LobbyCode);
+        await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
         
         // Navigate to the lobby page
-        await Shell.Current.GoToAsync("LobbyPage");
+        await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
 
     private string CanJoinLobby()

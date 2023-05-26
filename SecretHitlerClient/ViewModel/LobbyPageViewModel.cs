@@ -1,5 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SecretHitler.Model;
@@ -19,7 +18,7 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task StartGame()
         {
-            await this.GameManager.StartGame();
+            await this.GameManager.SignalRService.StartOnlineGame();
         }
     }
 }
