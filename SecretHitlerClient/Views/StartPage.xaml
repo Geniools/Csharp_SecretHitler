@@ -6,7 +6,8 @@
              x:DataType="viewmodel:StartPageViewModel"
              Title="StartPage">
 
-    <Grid BackgroundColor="#FBB969">
+    <Grid BackgroundColor="#FBB969"
+          >
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
