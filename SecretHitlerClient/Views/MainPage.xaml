@@ -2,13 +2,42 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SecretHitler.Views.MainPage"
+             xmlns:viewmodel="clr-namespace:SecretHitler.ViewModel"
+             xmlns:model="clr-namespace:SecretHitler.Model"
+             x:DataType="viewmodel:MainPageViewModel"
              Title="MainPage">
-    
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center"
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+    <Frame
+        HorizontalOptions="Center"
+        VerticalOptions="Start"
+        WidthRequest="800"
+        HeightRequest="400">
+
+        <Grid BackgroundColor="White">
+            <Polygon Grid.Row="0" Grid.Column="0" Points="200,50 575,50 700,400 100,400" Fill="#5C4033" />
+
+            <Rectangle 
+                Fill="Black"
+                Grid.Column="1"
+                Grid.Row="1"
+                WidthRequest="50"
+                HeightRequest="50"/>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Row="0" Grid.Column="0" Text="Player Name:" />
+            <!-- <Label Grid.Row="0" Grid.Column="0" Text="{Binding Player }" />-->
+
+            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Join Player" /> <!--Command="{Binding JoinCommand}"  />-->
+        </Grid>
+    </Frame>
 
 </ContentPage>

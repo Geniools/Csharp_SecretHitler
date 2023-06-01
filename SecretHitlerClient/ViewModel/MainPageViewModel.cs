@@ -1,11 +1,17 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using SecretHitler.Model;
 
 namespace SecretHitler.ViewModel
 {
-    public class MainPageViewModel : ViewModel
+    public partial class MainPageViewModel : ViewModel
     {
-        public MainPageViewModel(GameManager gameManager) : base(gameManager)
-        {
-        }
+        [ObservableProperty]
+        private string _username;
+
+        public MainPageViewModel(GameManager gameManager) : base(gameManager) { }
+
+
     }
 }
