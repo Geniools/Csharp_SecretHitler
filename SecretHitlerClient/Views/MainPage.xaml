@@ -7,9 +7,8 @@
              x:DataType="viewmodel:MainPageViewModel"
              Title="MainPage">
 
-<<<<<<< HEAD
-    
-         <!--Board Layout-->
+
+    <!--Board Layout-->
     <Grid BackgroundColor="#FBB969">
 
         <!--Defining Grid-->
@@ -281,54 +280,9 @@
         <Grid Grid.Row="0" Grid.Column="6">
             <Button Text="Role" WidthRequest="100" HeightRequest="50"/>
         </Grid>
-=======
-    <StackLayout>
-         <!--Board Layout--> 
-        <Grid>
-             <!--Game Board 
-             Add your game board layout here, including spaces for players, policies, and other game elements--> 
-        </Grid>
 
-         <!--Players--> 
-        <ScrollView Orientation="Horizontal">
-            <StackLayout Orientation="Horizontal">
-                 <!--Player Icons--> 
-                <CollectionView ItemsSource="{Binding Players}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type model:Player}">
-                            <StackLayout>
-                                <Image Source="{Binding Role}" WidthRequest="50" HeightRequest="50" />
-                                <Label Text="{Binding Username}" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </StackLayout>
-        </ScrollView>
-
-         <!--Voting--> 
-        <StackLayout Orientation="Horizontal" VerticalOptions="End">
-            <Label Text="Vote: " />
-            <Button Text="Ja"  />
-            <Button Text="Nein" />
-        </StackLayout>
-
-         <!--Elected Policies--> 
-        <StackLayout>
-            <Label Text="Elected Policies:" />
-            <CollectionView ItemsSource="{Binding ElectedPolicies}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
-                        <Label Text="{Binding}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout>
-    </StackLayout>
->>>>>>> front-end-testing
-
-        <!--Elected Policies--> 
-         <!--<StackLayout>
+        <!--Elected Policies-->
+        <!--<StackLayout>
             <Label Text="Elected Policies:" />
             <CollectionView ItemsSource="{Binding ElectedPolicies}">
                 <CollectionView.ItemTemplate>
