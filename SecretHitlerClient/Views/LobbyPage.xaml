@@ -53,12 +53,15 @@
                     Margin="10,0,0,0" />
             </HorizontalStackLayout>
 
-            <Button
-                x:Name="StartButton"
-                Grid.Row="3"
-                Text="Start"
-                Command="{Binding StartGameCommand}" />
-        </Grid>
-    </Frame>
-
+                <Button
+                    x:Name="StartButton"
+                    Grid.Row="3"
+                    Text="Start"
+                    Command="{Binding StartGameCommand}"
+                    BackgroundColor="#525252"
+                    TextColor="#FBB969" />
+            </Grid>
+        </Frame>
+    
 </ContentPage>
+    

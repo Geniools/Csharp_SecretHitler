@@ -7,37 +7,290 @@
              x:DataType="viewmodel:MainPageViewModel"
              Title="MainPage">
 
-    <Frame
-        HorizontalOptions="Center"
-        VerticalOptions="Start"
-        WidthRequest="800"
-        HeightRequest="400">
+    
+         <!--Board Layout-->
+    <Grid BackgroundColor="#FBB969">
 
-        <Grid BackgroundColor="White">
-            <Polygon Grid.Row="0" Grid.Column="0" Points="200,50 575,50 700,400 100,400" Fill="#5C4033" />
+        <!--Defining Grid-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="150" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="150" />
+        </Grid.ColumnDefinitions>
 
-            <Rectangle 
-                Fill="Black"
-                Grid.Column="1"
-                Grid.Row="1"
-                WidthRequest="50"
-                HeightRequest="50"/>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <Label Grid.Row="0" Grid.Column="0" Text="Player Name:" />
-            <!-- <Label Grid.Row="0" Grid.Column="0" Text="{Binding Player }" />-->
+        <!--Players-->
+        <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Players}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:Player}">
+                    <VerticalStackLayout>
+                        <Image Source="{Binding Role}" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Username}" HorizontalOptions="Center" />
+                        <Image Source="profile.png" 
+                           WidthRequest="50"
+                           HeightRequest="50"
+                           HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-            <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Join Player" /> <!--Command="{Binding JoinCommand}"  />-->
+        <!--Table-->
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Grid.RowSpan="7">
+            <HorizontalStackLayout>
+                <Rectangle BackgroundColor="#855E42"
+                           WidthRequest="1600"
+                           HeightRequest="900">
+                    <Rectangle.Shadow>
+                        <Shadow
+                            Brush="#331800"
+                            Offset="10,10"
+                            Radius="7"
+                            Opacity="0.3"/>
+                    </Rectangle.Shadow>
+                </Rectangle>
+            </HorizontalStackLayout>
         </Grid>
-    </Frame>
 
+        <!-- Grid test for row 0 -->
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Label Text="Grid 0,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="2">
+            <Label Text="Grid 0,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="3">
+            <Label Text="Grid 0,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="4">
+            <Label Text="Grid 0,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="5">
+            <Label Text="Grid 0,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid test for row 1 -->
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Label Text="Grid 1,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Label Text="Grid 1,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="2">
+            <Label Text="Grid 1,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="3">
+            <Label Text="Grid 1,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="4">
+            <Label Text="Grid 1,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="5">
+            <Label Text="Grid 1,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="6">
+            <Label Text="Grid 1,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="7">
+            <Label Text="Grid 1,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid Test for row 2 -->
+        <Grid Grid.Row="2" Grid.Column="0">
+            <Label Text="Grid 2,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Label Text="Grid 2,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="2">
+            <Label Text="Grid 2,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="3">
+            <Label Text="Grid 2,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="4">
+            <Label Text="Grid 2,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="5">
+            <Label Text="Grid 2,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="6">
+            <Label Text="Grid 2,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="7">
+            <Label Text="Grid 2,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid test for row 3 -->
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Label Text="Grid 3,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Label Text="Grid 3,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="2">
+            <Label Text="Grid 3,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="3">
+            <Label Text="Grid 3,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="4">
+            <Label Text="Grid 3,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="5">
+            <Label Text="Grid 3,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="6">
+            <Label Text="Grid 3,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="7">
+            <Label Text="Grid 3,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid test for row 4 -->
+        <Grid Grid.Row="4" Grid.Column="0">
+            <Label Text="Grid 4,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="1">
+            <Label Text="Grid 4,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="2">
+            <Label Text="Grid 4,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="3">
+            <Label Text="Grid 4,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="4">
+            <Label Text="Grid 4,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="5">
+            <Label Text="Grid 4,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="6">
+            <Label Text="Grid 4,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="4" Grid.Column="7">
+            <Label Text="Grid 4,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid testing for row 5 -->
+        <Grid Grid.Row="5" Grid.Column="0">
+            <Label Text="Grid 5,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="1">
+            <Label Text="Grid 5,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="2">
+            <Label Text="Grid 5,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="3">
+            <Label Text="Grid 5,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="4">
+            <Label Text="Grid 5,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="5">
+            <Label Text="Grid 5,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="6">
+            <Label Text="Grid 5,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="5" Grid.Column="7">
+            <Label Text="Grid 5,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!-- Grid testing for row 6 -->
+        <Grid Grid.Row="6" Grid.Column="0">
+            <Label Text="Grid 6,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="1">
+            <Label Text="Grid 6,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="2">
+            <Label Text="Grid 6,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="3">
+            <Label Text="Grid 6,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="4">
+            <Label Text="Grid 6,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="5">
+            <Label Text="Grid 6,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="6">
+            <Label Text="Grid 6,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="6" Grid.Column="7">
+            <Label Text="Grid 6,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+
+        <!-- Grid testing row 7 -->
+        <Grid Grid.Row="7" Grid.Column="0">
+            <Label Text="Grid 7,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="1">
+            <Label Text="Grid 7,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="2">
+            <Label Text="Grid 7,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="3">
+            <Label Text="Grid 7,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="4">
+            <Label Text="Grid 7,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="5">
+            <Label Text="Grid 7,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="6">
+            <Label Text="Grid 7,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+        <Grid Grid.Row="7" Grid.Column="7">
+            <Label Text="Grid 7,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
+        </Grid>
+
+        <!--Voting-->
+        <Grid Grid.Row="0" Grid.Column="7">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
+                <Button Text="Ja"  WidthRequest="60"/>
+                <Button Text="Nein" WidthRequest="60"/>
+            </StackLayout>
+        </Grid>
+
+        <!--Role-->
+        <Grid Grid.Row="0" Grid.Column="6">
+            <Button Text="Role" WidthRequest="100" HeightRequest="50"/>
+        </Grid>
+
+        <!--Elected Policies--> 
+         <!--<StackLayout>
+            <Label Text="Elected Policies:" />
+            <CollectionView ItemsSource="{Binding ElectedPolicies}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
+                        <Label Text="{Binding}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout> -->
+    </Grid>
 </ContentPage>
