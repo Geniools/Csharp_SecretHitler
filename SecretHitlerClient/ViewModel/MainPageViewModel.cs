@@ -8,10 +8,17 @@ namespace SecretHitler.ViewModel
     public partial class MainPageViewModel : ViewModel
     {
         [ObservableProperty]
-        private string _username;
+        private ObservableCollection<Player> _players;
 
-        public MainPageViewModel(GameManager gameManager) : base(gameManager) { }
+        [ObservableProperty]
+        private ObservableCollection<PolicyCard> _electedPolicies;
 
+        public MainPageViewModel(GameManager gameManager) : base(gameManager)
+        {
+            this.Players = this.GameManager.Players;
 
+            // Create the policies
+            this.ElectedPolicies = this.GameManager.Board.ElectedPolicies;
+        }
     }
 }
