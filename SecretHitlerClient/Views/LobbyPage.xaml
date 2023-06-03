@@ -6,62 +6,95 @@
              xmlns:model="clr-namespace:SecretHitler.Model"
              x:DataType="viewmodel:LobbyPageViewModel"
              Title="LobbyPage">
+    <Grid BackgroundColor="#FBB969">
 
-    <Frame
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        WidthRequest="300"
-        HeightRequest="500">
+        <Frame
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            WidthRequest="300"
+            HeightRequest="500"
+            BackgroundColor="#855E42">
 
-        <Grid
-            RowDefinitions="50,*,60,50"
-            RowSpacing="10"
-            Margin="10">
+            <Grid
+                RowDefinitions="14,40,*,60,50"
+                RowSpacing="10"
+                Margin="10"
+                >
 
-            <Label
-                x:Name="CreatingTitleLabel" />
+                <HorizontalStackLayout Spacing="40"
+                    Grid.Row="1"
+                    >
+                    <!--Make changes so that players are visible-->
+                    <Grid
+                        Margin="0,0,0,20"
+                        >
+                        <Label
+                            Text="1/10"
+                            FontSize="22"
+                            HorizontalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            TextColor="#000000">
 
-            <VerticalStackLayout
-                BindableLayout.ItemsSource="{Binding Players}"
-                Grid.Row="1"
-                Spacing="10">
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:Player}">
-                        <Grid>
-                            <Label
-                                Text="{Binding Username}"
-                                FontSize="16"
-                                VerticalOptions="Center" />
+                        </Label>
+                    </Grid>
+                </HorizontalStackLayout>
 
-                            <Image
-                                Source="dotnet_bot.svg"
-                                HorizontalOptions="End" />
-                        </Grid>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
-            </VerticalStackLayout>
-
-            <HorizontalStackLayout
-                Grid.Row="2">
                 <Label
-                    Text="Waiting for players to join"
-                    VerticalOptions="Center" />
+                    x:Name="CreatingTitleLabel" />
+                <!--make the page like the main page-->
+                <!--same color and font-->
+                <VerticalStackLayout
+                    BindableLayout.ItemsSource="{Binding Players}"
+                    Grid.Row="2"
+                    Spacing="10">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Player}">
+                            <Grid>
+                                <Label
+                                    Text="{Binding Username}"
+                                    FontSize="18"
+                                    VerticalOptions="Center"
+                                    TextColor="#000000"
+                                    TextTransform="Uppercase"
+                                 />
 
-                <ActivityIndicator
-                    IsRunning="True"
-                    VerticalOptions="Center"
-                    Margin="10,0,0,0" />
-            </HorizontalStackLayout>
+                                <Image
+                                    Source="check.png"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    HorizontalOptions="End" />
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <HorizontalStackLayout
+                    Grid.Row="3">
+                    <!--Making the alignment centered with Horizontal/Verticaltxtalignment-->
+                    <!--Change maube Horizantalstacklayout to grid -> play with it, avoid padding-->
+
+                    <Label
+                        Text="Waiting for players to join"
+                        VerticalOptions="Center"
+                        Padding="25, 0, 0 ,40"
+                        HorizontalTextAlignment="Center"/>
+
+                    <ActivityIndicator
+                        IsRunning="True"
+                        VerticalOptions="Center"
+                        Color="DarkRed"
+                        Margin="10,-40,0,0" />
+                </HorizontalStackLayout>
 
                 <Button
                     x:Name="StartButton"
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Text="Start"
                     Command="{Binding StartGameCommand}"
                     BackgroundColor="#525252"
-                    TextColor="#FBB969" />
+                    TextColor="#FBB969"/>
             </Grid>
         </Frame>
-    
+    </Grid>
 </ContentPage>
     

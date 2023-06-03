@@ -24,6 +24,7 @@
 
             <Label
                 Text="Waiting for the game to begin"
+                HorizontalOptions="Center"
                 Grid.Row="1"/>
 
         </VerticalStackLayout>

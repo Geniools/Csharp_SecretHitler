@@ -1,13 +1,19 @@
 ﻿using SecretHitler.Model;
 using SecretHitler.Services;
 using System.Collections.ObjectModel;
+using SecretHitler.Views;
 
 namespace SecretHitler
 {
     public class GameManager : BindableObject
     {
+        // Services
         public SignalRService SignalRService { get; private set; }
 
+        // Other
+
+
+        // Game state
         public ObservableCollection<Player> Players { get; private set; }
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
@@ -19,9 +25,10 @@ namespace SecretHitler
 
         public GameManager()
         {
-            this.SignalRService = new SignalRService();
+            this.SignalRService = new SignalRService("gameHub", "https://secrethitler.azurewebsites.net");
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
+            SignalRService.GameStarted += this.StartLocalGame;
 
             // Create a new game
             this.Board = new Board();
@@ -33,15 +40,20 @@ namespace SecretHitler
 
         private void AddPlayer(Player player)
         {
-            this.Players.Add(player);
+            //Shell.Current.DisplayAlert("Player connected", $"{player.Username} has connected", "OK");
+
+            Shell.Current.Dispatcher.DispatchAsync(() => this.Players.Add(player));
+            //Players.Add(player);
         }
 
-        public async Task StartGame()
+        public async void StartLocalGame()
         {
-            throw new NotImplementedException();
+            await Shell.Current.Dispatcher.DispatchAsync(async () => await Shell.Current.GoToAsync(nameof(MainPage)));
+            
+            //await Shell.Current.GoToAsync(nameof(MainPage));
         }
 
-        public void EndGame()
+        public async Task EndGame()
         {
             throw new NotImplementedException();
         }

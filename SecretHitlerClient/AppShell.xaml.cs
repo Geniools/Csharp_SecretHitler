@@ -1,5 +1,6 @@
 ﻿using SecretHitler.Views;
 
+
 namespace SecretHitler;
 
 public partial class AppShell : Shell
