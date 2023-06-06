@@ -10,6 +10,6 @@
     <ShellContent
         Title="Game"
         ContentTemplate="{DataTemplate views:StartPage}"
-        Route="MainPage" />
+        Route="StartPage" />
 
 </Shell>
