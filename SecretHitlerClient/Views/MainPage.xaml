@@ -13,7 +13,7 @@
 
         <!--Defining Grid-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="150" />
+            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -55,7 +55,7 @@
         <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Grid.RowSpan="7">
             <HorizontalStackLayout>
                 <Rectangle BackgroundColor="#855E42"
-                           WidthRequest="1600"
+                           WidthRequest="1250"
                            HeightRequest="900">
                     <Rectangle.Shadow>
                         <Shadow
