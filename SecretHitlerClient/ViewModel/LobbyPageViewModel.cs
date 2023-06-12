@@ -9,12 +9,10 @@ namespace SecretHitler.ViewModel
     {
         [ObservableProperty]
         private ObservableCollection<Player> _players;
-        
 
         public LobbyPageViewModel(GameManager gameManager) : base(gameManager)
         {
             this.Players = this.GameManager.Players;
-
         }
 
         [RelayCommand]

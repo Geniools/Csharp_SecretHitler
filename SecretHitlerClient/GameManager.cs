@@ -10,9 +10,6 @@ namespace SecretHitler
         // Services
         public SignalRService SignalRService { get; private set; }
 
-        // Other
-
-
         // Game state
         public ObservableCollection<Player> Players { get; private set; }
         public Board Board { get; private set; }
@@ -40,17 +37,12 @@ namespace SecretHitler
 
         private void AddPlayer(Player player)
         {
-            //Shell.Current.DisplayAlert("Player connected", $"{player.Username} has connected", "OK");
-
             Shell.Current.Dispatcher.DispatchAsync(() => this.Players.Add(player));
-            //Players.Add(player);
         }
 
         public async void StartLocalGame()
         {
             await Shell.Current.Dispatcher.DispatchAsync(async () => await Shell.Current.GoToAsync(nameof(MainPage)));
-            
-            //await Shell.Current.GoToAsync(nameof(MainPage));
         }
 
         public async Task EndGame()

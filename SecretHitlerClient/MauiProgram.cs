@@ -4,10 +4,6 @@ using SecretHitler.ViewModel;
 using SecretHitler.Views;
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.LifecycleEvents;
-#if WINDOWS
-using Microsoft.UI;
-using Microsoft.UI.Windowing;
-#endif
 
 namespace SecretHitler;
 
@@ -30,31 +26,35 @@ public static class MauiProgram
             .Services
             .AddViewModels()
             .AddViews()
-            .AddTransient<SignalRService>()
             .AddSingleton<GameManager>();
 
-#if DEBUG
-        builder.Logging.AddDebug();
+        // This makes the app fullscreen on Windows
+#if WINDOWS
         builder.ConfigureLifecycleEvents(events =>
         {
-            events.AddWindows(wndLifeCycleBuilder =>
+            // Make sure to add "using Microsoft.Maui.LifecycleEvents;" in the top of the file 
+            events.AddWindows(windowsLifecycleBuilder =>
             {
-                wndLifeCycleBuilder.OnWindowCreated(window =>
+                windowsLifecycleBuilder.OnWindowCreated(window =>
                 {
                     window.ExtendsContentIntoTitleBar = false;
-                    IntPtr nativeWindowHandle = WinRT.Interop.WindowNative.GetWindowHandle(window);
-                    WindowId win32WindowsId = Win32Interop.GetWindowIdFromWindow(nativeWindowHandle);
-                    AppWindow winuiAppWindow = AppWindow.GetFromWindowId(win32WindowsId);
-
-                    if (winuiAppWindow.Presenter is OverlappedPresenter p)
+                    var handle = WinRT.Interop.WindowNative.GetWindowHandle(window);
+                    var id = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(handle);
+                    var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(id);
+                    switch (appWindow.Presenter)
                     {
-                        p.SetBorderAndTitleBar(true, true);
-                        p.Maximize();
+                        case Microsoft.UI.Windowing.OverlappedPresenter overlappedPresenter:
+                            overlappedPresenter.SetBorderAndTitleBar(false, false);
+                            overlappedPresenter.Maximize();
+                            break;
                     }
                 });
             });
         });
+#endif
 
+#if DEBUG
+        builder.Logging.AddDebug();
 #endif
         return builder.Build();
     }

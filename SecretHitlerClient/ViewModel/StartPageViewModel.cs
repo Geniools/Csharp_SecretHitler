@@ -20,7 +20,7 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task JoinLobby()
     {
-        string errorMessage = this.CanJoinLobby();
+        string errorMessage = this.CanAccessLobby();
         if (!string.IsNullOrEmpty(errorMessage))
         {
             await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
@@ -37,7 +37,7 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task CreateLobby()
     {
-        string errorMessage = this.CanJoinLobby();
+        string errorMessage = this.CanAccessLobby();
         if (!string.IsNullOrEmpty(errorMessage))
         {
             await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
@@ -51,7 +51,7 @@ public partial class StartPageViewModel : ViewModel
         await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
 
-    private string CanJoinLobby()
+    private string CanAccessLobby()
     {
         string errorMessage = string.Empty;
 

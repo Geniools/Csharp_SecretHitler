@@ -24,8 +24,6 @@ namespace SecretHitler.Services
         // Other properties
         public string LobbyCode { get; private set; }
 
-
-
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
             // Android can't connect to localhost (for some reason)

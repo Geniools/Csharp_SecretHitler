@@ -13,40 +13,52 @@
             VerticalOptions="Center"
             WidthRequest="300"
             HeightRequest="500"
-            BackgroundColor="#855E42">
+            BackgroundColor="#855E42"
+            >
 
             <Grid
-                RowDefinitions="14,40,*,60,50"
+                RowDefinitions="14, 40, *, 60, 50"
                 RowSpacing="10"
                 Margin="10"
                 >
 
-                <HorizontalStackLayout Spacing="40"
+                <HorizontalStackLayout
+                    Spacing="40"
                     Grid.Row="1"
                     >
                     <!--Make changes so that players are visible-->
-                    <Grid
+                    <Grid 
                         Margin="0,0,0,20"
+                        ColumnDefinitions="50, 50"
                         >
                         <Label
-                            Text="1/10"
+                            Text="{Binding Players.Count}"
+                            Grid.Column="0"
                             FontSize="22"
                             HorizontalOptions="Center"
                             VerticalTextAlignment="Center"
-                            TextColor="#000000">
-
-                        </Label>
+                            TextColor="#000000"
+                            />
+                        
+                        <!-- I don't know another way to make it stand one next to another -->
+                        <Label
+                            Text="/ 10"
+                            Grid.Column="1"
+                            FontSize="22"
+                            VerticalTextAlignment="Center"
+                            TextColor="#000000"
+                            />
                     </Grid>
                 </HorizontalStackLayout>
 
-                <Label
-                    x:Name="CreatingTitleLabel" />
+                <Label x:Name="CreatingTitleLabel" />
                 <!--make the page like the main page-->
                 <!--same color and font-->
                 <VerticalStackLayout
                     BindableLayout.ItemsSource="{Binding Players}"
                     Grid.Row="2"
-                    Spacing="10">
+                    Spacing="10"
+                    >
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type model:Player}">
                             <Grid>
@@ -56,34 +68,36 @@
                                     VerticalOptions="Center"
                                     TextColor="#000000"
                                     TextTransform="Uppercase"
-                                 />
+                                    />
 
                                 <Image
                                     Source="check.png"
                                     WidthRequest="50"
                                     HeightRequest="50"
-                                    HorizontalOptions="End" />
+                                    HorizontalOptions="End" 
+                                    />
                             </Grid>
                         </DataTemplate>
                     </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
 
-                <HorizontalStackLayout
-                    Grid.Row="3">
+                <HorizontalStackLayout Grid.Row="3">
                     <!--Making the alignment centered with Horizontal/Verticaltxtalignment-->
-                    <!--Change maube Horizantalstacklayout to grid -> play with it, avoid padding-->
+                    <!--Change maybe Horizantalstacklayout to grid -> play with it, avoid padding-->
 
                     <Label
                         Text="Waiting for players to join"
                         VerticalOptions="Center"
                         Padding="25, 0, 0 ,40"
-                        HorizontalTextAlignment="Center"/>
+                        HorizontalTextAlignment="Center"
+                        />
 
                     <ActivityIndicator
                         IsRunning="True"
                         VerticalOptions="Center"
                         Color="DarkRed"
-                        Margin="10,-40,0,0" />
+                        Margin="10,-40,0,0" 
+                        />
                 </HorizontalStackLayout>
 
                 <Button
@@ -92,7 +106,8 @@
                     Text="Start"
                     Command="{Binding StartGameCommand}"
                     BackgroundColor="#525252"
-                    TextColor="#FBB969"/>
+                    TextColor="#FBB969"
+                    />
             </Grid>
         </Frame>
     </Grid>
