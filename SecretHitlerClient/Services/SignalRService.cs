@@ -6,15 +6,6 @@ namespace SecretHitler.Services
 {
     public class SignalRService
     {
-        // Names of server callbacks
-        private const string PlayerConnectedName = "PlayerConnected";
-        private const string ConnectPlayerName = "ConnectPlayer";
-        private const string SessionStartedName = "SessionStarted";
-        private const string StartGameName = "StartGame";
-        private const string EndGameName = "EndGame";
-        private const string ChatMessageName = "ChatMessage";
-        private const string ElectionVoteName = "ElectionVote";
-
         // Connection to the server
         public HubConnection HubConnection { get; }
 
@@ -48,7 +39,7 @@ namespace SecretHitler.Services
         {
             // This function must contain all event handlers
             // Handle the PlayerConnected event
-            this.HubConnection.On<PlayerShared>(PlayerConnectedName, playerShared =>
+            this.HubConnection.On<PlayerShared>(ServerCallbacks.PlayerConnectedName, playerShared =>
             {
                 Player player = new Player(playerShared.Username);
                 this.PlayerConnected?.Invoke(player);
@@ -60,7 +51,7 @@ namespace SecretHitler.Services
             });
 
             // Handle the GameStarted event
-            this.HubConnection.On(StartGameName, () =>
+            this.HubConnection.On(ServerCallbacks.StartGameName, () =>
             {
                 this.GameStarted?.Invoke();
             });
@@ -73,7 +64,7 @@ namespace SecretHitler.Services
         {
             await this.StartConnection();
             PlayerShared player = new PlayerShared(username, lobbyCode);
-            await this.HubConnection.SendAsync(PlayerConnectedName, player);
+            await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
@@ -82,12 +73,12 @@ namespace SecretHitler.Services
             foreach (Player player in connectedPlayers)
             {
                 PlayerShared playerShared = new PlayerShared(player.Username, this.LobbyCode);
-                await this.HubConnection.SendAsync(ConnectPlayerName, playerShared);
+                await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, playerShared);
             }
 
             if (!string.IsNullOrEmpty(this.LobbyCode))
             {
-                await this.HubConnection.SendAsync(StartGameName, this.LobbyCode);
+                await this.HubConnection.SendAsync(ServerCallbacks.StartGameName, this.LobbyCode);
             }
         }
     }

@@ -15,32 +15,32 @@ namespace Server.Hubs
         public async Task ConnectPlayer(PlayerShared player)
         {
             // Notify other players that a player has connected
-            await Clients.Group(player.LobbyCode).SendAsync("PlayerConnected", player);
+            await Clients.Group(player.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
         public async Task StartGame(string lobbyCode)
         {
-            await Clients.Group(lobbyCode).SendAsync("StartGame");
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.StartGameName);
         }
 
         public async Task EndGame(string lobbyCode)
         {
-            await Clients.Group(lobbyCode).SendAsync("EndGame");
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EndGameName);
         }
 
         public async Task SessionStarted(string lobbyCode)
         {
-            await Clients.Group(lobbyCode).SendAsync("SessionStarted");
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.SessionStartedName);
         }
 
         public async Task SendChatMessage(string lobbyCode, string username, string message)
         {
-            await Clients.Group(lobbyCode).SendAsync("ChatMessage", username, message);
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, username, message);
         }
 
         public async Task SendElectionVote(string lobbyCode, string username, bool vote)
         {
-            await Clients.Group(lobbyCode).SendAsync("ElectionVote", username, vote);
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, username, vote);
         }
     }
 }

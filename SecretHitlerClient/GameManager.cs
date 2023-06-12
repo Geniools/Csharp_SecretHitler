@@ -2,6 +2,7 @@
 using SecretHitler.Services;
 using System.Collections.ObjectModel;
 using SecretHitler.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SecretHitler
 {

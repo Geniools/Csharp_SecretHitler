@@ -7,7 +7,6 @@
              x:DataType="viewmodel:MainPageViewModel"
              Title="MainPage">
 
-
     <!--Board Layout-->
     <Grid BackgroundColor="#FBB969">
 
@@ -22,6 +21,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
@@ -32,8 +32,6 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="150" />
         </Grid.ColumnDefinitions>
-
-
 
         <!--Players-->
         <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Players}">

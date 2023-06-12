@@ -20,14 +20,22 @@ public partial class StartPageViewModel : ViewModel
 
     public StartPageViewModel(GameManager gameManager) : base(gameManager) 
     {
-        this.GameName = "Join or Create a Game:";
-        this.Title = "Stealth Führer";
+        this.GameName = "Stealth Führer";
+        this.Title = "Join or Create a Game:";
     }
 
     [RelayCommand]
     private async Task JoinLobby()
     {
-        await this.AccessLobby();
+        try
+        {
+            await this.AccessLobby();
+        }
+        catch (ArgumentException ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            return;
+        }
 
         // Navigate to the join game page
         await Shell.Current.GoToAsync(nameof(JoinGamePage));
@@ -36,8 +44,16 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task CreateLobby()
     {
-        await this.AccessLobby();
-        
+        try
+        {
+            await this.AccessLobby();
+        }
+        catch (ArgumentException ex)
+        {
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            return;
+        }
+
         // Navigate to the lobby page
         await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
@@ -47,8 +63,7 @@ public partial class StartPageViewModel : ViewModel
         string errorMessage = this.CanAccessLobby();
         if (!string.IsNullOrEmpty(errorMessage))
         {
-            await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
-            return;
+            throw new ArgumentException(errorMessage);
         }
 
         // Create a lobby
