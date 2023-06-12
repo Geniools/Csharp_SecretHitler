@@ -13,6 +13,7 @@ namespace SecretHitler.Services
         public event Action<Player> PlayerConnected;
         public event Action<Player, string> PlayerDisconnected;
         public event Action GameStarted;
+        public event Action ClearAllPlayers;
 
         // Other properties
         internal string LobbyCode { get; set; }
@@ -64,6 +65,11 @@ namespace SecretHitler.Services
                 this.GameStarted?.Invoke();
             });
 
+            this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
+            {
+                
+            });
+
             //Start the connection
             await this.HubConnection.StartAsync();
         }
@@ -82,6 +88,9 @@ namespace SecretHitler.Services
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
+            // Clear all players from other clients
+            await this.HubConnection.SendAsync(ServerCallbacks.ClearAllPlayersName, this.LobbyCode);
+
             // Notify all players of the other connected players
             foreach (Player player in connectedPlayers)
             {

@@ -36,6 +36,11 @@ namespace Server.Hubs
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.StartGameName);
         }
 
+        public async Task ClearAllPlayers(string lobbyCode)
+        {
+            await Clients.OthersInGroup(lobbyCode).SendAsync(ServerCallbacks.ClearAllPlayersName);
+        }
+
         public async Task EndGame(string lobbyCode)
         {
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EndGameName);

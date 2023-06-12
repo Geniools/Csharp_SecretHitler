@@ -20,6 +20,9 @@ public partial class StartPageViewModel : ViewModel
 
     public StartPageViewModel(GameManager gameManager) : base(gameManager) 
     {
+        // Make sure the connection to the server is closed
+        this.GameManager.SignalRService.HubConnection.StopAsync();
+
         this.GameName = "Stealth Führer";
         this.Title = "Join or Create a Game:";
     }

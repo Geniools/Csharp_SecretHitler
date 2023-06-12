@@ -32,6 +32,7 @@ namespace SecretHitler
             SignalRService.PlayerConnected += this.AddPlayer;
             SignalRService.PlayerDisconnected += this.RemovePlayer;
             SignalRService.GameStarted += this.StartLocalGame;
+            SignalRService.ClearAllPlayers += this.ClearAllPlayers;
 
             // Create a new game
             this.Board = new Board();
@@ -85,25 +86,33 @@ namespace SecretHitler
             });
         }
 
-        public async void StartLocalGame()
+        private async void StartLocalGame()
         {
             await Shell.Current.Dispatcher.DispatchAsync(async () => 
                 await Shell.Current.GoToAsync(nameof(MainPage))
             );
         }
 
+        private void ClearAllPlayers()
+        {
+            if (!this.IsPrimaryPlayer)
+            {
+                this.Players.Clear();
+            }
+        }
+
         // Game logic
-        public async Task EndGame()
+        private async Task EndGame()
         {
             throw new NotImplementedException();
         }
 
-        public Player RunNextElection()
+        private Player RunNextElection()
         {
             throw new NotImplementedException();
         }
 
-        public Player SetNextPresident()
+        private Player SetNextPresident()
         {
             throw new NotImplementedException();
         }
