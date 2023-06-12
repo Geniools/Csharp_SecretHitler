@@ -13,29 +13,36 @@ public partial class StartPageViewModel : ViewModel
     private string _lobbyCode;
 
     [ObservableProperty]
-    private string _playerJoinedLabel;
+    private string _gameName;
 
-    public StartPageViewModel(GameManager gameManager) : base(gameManager) { }
+    [ObservableProperty]
+    private string _title;
+
+    public StartPageViewModel(GameManager gameManager) : base(gameManager) 
+    {
+        this.GameName = "Join or Create a Game:";
+        this.Title = "Stealth Führer";
+    }
 
     [RelayCommand]
     private async Task JoinLobby()
     {
-        string errorMessage = this.CanAccessLobby();
-        if (!string.IsNullOrEmpty(errorMessage))
-        {
-            await Shell.Current.DisplayAlert("Error", errorMessage, "OK");
-            return;
-        }
+        await this.AccessLobby();
 
-        // Join a lobby
-        await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
-        
         // Navigate to the join game page
         await Shell.Current.GoToAsync(nameof(JoinGamePage));
     }
 
     [RelayCommand]
     private async Task CreateLobby()
+    {
+        await this.AccessLobby();
+        
+        // Navigate to the lobby page
+        await Shell.Current.GoToAsync(nameof(LobbyPage));
+    }
+
+    private async Task AccessLobby()
     {
         string errorMessage = this.CanAccessLobby();
         if (!string.IsNullOrEmpty(errorMessage))
@@ -46,9 +53,6 @@ public partial class StartPageViewModel : ViewModel
 
         // Create a lobby
         await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
-        
-        // Navigate to the lobby page
-        await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
 
     private string CanAccessLobby()
