@@ -2,7 +2,8 @@
 using SecretHitler.Services;
 using System.Collections.ObjectModel;
 using SecretHitler.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.AspNetCore.SignalR.Client;
+using SecretHitlerShared;
 
 namespace SecretHitler
 {
@@ -10,6 +11,9 @@ namespace SecretHitler
     {
         // Services
         public SignalRService SignalRService { get; private set; }
+
+        // Game specific properties
+        public bool IsPrimaryPlayer { get; set; }
 
         // Game state
         public ObservableCollection<Player> Players { get; private set; }
@@ -26,6 +30,7 @@ namespace SecretHitler
             this.SignalRService = new SignalRService("gameHub", "https://secrethitler.azurewebsites.net");
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
+            SignalRService.PlayerDisconnected += this.RemovePlayer;
             SignalRService.GameStarted += this.StartLocalGame;
 
             // Create a new game
@@ -36,35 +41,58 @@ namespace SecretHitler
             this.ElectionTracker = 0;
         }
 
+        // Event handlers / Pre game logic
         private void AddPlayer(Player player)
         {
             Shell.Current.Dispatcher.DispatchAsync(() =>
             {
-                if (!this.ContainsUsername(player.Username))
+                if (this.ContainsUsername(player.Username) is null && this.Players.Count <= 10)
                 {
                     this.Players.Add(player);
+                }
+                else
+                {
+                    if (this.IsPrimaryPlayer)
+                    {
+                        PlayerShared disconnectedPlayer = new PlayerShared(player.Username, this.SignalRService.LobbyCode);
+
+                        string message = "Username already exists or the lobby is full";
+                        this.SignalRService.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectedPlayer, message);
+                    }
                 }
             });
         }
 
-        private bool ContainsUsername(string username)
+        private void RemovePlayer(Player player, string message)
         {
-            foreach (Player player in this.Players)
+            Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
-                if (player.Username.Equals(username.ToLower()))
+                Player playerToRemove = this.ContainsUsername(player.Username);
+                if (playerToRemove is not null)
                 {
-                    return true;
-                }
-            }
+                    this.Players.Remove(playerToRemove);
 
-            return false;
+                    if (playerToRemove.Username.Equals(this.SignalRService.PlayerUsername.ToLower()))
+                    {
+                        this.SignalRService.LobbyCode = string.Empty;
+                        this.SignalRService.PlayerUsername = string.Empty;
+
+                        await Shell.Current.DisplayAlert("Disconnected", message, "OK");
+                        await this.SignalRService.HubConnection.StopAsync();
+                        await Shell.Current.GoToAsync(nameof(StartPage));
+                    }
+                }
+            });
         }
 
         public async void StartLocalGame()
         {
-            await Shell.Current.Dispatcher.DispatchAsync(async () => await Shell.Current.GoToAsync(nameof(MainPage)));
+            await Shell.Current.Dispatcher.DispatchAsync(async () => 
+                await Shell.Current.GoToAsync(nameof(MainPage))
+            );
         }
 
+        // Game logic
         public async Task EndGame()
         {
             throw new NotImplementedException();
@@ -78,6 +106,26 @@ namespace SecretHitler
         public Player SetNextPresident()
         {
             throw new NotImplementedException();
+        }
+
+        // Helper functions / Utility functions
+
+        /// <summary>
+        /// Will return the first player having the given username, null otherwise
+        /// </summary>
+        /// <param name="username">The username of the player to be searched for</param>
+        /// <returns>The first player having the given username, null otherwise</returns>
+        private Player ContainsUsername(string username)
+        {
+            foreach (Player player in this.Players)
+            {
+                if (player.Username.Equals(username.ToLower()))
+                {
+                    return player;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -7,14 +7,16 @@ namespace SecretHitler.Services
     public class SignalRService
     {
         // Connection to the server
-        public HubConnection HubConnection { get; }
+        public HubConnection HubConnection { get; private set; }
 
         // Events
         public event Action<Player> PlayerConnected;
+        public event Action<Player, string> PlayerDisconnected;
         public event Action GameStarted;
 
         // Other properties
-        public string LobbyCode { get; private set; }
+        internal string LobbyCode { get; set; }
+        internal string PlayerUsername { get; set; }
 
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
@@ -50,6 +52,12 @@ namespace SecretHitler.Services
                 }
             });
 
+            this.HubConnection.On<PlayerShared, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
+            {
+                Player player = new Player(disconnectingPlayer.Username);
+                this.PlayerDisconnected?.Invoke(player, message);
+            });
+
             // Handle the GameStarted event
             this.HubConnection.On(ServerCallbacks.StartGameName, () =>
             {
@@ -65,6 +73,11 @@ namespace SecretHitler.Services
             await this.StartConnection();
             PlayerShared player = new PlayerShared(username, lobbyCode);
             await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
+        }
+
+        internal async Task DisconnectPlayer(string username, string lobbyCode)
+        {
+            await this.HubConnection.SendAsync(ServerCallbacks.PlayerDisconnectedName, username, lobbyCode);
         }
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)

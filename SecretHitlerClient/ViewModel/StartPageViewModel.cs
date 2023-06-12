@@ -37,6 +37,7 @@ public partial class StartPageViewModel : ViewModel
             return;
         }
 
+        this.GameManager.IsPrimaryPlayer = false;
         // Navigate to the join game page
         await Shell.Current.GoToAsync(nameof(JoinGamePage));
     }
@@ -54,6 +55,7 @@ public partial class StartPageViewModel : ViewModel
             return;
         }
 
+        this.GameManager.IsPrimaryPlayer = true;
         // Navigate to the lobby page
         await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
@@ -68,6 +70,9 @@ public partial class StartPageViewModel : ViewModel
 
         // Create a lobby
         await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
+
+        // Set the player username (this client)
+        this.GameManager.SignalRService.PlayerUsername = this.Username;
     }
 
     private string CanAccessLobby()

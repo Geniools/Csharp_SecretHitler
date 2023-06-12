@@ -10,9 +10,13 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private ObservableCollection<Player> _players;
 
+        [ObservableProperty]
+        private string _lobbyWaitingText;
+
         public LobbyPageViewModel(GameManager gameManager) : base(gameManager)
         {
             this.Players = this.GameManager.Players;
+            this.LobbyWaitingText = "Waiting for players to join";
         }
 
         [RelayCommand]

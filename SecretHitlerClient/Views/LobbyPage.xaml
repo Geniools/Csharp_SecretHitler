@@ -71,7 +71,7 @@
                                     />
 
                                 <Image
-                                    Source="check.png"
+                                    Source="{Binding ImageSource}"
                                     WidthRequest="50"
                                     HeightRequest="50"
                                     HorizontalOptions="End" 
@@ -86,7 +86,7 @@
                     <!--Change maybe Horizantalstacklayout to grid -> play with it, avoid padding-->
 
                     <Label
-                        Text="Waiting for players to join"
+                        Text="{Binding LobbyWaitingText}"
                         VerticalOptions="Center"
                         Padding="25, 0, 0 ,40"
                         HorizontalTextAlignment="Center"

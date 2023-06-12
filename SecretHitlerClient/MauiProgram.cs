@@ -14,6 +14,17 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .ConfigureLifecycleEvents(AppLifecycle => {
+                // TODO: Do smth when the application is being closed (not working at the moment)
+                AppLifecycle.AddEvent("Closing", () => LogEvent("Closing"));
+                AppLifecycle.AddEvent("Destroying", () => LogEvent("Destroying"));
+
+                static bool LogEvent(string eventName, string type = null)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Lifecycle event: {eventName}{(type == null ? string.Empty : $" ({type})")}");
+                    return true;
+                }
+            })
             // Initialize the .NET MAUI Community Toolkit by adding the below line of code
             .UseMauiCommunityToolkit()
             .ConfigureFonts(fonts =>
