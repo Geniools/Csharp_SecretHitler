@@ -18,7 +18,14 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task StartGame()
         {
-            await this.GameManager.SignalRService.StartOnlineGame();
+            // Create a list of players
+            List<Player> connectedPlayers = new List<Player>();
+            foreach (Player player in this.Players)
+            {
+                connectedPlayers.Add(player);
+            }
+
+            await this.GameManager.SignalRService.StartOnlineGame(connectedPlayers);
         }
     }
 }

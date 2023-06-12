@@ -37,7 +37,26 @@ namespace SecretHitler
 
         private void AddPlayer(Player player)
         {
-            Shell.Current.Dispatcher.DispatchAsync(() => this.Players.Add(player));
+            Shell.Current.Dispatcher.DispatchAsync(() =>
+            {
+                if (!this.ContainsUsername(player.Username))
+                {
+                    this.Players.Add(player);
+                }
+            });
+        }
+
+        private bool ContainsUsername(string username)
+        {
+            foreach (Player player in this.Players)
+            {
+                if (player.Username.Equals(username.ToLower()))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public async void StartLocalGame()

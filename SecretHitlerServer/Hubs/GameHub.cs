@@ -9,7 +9,11 @@ namespace Server.Hubs
         {
             // Add the player to the group
             await Groups.AddToGroupAsync(Context.ConnectionId, player.LobbyCode);
+            await this.ConnectPlayer(player);
+        }
 
+        public async Task ConnectPlayer(PlayerShared player)
+        {
             // Notify other players that a player has connected
             await Clients.Group(player.LobbyCode).SendAsync("PlayerConnected", player);
         }

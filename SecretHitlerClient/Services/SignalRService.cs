@@ -8,6 +8,7 @@ namespace SecretHitler.Services
     {
         // Names of server callbacks
         private const string PlayerConnectedName = "PlayerConnected";
+        private const string ConnectPlayerName = "ConnectPlayer";
         private const string SessionStartedName = "SessionStarted";
         private const string StartGameName = "StartGame";
         private const string EndGameName = "EndGame";
@@ -75,8 +76,15 @@ namespace SecretHitler.Services
             await this.HubConnection.SendAsync(PlayerConnectedName, player);
         }
 
-        internal async Task StartOnlineGame()
+        internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
+            // Notify all players of the other connected players
+            foreach (Player player in connectedPlayers)
+            {
+                PlayerShared playerShared = new PlayerShared(player.Username, this.LobbyCode);
+                await this.HubConnection.SendAsync(ConnectPlayerName, playerShared);
+            }
+
             if (!string.IsNullOrEmpty(this.LobbyCode))
             {
                 await this.HubConnection.SendAsync(StartGameName, this.LobbyCode);
