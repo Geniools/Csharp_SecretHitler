@@ -15,7 +15,7 @@ namespace Server.Hubs
         public async Task ConnectPlayer(PlayerShared connectingPlayer)
         {
             // Notify other players that a player has connected
-            await Clients.Group(connectingPlayer.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, connectingPlayer);
+            await Clients.OthersInGroup(connectingPlayer.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, connectingPlayer);
         }
 
         //public async Task PlayerDisconnected(PlayerShared disconnectingPlayer, string? message = null)

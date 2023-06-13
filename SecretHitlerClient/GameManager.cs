@@ -79,6 +79,7 @@ namespace SecretHitler
                         this.SignalRService.PlayerUsername = string.Empty;
 
                         await Shell.Current.DisplayAlert("Disconnected", message, "OK");
+
                         await this.SignalRService.HubConnection.StopAsync();
                         await Shell.Current.GoToAsync(nameof(StartPage));
                     }

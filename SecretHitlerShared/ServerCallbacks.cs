@@ -10,7 +10,7 @@ namespace SecretHitlerShared
         public const string DisconnectPlayerName = "DisconnectPlayer";
         
         public const string StartGameName = "StartGame";
-        public const string ClearAllPlayersName = "ClearnAllPlayers";
+        public const string ClearAllPlayersName = "ClearAllPlayers";
         
         public const string SessionStartedName = "SessionStarted";
         public const string EndGameName = "EndGame";

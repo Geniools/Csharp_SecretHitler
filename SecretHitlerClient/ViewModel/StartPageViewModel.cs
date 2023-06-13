@@ -59,6 +59,10 @@ public partial class StartPageViewModel : ViewModel
         }
 
         this.GameManager.IsPrimaryPlayer = true;
+        // Add the player to the list of players
+        this.GameManager.Players.Add(new Model.Player(this.Username));
+        this.GameManager.SignalRService.LobbyCode = this.LobbyCode;
+
         // Navigate to the lobby page
         await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
@@ -76,6 +80,8 @@ public partial class StartPageViewModel : ViewModel
 
         // Set the player username (this client)
         this.GameManager.SignalRService.PlayerUsername = this.Username;
+
+
     }
 
     private string CanAccessLobby()

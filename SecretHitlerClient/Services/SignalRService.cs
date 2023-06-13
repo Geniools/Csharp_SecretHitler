@@ -67,7 +67,7 @@ namespace SecretHitler.Services
 
             this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
             {
-                
+                this.ClearAllPlayers?.Invoke();
             });
 
             //Start the connection
@@ -79,11 +79,6 @@ namespace SecretHitler.Services
             await this.StartConnection();
             PlayerShared player = new PlayerShared(username, lobbyCode);
             await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
-        }
-
-        internal async Task DisconnectPlayer(string username, string lobbyCode)
-        {
-            await this.HubConnection.SendAsync(ServerCallbacks.PlayerDisconnectedName, username, lobbyCode);
         }
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
