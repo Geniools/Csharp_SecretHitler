@@ -127,7 +127,10 @@ namespace SecretHitler
         /// <returns>The first player having the given username, null otherwise</returns>
         private Player ContainsUsername(string username)
         {
-            foreach (Player player in this.Players)
+            // Create a copy of the players list to avoid concurrency issues
+            List<Player> players = new List<Player>(this.Players);
+
+            foreach (Player player in players)
             {
                 if (player.Username.Equals(username.ToLower()))
                 {
