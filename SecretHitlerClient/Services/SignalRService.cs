@@ -61,15 +61,21 @@ namespace SecretHitler.Services
                 this.ClearAllPlayers?.Invoke();
             });
 
+            this.HubConnection.On<string>(ServerCallbacks.GetConnectionIdName, (connectionId) =>
+            {
+                this.CurrentPlayer.ConnectionId = connectionId;
+            });
+
             //Start the connection
             await this.HubConnection.StartAsync();
 
             // Get the connection id
-            //this.CurrentPlayer.ConnectionId = await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
+            await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
         }
         
         internal async Task ConnectPlayer(Player player)
         {
+            this.CurrentPlayer = player;
             await this.StartConnection();
             await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
         }

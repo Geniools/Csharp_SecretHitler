@@ -29,7 +29,7 @@ namespace SecretHitler
             this.SignalRService = new SignalRService("gameHub", "https://secrethitler.azurewebsites.net");
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
-            SignalRService.PlayerDisconnected += this.RemovePlayer;
+            SignalRService.PlayerDisconnected += this.DisconnectPlayer;
             SignalRService.GameStarted += this.StartLocalGame;
             SignalRService.ClearAllPlayers += this.ClearAllPlayers;
 
@@ -41,12 +41,13 @@ namespace SecretHitler
             this.ElectionTracker = 0;
         }
 
-        // Event handlers / Pre game logic
+        // Event handlers / Pre game logic =====================================================================================
+
         private async void AddPlayer(Player player)
         {
             await Shell.Current.Dispatcher.DispatchAsync(() =>
             {
-                if (this.ContainsUsername(player.Username) is null && this.Players.Count <= 10)
+                if (this.ContainsUsername(player) is null && this.Players.Count <= 10)
                 {
                     this.Players.Add(player);
                 }
@@ -61,14 +62,13 @@ namespace SecretHitler
             });
         }
 
-        private async void RemovePlayer(string message)
+        private async void DisconnectPlayer(string message)
         {
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
                 this.SignalRService.CurrentPlayer = null;
 
                 // Return to the start page
-                //await Shell.Current.GoToAsync(nameof(StartPage));
                 await Shell.Current.GoToAsync("..");
 
                 // Display the message
@@ -94,8 +94,9 @@ namespace SecretHitler
             }
         }
 
-        // Game logic
-        private async Task EndGame()
+        // Game logic ==========================================================================================================
+
+        private Task EndGame()
         {
             throw new NotImplementedException();
         }
@@ -110,21 +111,21 @@ namespace SecretHitler
             throw new NotImplementedException();
         }
 
-        // Helper functions / Utility functions
+        // Helper functions / Utility functions ===============================================================================
 
         /// <summary>
         /// Will return the first player having the given username, null otherwise
         /// </summary>
         /// <param name="username">The username of the player to be searched for</param>
         /// <returns>The first player having the given username, null otherwise</returns>
-        private Player ContainsUsername(string username)
+        private Player ContainsUsername(Player comparedPlayer)
         {
             // Create a copy of the players list to avoid concurrency issues
             List<Player> players = new List<Player>(this.Players);
 
             foreach (Player player in players)
             {
-                if (player.Username.ToLower().Equals(username.ToLower()))
+                if (comparedPlayer.Equals(player))
                 {
                     return player;
                 }

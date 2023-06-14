@@ -14,8 +14,8 @@ namespace SecretHitlerShared
         public string ImageSource { get; set; }
 
         public Player(
-            string username, string lobbyCode = "",
-            string imageSource = "check.png", SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal
+            string username, string lobbyCode = "", string imageSource = "check.png", 
+            SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal
         )
         {
             // Hub properties
@@ -34,6 +34,16 @@ namespace SecretHitlerShared
         public bool IsHitler()
         {
             return this.Role is SecretRole.Hitler;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Player player)
+            {
+                return this.Username.Trim().ToLower().Equals(player.Username.Trim().ToLower());
+            }
+
+            return false;
         }
     }
 }

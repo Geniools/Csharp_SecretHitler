@@ -10,7 +10,6 @@ namespace Server.Hubs
             // Add the player to the group
             await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
             // Set the connection ID of the player
-            connectingPlayer.ConnectionId = Context.ConnectionId;
             await this.ConnectPlayer(connectingPlayer);
         }
 
@@ -21,9 +20,9 @@ namespace Server.Hubs
         }
 
         // Get the connection ID of the player
-        public string GetConnectionId()
+        public async Task GetConnectionId()
         {
-            return Context.ConnectionId;
+            await Clients.Client(Context.ConnectionId).SendAsync(ServerCallbacks.GetConnectionIdName, Context.ConnectionId);
         }
 
         public async Task DisconnectPlayer(Player disconnectingPlayer, string? message = null)

@@ -66,7 +66,6 @@ public partial class StartPageViewModel : ViewModel
         this.GameManager.IsPrimary = true;
         // Add the player to the list of players
         this.GameManager.Players.Add(player);
-        this.GameManager.SignalRService.CurrentPlayer = player;
 
         // Navigate to the lobby page
         await Shell.Current.GoToAsync(nameof(LobbyPage));
