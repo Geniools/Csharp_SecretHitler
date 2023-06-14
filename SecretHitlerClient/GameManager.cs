@@ -13,6 +13,7 @@ namespace SecretHitler
 
         // Game specific properties
         public bool IsPrimary { get; set; }
+        public bool GameStarted { get; set; }
 
         // Game state
         public ObservableCollection<Player> Players { get; private set; }
@@ -43,19 +44,37 @@ namespace SecretHitler
 
         // Event handlers / Pre game logic =====================================================================================
 
-        private async void AddPlayer(Player player)
+        private void AddPlayer(Player player)
         {
-            await Shell.Current.Dispatcher.DispatchAsync(() =>
+            Shell.Current.Dispatcher.DispatchAsync(() =>
             {
-                if (this.ContainsUsername(player) is null && this.Players.Count <= 10)
+                Dictionary<int, string> errorMessages = new Dictionary<int, string>()
                 {
-                    this.Players.Add(player);
+                    { 1, "Username already exists" },
+                    { 2, "The lobby is full" },
+                    { 3, "The game has already started" }
+                };
+                int errorCode = 1;
+
+                if (this.ContainsUsername(player) is null)
+                {
+                    errorCode = 2;
+                    if (this.Players.Count <= 10)
+                    {
+                        errorCode = 3;
+                        if (!this.GameStarted)
+                        {
+                            errorCode = -1;
+                            this.Players.Add(player);
+                        }
+                    }
                 }
-                else
+
+                if(errorCode != -1)
                 {
                     if (this.IsPrimary)
                     {
-                        string message = "Username already exists or the lobby is full";
+                        string message = errorMessages[errorCode];
                         this.SignalRService.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, player, message);
                     }
                 }
@@ -75,14 +94,15 @@ namespace SecretHitler
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
                 // Stop the connection to the hub
-                //await this.SignalRService.HubConnection.StopAsync();
-                await this.SignalRService.HubConnection.DisposeAsync();
-                await this.SignalRService.DisconnectPlayer();
+                await this.SignalRService.HubConnection.StopAsync();
+                //await this.SignalRService.HubConnection.DisposeAsync();
+                //await this.SignalRService.DisconnectPlayer();
             });
         }
 
         private async void StartLocalGame()
         {
+            this.GameStarted = true;
             await Shell.Current.Dispatcher.DispatchAsync(async () => 
                 await Shell.Current.GoToAsync(nameof(MainPage))
             );
