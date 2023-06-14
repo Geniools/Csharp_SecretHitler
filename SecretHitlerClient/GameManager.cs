@@ -42,9 +42,9 @@ namespace SecretHitler
         }
 
         // Event handlers / Pre game logic
-        private void AddPlayer(Player player)
+        private async void AddPlayer(Player player)
         {
-            Shell.Current.Dispatcher.DispatchAsync(() =>
+            await Shell.Current.Dispatcher.DispatchAsync(() =>
             {
                 if (this.ContainsUsername(player.Username) is null && this.Players.Count <= 10)
                 {
@@ -61,14 +61,15 @@ namespace SecretHitler
             });
         }
 
-        private void RemovePlayer(string message)
+        private async void RemovePlayer(string message)
         {
-            Shell.Current.Dispatcher.DispatchAsync(async () =>
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
                 this.SignalRService.CurrentPlayer = null;
 
                 // Return to the start page
-                await Shell.Current.GoToAsync(nameof(StartPage));
+                //await Shell.Current.GoToAsync(nameof(StartPage));
+                await Shell.Current.GoToAsync("..");
 
                 // Display the message
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
