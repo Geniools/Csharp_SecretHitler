@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
 using SecretHitlerShared;
+using System.Net;
 
 namespace SecretHitler.Services
 {
@@ -61,23 +62,26 @@ namespace SecretHitler.Services
                 this.ClearAllPlayers?.Invoke();
             });
 
-            this.HubConnection.On<string>(ServerCallbacks.GetConnectionIdName, (connectionId) =>
-            {
-                this.CurrentPlayer.ConnectionId = connectionId;
-            });
+            ServicePointManager.DefaultConnectionLimit = 10;
 
             //Start the connection
             await this.HubConnection.StartAsync();
 
             // Get the connection id
-            await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
+            this.CurrentPlayer.ConnectionId = this.HubConnection.ConnectionId;
         }
         
         internal async Task ConnectPlayer(Player player)
         {
             this.CurrentPlayer = player;
-            await this.StartConnection();
-            await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
+
+            // Check if the connection is already started
+            if (this.HubConnection.State != HubConnectionState.Connected)
+            {
+                await this.StartConnection();
+            }
+
+            await this.HubConnection.InvokeAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)

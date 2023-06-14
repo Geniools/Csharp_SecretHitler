@@ -46,7 +46,7 @@ namespace SecretHitler
 
         private async void AddPlayer(Player player)
         {
-            await Shell.Current.Dispatcher.DispatchAsync(() =>
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
                 Dictionary<int, string> errorMessages = new Dictionary<int, string>()
                 {
@@ -75,7 +75,7 @@ namespace SecretHitler
                     if (this.IsPrimary)
                     {
                         string message = errorMessages[errorCode];
-                        this.SignalRService.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, player, message);
+                        await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.DisconnectPlayerName, player, message);
                     }
                 }
             });
@@ -94,10 +94,7 @@ namespace SecretHitler
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
                 // Stop the connection to the hub
-                await this.SignalRService.HubConnection.DisposeAsync();
                 await this.SignalRService.HubConnection.StopAsync();
-
-                //await this.SignalRService.DisconnectPlayer();
             });
         }
 
@@ -139,7 +136,7 @@ namespace SecretHitler
         /// <summary>
         /// Will return the first player having the given username, null otherwise
         /// </summary>
-        /// <param name="username">The username of the player to be searched for</param>
+        /// <param player="comparedPlayer">The Player to be searched for</param>
         /// <returns>The first player having the given username, null otherwise</returns>
         private Player ContainsUsername(Player comparedPlayer)
         {

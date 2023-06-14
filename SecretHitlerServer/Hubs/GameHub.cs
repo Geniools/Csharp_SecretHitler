@@ -7,10 +7,10 @@ namespace Server.Hubs
     {
         public async Task PlayerConnected(Player connectingPlayer)
         {
-            // Add the player to the group
-            await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
             // Set the connection ID of the player
             await this.ConnectPlayer(connectingPlayer);
+            // Add the player to the group
+            await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
         }
 
         public async Task PlayerDisconnected(Player disconnectedPlayer)
