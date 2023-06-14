@@ -46,8 +46,9 @@ namespace SecretHitler.Services
                 this.PlayerConnected?.Invoke(connectedPlayer);
             });
 
-            this.HubConnection.On<string>(ServerCallbacks.DisconnectPlayerName, (message) =>
+            this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
             {
+                Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
                 this.PlayerDisconnected?.Invoke(message);
             });
 

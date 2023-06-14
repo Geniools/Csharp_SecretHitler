@@ -83,18 +83,18 @@ namespace SecretHitler
 
         private async void DisconnectPlayer(string message)
         {
+            this.SignalRService.CurrentPlayer = null;
+
+            // Stop the connection to the hub
+            //await this.SignalRService.HubConnection.StopAsync();
+
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
-                this.SignalRService.CurrentPlayer = null;
-
-                // Return to the start page
-                await Shell.Current.GoToAsync("..");
-
                 // Display the message
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
-                // Stop the connection to the hub
-                await this.SignalRService.HubConnection.StopAsync();
+                // Return to the start page
+                await Shell.Current.GoToAsync("..");
             });
         }
 
