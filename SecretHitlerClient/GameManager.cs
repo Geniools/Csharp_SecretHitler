@@ -44,9 +44,9 @@ namespace SecretHitler
 
         // Event handlers / Pre game logic =====================================================================================
 
-        private void AddPlayer(Player player)
+        private async void AddPlayer(Player player)
         {
-            Shell.Current.Dispatcher.DispatchAsync(() =>
+            await Shell.Current.Dispatcher.DispatchAsync(() =>
             {
                 Dictionary<int, string> errorMessages = new Dictionary<int, string>()
                 {
@@ -94,8 +94,9 @@ namespace SecretHitler
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
                 // Stop the connection to the hub
+                await this.SignalRService.HubConnection.DisposeAsync();
                 await this.SignalRService.HubConnection.StopAsync();
-                //await this.SignalRService.HubConnection.DisposeAsync();
+
                 //await this.SignalRService.DisconnectPlayer();
             });
         }
