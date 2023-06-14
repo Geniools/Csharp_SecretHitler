@@ -65,7 +65,7 @@ namespace SecretHitler.Services
             await this.HubConnection.StartAsync();
 
             // Get the connection id
-            this.CurrentPlayer.ConnectionId = await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
+            //this.CurrentPlayer.ConnectionId = await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
         }
         
         internal async Task ConnectPlayer(Player player)
