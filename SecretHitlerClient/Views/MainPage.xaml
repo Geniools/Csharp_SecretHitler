@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SecretHitler.Views.MainPage"
              xmlns:viewmodel="clr-namespace:SecretHitler.ViewModel"
-             xmlns:model="clr-namespace:SecretHitler.Model"
+             xmlns:model="clr-namespace:SecretHitlerShared"
              x:DataType="viewmodel:MainPageViewModel"
              Title="MainPage">
 

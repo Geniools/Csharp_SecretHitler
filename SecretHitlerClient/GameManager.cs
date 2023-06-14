@@ -1,5 +1,4 @@
-﻿using SecretHitler.Model;
-using SecretHitler.Services;
+﻿using SecretHitler.Services;
 using System.Collections.ObjectModel;
 using SecretHitler.Views;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -13,7 +12,7 @@ namespace SecretHitler
         public SignalRService SignalRService { get; private set; }
 
         // Game specific properties
-        public bool IsPrimaryPlayer { get; set; }
+        public bool IsPrimary { get; set; }
 
         // Game state
         public ObservableCollection<Player> Players { get; private set; }
@@ -53,12 +52,10 @@ namespace SecretHitler
                 }
                 else
                 {
-                    if (this.IsPrimaryPlayer)
+                    if (this.IsPrimary)
                     {
-                        PlayerShared disconnectedPlayer = new PlayerShared(player.Username, this.SignalRService.LobbyCode);
-
                         string message = "Username already exists or the lobby is full";
-                        this.SignalRService.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectedPlayer, message);
+                        this.SignalRService.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, player, message);
                     }
                 }
             });
@@ -68,22 +65,16 @@ namespace SecretHitler
         {
             Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
-                Player playerToRemove = this.ContainsUsername(player.Username);
-                if (playerToRemove is not null)
-                {
-                    this.Players.Remove(playerToRemove);
+                this.SignalRService.CurrentPlayer = null;
 
-                    if (playerToRemove.Username.Equals(this.SignalRService.PlayerUsername.ToLower()))
-                    {
-                        this.SignalRService.LobbyCode = string.Empty;
-                        this.SignalRService.PlayerUsername = string.Empty;
+                // Return to the start page
+                await Shell.Current.GoToAsync(nameof(StartPage));
 
-                        await Shell.Current.DisplayAlert("Disconnected", message, "OK");
+                // Display the message
+                await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
-                        await this.SignalRService.HubConnection.StopAsync();
-                        await Shell.Current.GoToAsync(nameof(StartPage));
-                    }
-                }
+                // Stop the connection to the hub
+                await this.SignalRService.HubConnection.StopAsync();
             });
         }
 
@@ -96,7 +87,7 @@ namespace SecretHitler
 
         private void ClearAllPlayers()
         {
-            if (!this.IsPrimaryPlayer)
+            if (!this.IsPrimary)
             {
                 this.Players.Clear();
             }

@@ -17,5 +17,7 @@ namespace SecretHitlerShared
 
         public const string ChatMessageName = "ChatMessage";
         public const string ElectionVoteName = "ElectionVote";
+
+        public const string GetConnectionIdName = "GetConnectionId";
     }
 }

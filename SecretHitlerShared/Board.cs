@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 
-namespace SecretHitler.Model
+namespace SecretHitlerShared
 {
     public class Board
     {

@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SecretHitler.Views;
+using SecretHitlerShared;
 
 namespace SecretHitler.ViewModel;
 
@@ -23,6 +24,7 @@ public partial class StartPageViewModel : ViewModel
         // Make sure the connection to the server is closed
         this.GameManager.SignalRService.HubConnection.StopAsync();
 
+        // Set the title and game name
         this.GameName = "Stealth Führer";
         this.Title = "Join or Create a Game:";
     }
@@ -30,9 +32,10 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task JoinLobby()
     {
+        Player player = new Player(this.Username, this.LobbyCode);
         try
         {
-            await this.AccessLobby();
+            await this.AccessLobby(player);
         }
         catch (ArgumentException ex)
         {
@@ -40,7 +43,8 @@ public partial class StartPageViewModel : ViewModel
             return;
         }
 
-        this.GameManager.IsPrimaryPlayer = false;
+        this.GameManager.IsPrimary = false;
+
         // Navigate to the join game page
         await Shell.Current.GoToAsync(nameof(JoinGamePage));
     }
@@ -48,9 +52,10 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task CreateLobby()
     {
+        Player player = new Player(this.Username, this.LobbyCode);
         try
         {
-            await this.AccessLobby();
+            await this.AccessLobby(player);
         }
         catch (ArgumentException ex)
         {
@@ -58,30 +63,26 @@ public partial class StartPageViewModel : ViewModel
             return;
         }
 
-        this.GameManager.IsPrimaryPlayer = true;
+        this.GameManager.IsPrimary = true;
         // Add the player to the list of players
-        this.GameManager.Players.Add(new Model.Player(this.Username));
-        this.GameManager.SignalRService.LobbyCode = this.LobbyCode;
+        this.GameManager.Players.Add(player);
+        this.GameManager.SignalRService.CurrentPlayer = player;
 
         // Navigate to the lobby page
         await Shell.Current.GoToAsync(nameof(LobbyPage));
     }
 
-    private async Task AccessLobby()
+    private async Task AccessLobby(Player player)
     {
         string errorMessage = this.CanAccessLobby();
+
         if (!string.IsNullOrEmpty(errorMessage))
         {
             throw new ArgumentException(errorMessage);
         }
 
         // Create a lobby
-        await this.GameManager.SignalRService.ConnectPlayer(this.Username, this.LobbyCode);
-
-        // Set the player username (this client)
-        this.GameManager.SignalRService.PlayerUsername = this.Username;
-
-
+        await this.GameManager.SignalRService.ConnectPlayer(player);
     }
 
     private string CanAccessLobby()

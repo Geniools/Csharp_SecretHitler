@@ -5,30 +5,32 @@ namespace Server.Hubs
 {
     public class GameHub : Hub
     {
-        public async Task PlayerConnected(PlayerShared connectingPlayer)
+        public async Task PlayerConnected(Player connectingPlayer)
         {
             // Add the player to the group
             await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
+            // Set the connection ID of the player
+            connectingPlayer.ConnectionId = Context.ConnectionId;
             await this.ConnectPlayer(connectingPlayer);
         }
 
-        public async Task ConnectPlayer(PlayerShared connectingPlayer)
+        public async Task ConnectPlayer(Player connectingPlayer)
         {
             // Notify other players that a player has connected
             await Clients.OthersInGroup(connectingPlayer.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, connectingPlayer);
         }
 
-        //public async Task PlayerDisconnected(PlayerShared disconnectingPlayer, string? message = null)
-        //{
-        //    // Remove the player from the group
-        //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, disconnectingPlayer.LobbyCode);
-        //    await this.DisconnectPlayer(disconnectingPlayer, message);
-        //}
+        // Get the connection ID of the player
+        public string GetConnectionId()
+        {
+            return Context.ConnectionId;
+        }
 
-        public async Task DisconnectPlayer(PlayerShared disconnectingPlayer, string? message = null)
+        public async Task DisconnectPlayer(Player disconnectingPlayer, string? message = null)
         {
             // Notify other players that a player has disconnected
-            await Clients.Group(disconnectingPlayer.LobbyCode).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
+            //await Clients.Group(disconnectingPlayer.LobbyCode).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
+            await Clients.Client(disconnectingPlayer.ConnectionId).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
         }
 
         public async Task StartGame(string lobbyCode)

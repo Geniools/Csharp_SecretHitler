@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SecretHitler.Model;
+using SecretHitlerShared;
 
 namespace SecretHitler.ViewModel
 {

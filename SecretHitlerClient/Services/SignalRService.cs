@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using SecretHitler.Model;
 using SecretHitlerShared;
 
 namespace SecretHitler.Services
@@ -16,8 +15,7 @@ namespace SecretHitler.Services
         public event Action ClearAllPlayers;
 
         // Other properties
-        internal string LobbyCode { get; set; }
-        internal string PlayerUsername { get; set; }
+        internal Player CurrentPlayer { get; set; }
 
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
@@ -42,21 +40,14 @@ namespace SecretHitler.Services
         {
             // This function must contain all event handlers
             // Handle the PlayerConnected event
-            this.HubConnection.On<PlayerShared>(ServerCallbacks.PlayerConnectedName, playerShared =>
+            this.HubConnection.On<Player>(ServerCallbacks.PlayerConnectedName, connectedPlayer =>
             {
-                Player player = new Player(playerShared.Username);
-                this.PlayerConnected?.Invoke(player);
-
-                if (string.IsNullOrEmpty(this.LobbyCode))
-                {
-                    this.LobbyCode = playerShared.LobbyCode;
-                }
+                this.PlayerConnected?.Invoke(connectedPlayer);
             });
 
-            this.HubConnection.On<PlayerShared, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
+            this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
             {
-                Player player = new Player(disconnectingPlayer.Username);
-                this.PlayerDisconnected?.Invoke(player, message);
+                this.PlayerDisconnected?.Invoke(disconnectingPlayer, message);
             });
 
             // Handle the GameStarted event
@@ -72,30 +63,31 @@ namespace SecretHitler.Services
 
             //Start the connection
             await this.HubConnection.StartAsync();
+
+            // Get the connection id
+            this.CurrentPlayer.ConnectionId = await this.HubConnection.InvokeAsync<string>(ServerCallbacks.GetConnectionIdName);
         }
         
-        internal async Task ConnectPlayer(string username, string lobbyCode)
+        internal async Task ConnectPlayer(Player player)
         {
             await this.StartConnection();
-            PlayerShared player = new PlayerShared(username, lobbyCode);
             await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
             // Clear all players from other clients
-            await this.HubConnection.SendAsync(ServerCallbacks.ClearAllPlayersName, this.LobbyCode);
+            await this.HubConnection.SendAsync(ServerCallbacks.ClearAllPlayersName, this.CurrentPlayer.LobbyCode);
 
             // Notify all players of the other connected players
             foreach (Player player in connectedPlayers)
             {
-                PlayerShared playerShared = new PlayerShared(player.Username, this.LobbyCode);
-                await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, playerShared);
+                await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, player);
             }
 
-            if (!string.IsNullOrEmpty(this.LobbyCode))
+            if (!string.IsNullOrEmpty(this.CurrentPlayer.LobbyCode))
             {
-                await this.HubConnection.SendAsync(ServerCallbacks.StartGameName, this.LobbyCode);
+                await this.HubConnection.SendAsync(ServerCallbacks.StartGameName, this.CurrentPlayer.LobbyCode);
             }
         }
     }

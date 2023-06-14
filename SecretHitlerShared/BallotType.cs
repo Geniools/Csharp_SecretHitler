@@ -1,4 +1,4 @@
-﻿namespace SecretHitler.Model
+﻿namespace SecretHitlerShared
 {
     public enum BallotType
     {

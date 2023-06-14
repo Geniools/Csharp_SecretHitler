@@ -1,5 +1,5 @@
 ﻿
-namespace SecretHitler.Model
+namespace SecretHitlerShared
 {
     public class PolicyCard
     {

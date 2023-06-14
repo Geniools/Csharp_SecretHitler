@@ -1,15 +1,28 @@
 ﻿
-namespace SecretHitler.Model
+namespace SecretHitlerShared
 {
     public class Player
     {
+        // Hub properties
+        public string LobbyCode { get; set; }
+        public string ConnectionId { get; set; }
+
+        // Game properties
         public string Username { get; private set; }
         public SecretRole Role { get; set; }
         public PartyMembership Party { get; set; }
         public string ImageSource { get; set; }
 
-        public Player(string username, string imageSource = "check.png", SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal)
+        public Player(
+            string username, string lobbyCode = "",
+            string imageSource = "check.png", SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal
+        )
         {
+            // Hub properties
+            this.LobbyCode = lobbyCode;
+            this.ConnectionId = string.Empty;
+
+            // Game properties
             this.Username = username;
             this.ImageSource = imageSource;
 
