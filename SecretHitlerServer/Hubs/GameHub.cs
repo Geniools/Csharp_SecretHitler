@@ -29,8 +29,7 @@ namespace Server.Hubs
         public async Task DisconnectPlayer(Player disconnectingPlayer, string? message = null)
         {
             // Notify other players that a player has disconnected
-            //await Clients.Group(disconnectingPlayer.LobbyCode).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
-            await Clients.Client(disconnectingPlayer.ConnectionId).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
+            await Clients.Client(disconnectingPlayer.ConnectionId).SendAsync(ServerCallbacks.DisconnectPlayerName, message);
         }
 
         public async Task StartGame(string lobbyCode)

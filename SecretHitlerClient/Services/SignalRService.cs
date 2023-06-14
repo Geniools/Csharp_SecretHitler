@@ -10,7 +10,7 @@ namespace SecretHitler.Services
 
         // Events
         public event Action<Player> PlayerConnected;
-        public event Action<Player, string> PlayerDisconnected;
+        public event Action<string> PlayerDisconnected;
         public event Action GameStarted;
         public event Action ClearAllPlayers;
 
@@ -45,9 +45,9 @@ namespace SecretHitler.Services
                 this.PlayerConnected?.Invoke(connectedPlayer);
             });
 
-            this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
+            this.HubConnection.On<string>(ServerCallbacks.DisconnectPlayerName, (message) =>
             {
-                this.PlayerDisconnected?.Invoke(disconnectingPlayer, message);
+                this.PlayerDisconnected?.Invoke(message);
             });
 
             // Handle the GameStarted event

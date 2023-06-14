@@ -61,7 +61,7 @@ namespace SecretHitler
             });
         }
 
-        private void RemovePlayer(Player player, string message)
+        private void RemovePlayer(string message)
         {
             Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
@@ -123,7 +123,7 @@ namespace SecretHitler
 
             foreach (Player player in players)
             {
-                if (player.Username.Equals(username.ToLower()))
+                if (player.Username.ToLower().Equals(username.ToLower()))
                 {
                     return player;
                 }
