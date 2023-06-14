@@ -80,6 +80,11 @@ namespace SecretHitler.Services
             await this.HubConnection.SendAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
+        internal async Task DisconnectPlayer()
+        {
+            await this.HubConnection.SendAsync(ServerCallbacks.DisconnectPlayerName, this.CurrentPlayer);
+        }
+
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
             // Clear all players from other clients

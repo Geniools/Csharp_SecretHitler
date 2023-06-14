@@ -75,7 +75,9 @@ namespace SecretHitler
                 await Shell.Current.DisplayAlert("Disconnected", message, "OK");
 
                 // Stop the connection to the hub
-                await this.SignalRService.HubConnection.StopAsync();
+                //await this.SignalRService.HubConnection.StopAsync();
+                await this.SignalRService.HubConnection.DisposeAsync();
+                await this.SignalRService.DisconnectPlayer();
             });
         }
 
