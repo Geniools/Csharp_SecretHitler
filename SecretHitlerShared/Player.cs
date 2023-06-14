@@ -36,7 +36,7 @@ namespace SecretHitlerShared
             return this.Role is SecretRole.Hitler;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is Player player)
             {
@@ -44,6 +44,11 @@ namespace SecretHitlerShared
             }
 
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

@@ -13,21 +13,15 @@ namespace Server.Hubs
             await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
         }
 
-        public async Task PlayerDisconnected(Player disconnectedPlayer)
-        {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, disconnectedPlayer.LobbyCode);
-        }
-
         public async Task ConnectPlayer(Player connectingPlayer)
         {
             // Notify other players that a player has connected
             await Clients.OthersInGroup(connectingPlayer.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, connectingPlayer);
         }
 
-        // Get the connection ID of the player
-        public async Task GetConnectionId()
+        public async Task PlayerDisconnected(Player disconnectedPlayer)
         {
-            await Clients.Client(Context.ConnectionId).SendAsync(ServerCallbacks.GetConnectionIdName, Context.ConnectionId);
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, disconnectedPlayer.LobbyCode);
         }
 
         public async Task DisconnectPlayer(Player disconnectingPlayer, string? message = null)

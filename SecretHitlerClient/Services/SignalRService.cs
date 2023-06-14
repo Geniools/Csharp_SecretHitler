@@ -58,7 +58,7 @@ namespace SecretHitler.Services
 
             this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
             {
-                Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
+                //Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
                 this.PlayerDisconnected?.Invoke(message);
             });
 
@@ -98,17 +98,17 @@ namespace SecretHitler.Services
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
             // Clear all players from other clients
-            await this.HubConnection.SendAsync(ServerCallbacks.ClearAllPlayersName, this.CurrentPlayer.LobbyCode);
+            await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.CurrentPlayer.LobbyCode);
 
             // Notify all players of the other connected players
             foreach (Player player in connectedPlayers)
             {
-                await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, player);
+                await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
             }
 
             if (!string.IsNullOrEmpty(this.CurrentPlayer.LobbyCode))
             {
-                await this.HubConnection.SendAsync(ServerCallbacks.StartGameName, this.CurrentPlayer.LobbyCode);
+                await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.CurrentPlayer.LobbyCode);
             }
         }
     }
