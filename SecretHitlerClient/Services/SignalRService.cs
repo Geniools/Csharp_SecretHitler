@@ -8,6 +8,8 @@ namespace SecretHitler.Services
     {
         // Connection to the server
         public HubConnection HubConnection { get; private set; }
+        private readonly string _baseUrl;
+        private readonly string _hubName;
 
         // Events
         public event Action<Player> PlayerConnected;
@@ -31,6 +33,9 @@ namespace SecretHitler.Services
                 baseUrl += $":{portNr}";
             }
 
+            this._baseUrl = baseUrl;
+            this._hubName = hubName;
+
             // Create the connection
             this.HubConnection = new HubConnectionBuilder()
                 .WithUrl($"{baseUrl}/{hubName}")
@@ -39,6 +44,11 @@ namespace SecretHitler.Services
 
         private async Task StartConnection()
         {
+            // (Re)Create the connection
+            this.HubConnection = new HubConnectionBuilder()
+                .WithUrl($"{this._baseUrl}/{this._hubName}")
+                .Build();
+
             // This function must contain all event handlers
             // Handle the PlayerConnected event
             this.HubConnection.On<Player>(ServerCallbacks.PlayerConnectedName, connectedPlayer =>

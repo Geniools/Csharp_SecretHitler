@@ -10,6 +10,7 @@ namespace SecretHitler
     {
         // Services
         public SignalRService SignalRService { get; private set; }
+        public const string HubName = "gameHub";
 
         // Game specific properties
         public bool IsPrimary { get; set; }
@@ -87,6 +88,7 @@ namespace SecretHitler
 
             // Stop the connection to the hub
             //await this.SignalRService.HubConnection.StopAsync();
+            await this.SignalRService.HubConnection.DisposeAsync();
 
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
