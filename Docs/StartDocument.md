@@ -79,37 +79,53 @@ here: https://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf.
 
 ![Game - Voting](./Assets/GameVoting.png "Game - Voting")
 
-## Input & Output
+### MoSCoW Analysis
 
-*The section below is yet to be updated*
+|  Priority   |                                                               Task                                                                |
+|:-----------:|:---------------------------------------------------------------------------------------------------------------------------------:|
+|  Must have  | Multiplayer mode<br/>Revealable role button<br/>Input Validation<br/>Policy Cards<br/>Role Cards<br/> Ja/Nein Voting buttons<br/> |
+| Should have |                                         Popup messages<br/>Chancellor/President Icon<br/>                                         |
+| Could have  |                                                  Animations<br/>Player Icon<br/>                                                  |
+|  Wont have  |                                                            Player Chat                                                            |
+
+## Input & Output
 
 ### Input
 
-|        Case         |   Type   | Conditions |
-|:-------------------:|:--------:|:----------:|
-| Example exampleName | `String` | not empty  |
+|          Case          |   Type   |          Conditions           |
+|:----------------------:|:--------:|:-----------------------------:|
+| PlayerShared Username  | `String` | 2 < `string` > 15, no symbols |
+| PlayerShared LobbyCode | `String` | 4 < `string` > 6, no symbols  |
+|                        |          |                               |
 
 ### Output
 
-|  Case   |   Type   |
-|:-------:|:--------:|
-| Example | `String` |
+|        Case        |         Type         |
+|:------------------:|:--------------------:|
+|      Players       |       `Player`       |
+|  CurrentPresident  |       `Player`       |
+| CurrentChancellor  |       `Player`       |
+|       Winner       |       `Player`       |
+|       Party        |  `PartyMembership`   |
+|      isHitler      |      `Boolean`       |
+|  ElectionTracker   |        `Byte`        |
+|        Role        |     `SecretRole`     |
+|      isKilled      |      `Boolean`       |
+| PresidentialPowers | `PresidentialPowers` |
+
 
 ### Calculations
 
-|  Case   |    Calculation    |
-|:-------:|:-----------------:|
-| Example | `Example*Example` |
+|    Case    |    Calculation    |
+|:----------:|:-----------------:|
+| AssignRole | `Example*Example` |
+|            |                   |
 
 ### Remarks
 
 * Input will be validated
-
-## Class Diagram
-
-(The class diagram will be added here later)
-
-![UML Diagram](InsertDiagramHere.png "insert diagram here")
+* Players with the same username cannot connect
+* Lobby can be created only once with the same code
 
 ## Test Plan
 
@@ -119,12 +135,12 @@ In this section the testcases will be described to test the application.
 
 In the following table you'll find all the data that is needed for testing.
 
-#### Example
+#### Player, entering the game
 
-|    ID    |        Input        |            Code             |
-|:--------:|:-------------------:|:---------------------------:|
-| example1 | `name1`, 1, `role`  | Example("name1", 1, HITLER) |
-| example2 | empty, empty, empty |   Example(null, 0, null)    |
+|               ID               |       Input        |            Code             |
+|:------------------------------:|:------------------:|:---------------------------:|
+| playershared1(name, lobbycode) |   `Chris, 1234`    | PlayerShared("Chris", 1234) |
+| playershared2(name,lobbycode)  |    empty, empty    |  PlayerShared(null, null)   |
 
 ### Test Cases
 
@@ -141,5 +157,16 @@ Description: Testing input validation.
 |  2   |       |   setExample(null)    |                   null                    |
 |  3   |       |    setExample(" ")    | `Example must be at least 2 letters long` |
 
+#### Test Case 2
 
+Description: Testing what if the player is killed
 
+| Step | Input |        Action         |              Expected Output              |
+|:----:|:-----:|:---------------------:|:-----------------------------------------:|
+|  1   |       | setExample("Example") |                 `Example`                 |
+|  2   |       |   setExample(null)    |                   null                    |
+|  3   |       |    setExample(" ")    | `Example must be at least 2 letters long` |
+
+#### Test Case 3
+
+Description: User is Fuhrer
