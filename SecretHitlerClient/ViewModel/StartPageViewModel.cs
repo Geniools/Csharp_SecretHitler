@@ -90,22 +90,36 @@ public partial class StartPageViewModel : ViewModel
 
         if (!string.IsNullOrEmpty(this.Username) && !string.IsNullOrEmpty(this.LobbyCode))
         {
+            // Check for special symbols in the username
+            if (this.Username.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                errorMessage += "Username cannot contain special characters.\n";
+            }
+
+            // Check for special symbols in the lobby code
+            if (this.LobbyCode.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                errorMessage += "Lobby code cannot contain special characters.\n";
+            }
+
+            // Check the length of the username
             if (this.Username.Length < 2)
             {
                 errorMessage += "Username must be at least 2 characters long.\n";
             }
-            else if (this.Username.Length > 15)
+            else if (this.Username.Length > 10)
             {
-                errorMessage += "Username must be less than 15 characters long.\n";
+                errorMessage += "Username must be less than 10 characters long.\n";
             }
 
+            // Check the length of the lobby code
             if (this.LobbyCode.Length < 4)
             {
                 errorMessage += "Lobby code must be at least 4 characters in length.\n";
             }
-            else if (this.LobbyCode.Length > 10)
+            else if (this.LobbyCode.Length > 6)
             {
-                errorMessage += "Lobby code must be less than 10 characters in length.\n";
+                errorMessage += "Lobby code must be less than 6 characters in length.\n";
             }
         }
         else
