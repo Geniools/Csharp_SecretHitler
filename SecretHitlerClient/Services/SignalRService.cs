@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
-using SecretHitlerShared;
 using System.Net;
+using SecretHitlerShared;
 
 namespace SecretHitler.Services
 {
@@ -18,7 +18,7 @@ namespace SecretHitler.Services
         public event Action ClearAllPlayers;
 
         // Other properties
-        internal Player CurrentPlayer { get; set; }
+        internal Player ThisPlayer { get; set; }
 
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
@@ -42,6 +42,10 @@ namespace SecretHitler.Services
                 .Build();
         }
 
+        /// <summary>
+        /// Will create (or recreate) the connection to the server, subscribe to events and start the connection
+        /// </summary>
+        /// <returns></returns>
         private async Task StartConnection()
         {
             // (Re)Create the connection
@@ -56,10 +60,17 @@ namespace SecretHitler.Services
                 this.PlayerConnected?.Invoke(connectedPlayer);
             });
 
+            // Will be called when a player disconnects (this player) - will be triggered by the "primary" client
             this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
             {
                 //Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
                 this.PlayerDisconnected?.Invoke(message);
+            });
+
+            // Before starting a new game, clear all players from other clients
+            this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
+            {
+                this.ClearAllPlayers?.Invoke();
             });
 
             // Handle the GameStarted event
@@ -68,23 +79,19 @@ namespace SecretHitler.Services
                 this.GameStarted?.Invoke();
             });
 
-            this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
-            {
-                this.ClearAllPlayers?.Invoke();
-            });
-
+            // Set the default connection limit
             ServicePointManager.DefaultConnectionLimit = 10;
 
             //Start the connection
             await this.HubConnection.StartAsync();
 
             // Get the connection id
-            this.CurrentPlayer.ConnectionId = this.HubConnection.ConnectionId;
+            this.ThisPlayer.ConnectionId = this.HubConnection.ConnectionId;
         }
         
         internal async Task ConnectPlayer(Player player)
         {
-            this.CurrentPlayer = player;
+            this.ThisPlayer = player;
 
             // Check if the connection is already started
             if (this.HubConnection.State != HubConnectionState.Connected)
@@ -98,7 +105,7 @@ namespace SecretHitler.Services
         internal async Task StartOnlineGame(List<Player> connectedPlayers)
         {
             // Clear all players from other clients
-            await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.CurrentPlayer.LobbyCode);
+            await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.ThisPlayer.LobbyCode);
 
             // Notify all players of the other connected players
             foreach (Player player in connectedPlayers)
@@ -106,9 +113,10 @@ namespace SecretHitler.Services
                 await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
             }
 
-            if (!string.IsNullOrEmpty(this.CurrentPlayer.LobbyCode))
+            // Start the game
+            if (!string.IsNullOrEmpty(this.ThisPlayer.LobbyCode))
             {
-                await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.CurrentPlayer.LobbyCode);
+                await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.ThisPlayer.LobbyCode);
             }
         }
     }

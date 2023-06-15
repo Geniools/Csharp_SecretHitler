@@ -34,27 +34,22 @@
         </Grid.ColumnDefinitions>
 
         <!--Players-->
-        <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Players}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type model:Player}">
-                    <Grid Padding="20">
-                        <Label Text="{Binding Username}" HorizontalOptions="Center" VerticalOptions="Start" />
-                        <Image Source="{Binding Role}" HorizontalOptions="Center" VerticalOptions="End" />
-                        <Image Source="profile.png" WidthRequest="50" HorizontalOptions="Center" Margin="30" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <HorizontalStackLayout Grid.ColumnSpan="7">
+            <CollectionView ItemsSource="{Binding Players}" ItemsLayout ="HorizontalList">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:Player}">
+                        <Grid Padding="10">
+                            <Label Text="{Binding Username}" HorizontalOptions="Center" VerticalOptions="Start" />
+                            <Image Source="{Binding PlayingImageSource}" WidthRequest="50" HorizontalOptions="Center" Margin="30" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </HorizontalStackLayout>
 
         <!--Table-->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Grid.RowSpan="7">
-            <Rectangle 
-                BackgroundColor="#855E42"
-                Grid.Column="0" 
-                Grid.ColumnSpan="8"
-                Grid.Row="0" 
-                Grid.RowSpan="8"
-                >
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
+            <Rectangle BackgroundColor="#855E42">
                 <Rectangle.Shadow>
                     <Shadow
                         Brush="#331800"
@@ -67,7 +62,7 @@
         </Grid>
 
         <!-- Grid test for row 0 -->
-        <Grid Grid.Row="0" Grid.Column="1">
+        <!--Grid Grid.Row="0" Grid.Column="1">
             <Label Text="Grid 0,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="2">
@@ -81,7 +76,7 @@
         </Grid>
         <Grid Grid.Row="0" Grid.Column="5">
             <Label Text="Grid 0,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
+        </Grid>-->
 
         <!-- Grid test for row 1 -->
         <Grid Grid.Row="1" Grid.Column="0">
@@ -266,7 +261,7 @@
             <Label Text="Grid 7,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
         </Grid>
 
-        <!--Voting-->
+        <!--Voting--><!--
         <Grid Grid.Row="0" Grid.Column="7">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <Button Text="Ja"  WidthRequest="60"/>
@@ -274,10 +269,10 @@
             </StackLayout>
         </Grid>
 
-        <!--Role-->
+        --><!--Role--><!--
         <Grid Grid.Row="0" Grid.Column="6">
             <Button Text="Role" WidthRequest="100" HeightRequest="50"/>
-        </Grid>
+        </Grid>-->
 
         <!--Elected Policies-->
         <!--<StackLayout>

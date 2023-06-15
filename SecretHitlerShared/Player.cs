@@ -8,13 +8,16 @@ namespace SecretHitlerShared
         public string ConnectionId { get; set; }
 
         // Game properties
+        public int RowNr { get; set; }
+        public int ColumnNr { get; set; }
         public string Username { get; private set; }
         public SecretRole Role { get; set; }
         public PartyMembership Party { get; set; }
-        public string ImageSource { get; set; }
+        public string JoinLobbyImageSource { get; set; }
+        public string PlayingImageSource { get; set; }
 
         public Player(
-            string username, string lobbyCode = "", string imageSource = "check.png", 
+            string username, string lobbyCode = "", string joinLobbyImageSource = "check.png", string playingImageSource = "profile.png",
             SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal
         )
         {
@@ -24,7 +27,8 @@ namespace SecretHitlerShared
 
             // Game properties
             this.Username = username;
-            this.ImageSource = imageSource;
+            this.JoinLobbyImageSource = joinLobbyImageSource;
+            this.PlayingImageSource = playingImageSource;
 
             // By default everyone is a liberal
             this.Role = role;

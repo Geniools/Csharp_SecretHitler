@@ -28,12 +28,14 @@ namespace SecretHitler
 
         public GameManager()
         {
-            this.SignalRService = new SignalRService("gameHub", "https://secrethitler.azurewebsites.net");
+            // Create the SignalRService
+            this.SignalRService = new SignalRService(HubName, "https://secrethitler.azurewebsites.net");
+            
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
             SignalRService.PlayerDisconnected += this.DisconnectPlayer;
-            SignalRService.GameStarted += this.StartLocalGame;
             SignalRService.ClearAllPlayers += this.ClearAllPlayers;
+            SignalRService.GameStarted += this.StartLocalGame;
 
             // Create a new game
             this.Board = new Board();
@@ -49,20 +51,25 @@ namespace SecretHitler
         {
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
+                // Create a dictionary with error messages
                 Dictionary<int, string> errorMessages = new Dictionary<int, string>()
                 {
                     { 1, "Username already exists" },
                     { 2, "The lobby is full" },
                     { 3, "The game has already started" }
                 };
-                int errorCode = 1;
 
-                if (this.ContainsUsername(player) is null)
+                // Based on the possible error, increase the error code (while doing all the checks)
+                int errorCode = 1;
+                // Check if the username already exists
+                if (!this.ContainsUsername(player))
                 {
                     errorCode = 2;
+                    // Check if the lobby is full
                     if (this.Players.Count <= 10)
                     {
                         errorCode = 3;
+                        // Check if the game has already started
                         if (!this.GameStarted)
                         {
                             errorCode = -1;
@@ -71,6 +78,7 @@ namespace SecretHitler
                     }
                 }
 
+                // If there was an error, disconnect the player (with the explenatory message)
                 if(errorCode != -1)
                 {
                     if (this.IsPrimary)
@@ -84,12 +92,13 @@ namespace SecretHitler
 
         private async void DisconnectPlayer(string message)
         {
-            this.SignalRService.CurrentPlayer = null;
+            this.SignalRService.ThisPlayer = null;
 
             // Stop the connection to the hub
             //await this.SignalRService.HubConnection.StopAsync();
             await this.SignalRService.HubConnection.DisposeAsync();
 
+            // When interacting with the UI, use the dispatcher (has something to do with Threading...)
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
                 // Display the message
@@ -102,7 +111,10 @@ namespace SecretHitler
 
         private async void StartLocalGame()
         {
+            // Will prevent other players from joining
             this.GameStarted = true;
+
+            // When interacting with the UI, use the dispatcher (has something to do with Threading...)
             await Shell.Current.Dispatcher.DispatchAsync(async () => 
                 await Shell.Current.GoToAsync(nameof(MainPage))
             );
@@ -136,11 +148,11 @@ namespace SecretHitler
         // Helper functions / Utility functions ===============================================================================
 
         /// <summary>
-        /// Will return the first player having the given username, null otherwise
+        /// Will return true if a player with the same username already exists in the game
         /// </summary>
-        /// <param player="comparedPlayer">The Player to be searched for</param>
-        /// <returns>The first player having the given username, null otherwise</returns>
-        private Player ContainsUsername(Player comparedPlayer)
+        /// <param player="comparedPlayer">The Player to be compared with</param>
+        /// <returns>True if such a player exists, false otherwise</returns>
+        private bool ContainsUsername(Player comparedPlayer)
         {
             // Create a copy of the players list to avoid concurrency issues
             List<Player> players = new List<Player>(this.Players);
@@ -149,11 +161,11 @@ namespace SecretHitler
             {
                 if (comparedPlayer.Equals(player))
                 {
-                    return player;
+                    return true;
                 }
             }
 
-            return null;
+            return false;
         }
     }
 }
