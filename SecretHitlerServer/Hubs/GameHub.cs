@@ -7,10 +7,10 @@ namespace Server.Hubs
     {
         public async Task PlayerConnected(Player connectingPlayer)
         {
-            // Set the connection ID of the player
-            await this.ConnectPlayer(connectingPlayer);
             // Add the player to the group
             await Groups.AddToGroupAsync(Context.ConnectionId, connectingPlayer.LobbyCode);
+            // Set the connection ID of the player
+            await this.ConnectPlayer(connectingPlayer);
         }
 
         public async Task ConnectPlayer(Player connectingPlayer)
@@ -50,14 +50,14 @@ namespace Server.Hubs
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.SessionStartedName);
         }
 
-        public async Task SendChatMessage(string lobbyCode, string username, string message)
+        public async Task SendChatMessage(string lobbyCode, Player player, string message)
         {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, username, message);
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, player, message);
         }
 
-        public async Task SendElectionVote(string lobbyCode, string username, bool vote)
+        public async Task SendElectionVote(string lobbyCode, Player player, bool vote)
         {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, username, vote);
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, player, vote);
         }
     }
 }

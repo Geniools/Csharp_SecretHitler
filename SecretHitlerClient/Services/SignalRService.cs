@@ -19,6 +19,7 @@ namespace SecretHitler.Services
 
         // Other properties
         internal Player ThisPlayer { get; set; }
+        internal Player MasterPlayer { get; set; }
 
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
@@ -92,12 +93,8 @@ namespace SecretHitler.Services
         internal async Task ConnectPlayer(Player player)
         {
             this.ThisPlayer = player;
-
-            // Check if the connection is already started
-            if (this.HubConnection.State != HubConnectionState.Connected)
-            {
-                await this.StartConnection();
-            }
+            // The connection is (re)created every time to avoid errors if the user navigates back to the main page
+            await this.StartConnection();
 
             await this.HubConnection.InvokeAsync(ServerCallbacks.PlayerConnectedName, player);
         }

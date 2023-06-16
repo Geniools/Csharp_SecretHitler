@@ -40,7 +40,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -57,10 +56,11 @@
 	<ItemGroup>
 	  <None Remove="Resources\AppIcon\newicon.png" />
 	  <None Remove="Resources\AppIcon\newicon.svg" />
-	  <None Remove="Resources\Images\icon_about.png" />
-	  <None Remove="Resources\Images\icon_about_ios.png" />
-	  <None Remove="Resources\Images\icon_notes.png" />
-	  <None Remove="Resources\Images\icon_notes_ios.png" />
+	  <None Remove="Resources\Images\chancellor.png" />
+	  <None Remove="Resources\Images\fascist.png" />
+	  <None Remove="Resources\Images\hitler.png" />
+	  <None Remove="Resources\Images\killed-player.png" />
+	  <None Remove="Resources\Images\president.png" />
 	</ItemGroup>
 
 	<ItemGroup>

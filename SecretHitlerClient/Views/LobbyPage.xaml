@@ -71,7 +71,7 @@
                                     />
 
                                 <Image
-                                    Source="{Binding JoinLobbyImageSource}"
+                                    Source="{Binding ImageSource}"
                                     WidthRequest="50"
                                     HeightRequest="50"
                                     HorizontalOptions="End" 

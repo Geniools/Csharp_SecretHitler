@@ -42,7 +42,7 @@ namespace SecretHitler
             this.Players = new ObservableCollection<Player>();
             this.Chat = new Chat();
             this.GameStatus = new GameStatus();
-            this.ElectionTracker = 0;
+            this.ElectionTracker = 1;
         }
 
         // Event handlers / Pre game logic =====================================================================================

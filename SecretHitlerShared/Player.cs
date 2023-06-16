@@ -13,11 +13,10 @@ namespace SecretHitlerShared
         public string Username { get; private set; }
         public SecretRole Role { get; set; }
         public PartyMembership Party { get; set; }
-        public string JoinLobbyImageSource { get; set; }
-        public string PlayingImageSource { get; set; }
+        public string ImageSource { get; set; }
 
         public Player(
-            string username, string lobbyCode = "", string joinLobbyImageSource = "check.png", string playingImageSource = "profile.png",
+            string username, string lobbyCode = "", string imageSource = GameImages.JoinLobbyImage,
             SecretRole role = SecretRole.Liberal, PartyMembership party = PartyMembership.Liberal
         )
         {
@@ -27,8 +26,7 @@ namespace SecretHitlerShared
 
             // Game properties
             this.Username = username;
-            this.JoinLobbyImageSource = joinLobbyImageSource;
-            this.PlayingImageSource = playingImageSource;
+            this.ImageSource = imageSource;
 
             // By default everyone is a liberal
             this.Role = role;
@@ -40,7 +38,7 @@ namespace SecretHitlerShared
             return this.Role is SecretRole.Hitler;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is Player player)
             {

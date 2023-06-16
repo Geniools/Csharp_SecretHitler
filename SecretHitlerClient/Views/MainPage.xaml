@@ -38,29 +38,80 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <!-- Players -->
-        <HorizontalStackLayout Grid.ColumnSpan="7" Grid.RowSpan="1">
-            <CollectionView ItemsSource="{Binding Players}" ItemsLayout ="HorizontalList">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:Player}">
-                        <Border>
-                            <Grid Padding="10" HorizontalOptions="Center" WidthRequest="100">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="2*" />
-                                </Grid.RowDefinitions>
+        <!-- Players layout -->
+        <CollectionView 
+            ItemsSource="{Binding Players}" 
+            Grid.Column="1"
+            Grid.ColumnSpan="7" >
+            
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout 
+                    Orientation="Horizontal"
+                    HorizontalItemSpacing="10"
+                    />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Type model:Player}">
+                    <Grid Padding="10">
+               
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+
+                        <Label 
+                            Text="{Binding Username}" 
+                            TextColor="#855E42" 
+                            FontSize="Small"
+                            Grid.Row="0" 
+                            HorizontalOptions="Center" 
+                            />
+                        <Image 
+                            Source="{Binding ImageSource}" 
+                            Grid.Row="1" 
+                            Aspect="AspectFit"
+                            />
                             
-                                <Label Text="{Binding Username}" Grid.Row="0" HorizontalOptions="Center"/>
-                                <Image Source="{Binding PlayingImageSource}" Grid.Row="1"/>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Failed elections tracker -->
+        <Grid Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label 
+                Text="Failed Elections"
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" 
+                FontFamily="GermanicaBold" 
+                FontSize="Medium"
+                TextColor="#331800"
+                />
+            
+            <Label 
+                Text="{Binding ElectionTracker}" 
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Row="1"
+                FontFamily="GermanicaBold" 
+                FontSize="Large"
+                TextColor="Black"
+                />
+        </Grid>
 
         <!-- Table -->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="6" Grid.RowSpan="7">
+        <Grid 
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="6"
+            Grid.RowSpan="7">
+            
             <Rectangle BackgroundColor="#855E42">
                 <Rectangle.Shadow>
                     <Shadow
@@ -72,6 +123,201 @@
                 </Rectangle.Shadow>
             </Rectangle>
         </Grid>
+        
+        <!-- Liberal text -->
+        <Frame 
+            Grid.Row="1" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2" 
+            BackgroundColor="White"
+            HeightRequest="150"
+            Margin="0,0,0,-50">
+            
+            <Label 
+                Text="Liberal" 
+                HorizontalTextAlignment="Center"
+                FontSize="80" 
+                FontFamily="GermanicaBold" 
+                TextColor="#331800" />
+        </Frame>
+        
+        <!-- Liberal board below -->
+        <Frame 
+            Margin="150,0,150,0" 
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="6" 
+            Grid.RowSpan="2"
+            BackgroundColor="White"
+            BorderColor="Transparent"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+                    
+                <!-- Defining the default background images -->
+                <Image Margin="10" Source="liberal_article_draw_pile.png" Grid.Column="0" Aspect="Fill"/>
+
+                <Image Source="article_background.png" Grid.Column="1" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="3" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="5" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="7" Aspect="Fill"/>
+                <Image Source="liberal_article_last_background.png" Grid.Column="9" Aspect="Fill"/>
+
+                <Image Margin="10" Source="liberal_article_discard_pile.png" Grid.Column="10" Aspect="Fill"/>
+
+                <!-- Actual articles enacted -->
+                <Image Source="liberal_article.png" Grid.Column="1" Aspect="Fill" IsVisible="{Binding LiberalPolicy1}" />
+                <Image Source="board_arrow.png" Grid.Column="2" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="3" Aspect="Fill" IsVisible="{Binding LiberalPolicy2}" />
+                <Image Source="board_arrow.png" Grid.Column="4" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="5" Aspect="Fill" IsVisible="{Binding LiberalPolicy3}" />
+                <Image Source="board_arrow.png" Grid.Column="6" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="7" Aspect="Fill" IsVisible="{Binding LiberalPolicy4}" />
+                <Image Source="board_arrow.png" Grid.Column="8" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />
+
+                
+                <!-- Below is a test implementation using a Collection View (not working as expected) -->
+            <!--<CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="10" ItemsSource="{Binding LiberalPolicices}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
+                        <Image Source="{Binding Image}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>-->
+
+            </Grid>
+        </Frame>
+
+        <!-- Fascist text -->
+        <Frame 
+            Grid.Row="4" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2" 
+            BackgroundColor="#777"
+            HeightRequest="150"
+            Margin="0,0,0,-50"
+            BorderColor="Transparent"
+            >
+            
+            <Label 
+                HorizontalTextAlignment="Center"
+                Text="Fascist" 
+                FontSize="80"
+                FontFamily="GermanicaBold"
+                TextColor="#331800" />
+        </Frame>
+
+        <!-- Fascist board below -->
+        <Frame 
+            Margin="150,0,150,0" 
+            Padding="10,20" 
+            Grid.Row="5" 
+            Grid.Column="1" 
+            Grid.ColumnSpan="6"
+            Grid.RowSpan="2" 
+            BackgroundColor="#777"
+            BorderColor="Transparent"
+            IsVisible="true" 
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Defining the default background images -->
+                
+                <!-- 1 cell, 5-6  -->
+                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+                <!-- 2 cells, 5-6 -->
+                <Image Source="article_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+                <!-- 3 cells, 5-6 -->
+                <Image Source="fascist_event_5_6_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+
+                <!-- 1 cell, 7-8 -->
+                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />                                       
+                <!-- 2 cells, 7-8 -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+                <!-- 3 cells, 7-8 -->
+                <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+
+                <!-- 1 cell, 9-10 -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+                <!-- 2 cells, 9-10 -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+                <!-- 3 cells, 9-10 -->
+                <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+
+                <!-- 4,5,6 cells, any nr of players -->
+                <Image Source="fascist_event_4_th_background.png" Grid.Column="6" Aspect="Fill" />
+                <Image Source="fascist_event_5_th_background.png" Grid.Column="8" Aspect="Fill" />
+                <Image Source="fascist_article_last_background.png" Grid.Column="10" Aspect="Fill" />
+
+                <!-- Actual articles enacted -->
+
+                <Image Source="fascist_article.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FascistPolicy1}" />
+                <Image Source="board_arrow.png" Grid.Column="1" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding FascistPolicy2}" />
+                <Image Source="board_arrow.png" Grid.Column="3" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding FascistPolicy3}" />
+                <Image Source="board_arrow.png" Grid.Column="5" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="6" Aspect="Fill" IsVisible="{Binding FascistPolicy4}" />
+                <Image Source="board_arrow.png" Grid.Column="7" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="8" Aspect="Fill" IsVisible="{Binding FascistPolicy5}" />
+                <Image Source="board_arrow.png" Grid.Column="9" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="10" Aspect="Fill" IsVisible="{Binding FascistPolicy6}" />
+
+            </Grid>
+        </Frame>
+
+        <!-- Meant as a timer in game -->
+        <ProgressBar 
+            IsVisible="false"
+            Grid.Row="7" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2"  
+            Progress="0.5" 
+            ProgressColor="Black" 
+            />
 
         <!-- Voting -->
         <!-- <Grid Grid.Row="0" Grid.Column="7">
