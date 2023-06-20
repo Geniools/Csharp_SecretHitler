@@ -1,15 +1,9 @@
 namespace SecretHitler.ViewModel;
 
-public class PolicyPickerViewModel : ContentView
+public class PolicyPickerViewModel : ViewModel
 {
-	public PolicyPickerViewModel()
+	public PolicyPickerViewModel(GameManager gameManager) : base(gameManager)
 	{
-		Content = new VerticalStackLayout
-		{
-			Children = {
-				new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, Text = "Welcome to .NET MAUI!"
-				}
-			}
-		};
+		
 	}
 }
