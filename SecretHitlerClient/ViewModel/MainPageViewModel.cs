@@ -17,7 +17,7 @@ namespace SecretHitler.ViewModel
 
         // Policies
 
-        // Liberal
+        // Liberal policies visibility
         [ObservableProperty]
         private bool _liberalPolicy1;
         [ObservableProperty]
@@ -29,7 +29,7 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private bool _liberalPolicy5;
 
-        // Fascist
+        // Fascist policies visibility
         [ObservableProperty]
         private bool _fascistPolicy1;
         [ObservableProperty]
@@ -42,6 +42,14 @@ namespace SecretHitler.ViewModel
         private bool _fascistPolicy5;
         [ObservableProperty]
         private bool _fascistPolicy6;
+
+        // Board + text visibility
+        [ObservableProperty]
+        private bool _boardVisibility;
+
+        // Voting buttons visibility
+        [ObservableProperty]
+        private bool _votingVisibility;
 
         // Election tracker
         [ObservableProperty]
@@ -68,7 +76,33 @@ namespace SecretHitler.ViewModel
             this.FascistPolicy5 = false;
             this.FascistPolicy6 = false;
 
+            // Assign the (default) visibility of the board
+            this.BoardVisibility = false;
+
+            // Assign the (default) visibility of the voting buttons
+            this.VotingVisibility = true;
+
             //this.SetPlayerPicture();
+        }
+
+        [RelayCommand]
+        private async Task VotingJa()
+        {
+            // When the players votes ja, this will be executed
+            this.VotingVisibility = false;
+        }
+
+        [RelayCommand]
+        private async Task VotingNein()
+        {
+            // When the players votes nein, this will be executed
+            this.VotingVisibility = false;
+        }
+
+        [RelayCommand]
+        private async Task RevealFascistPlayerIcons()
+        {
+            // TODO: First check if the player is a fascist, otherwise do nothing
         }
 
         private void SetPlayerPicture(Player player = null, string picture = GameImages.PlayerIcon)

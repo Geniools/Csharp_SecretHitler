@@ -20,7 +20,7 @@ namespace SecretHitlerShared
         public const string LiberalArticle = "liberal_article.png";
 
         // Vote images
-        public const string VoteJaImage = "voteing_ja.png";
+        public const string VoteJaImage = "voting_ja.png";
         public const string VoteNeinImage = "voting_nein.png";
 
         // Secret role images
