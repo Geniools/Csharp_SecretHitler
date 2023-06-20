@@ -1,4 +1,6 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace SecretHitlerShared
 {
     public class Player
@@ -11,9 +13,53 @@ namespace SecretHitlerShared
         public int RowNr { get; set; }
         public int ColumnNr { get; set; }
         public string Username { get; private set; }
-        public SecretRole Role { get; set; }
-        public PartyMembership Party { get; set; }
+
+        private SecretRole _role;
+        public SecretRole Role { 
+            get
+            {
+                return this._role;
+            }
+            set
+            {
+                if(value is SecretRole.Fascist)
+                {
+                    this.ImageSource = GameImages.FascistIcon;
+                }
+                else if(value is SecretRole.Liberal)
+                {
+                    this.ImageSource = GameImages.PlayerIcon;
+                }
+                else if (value is SecretRole.Hitler)
+                {
+                    this.ImageSource = GameImages.HitlerIcon;
+                }
+
+                this._role = value;
+            }
+        }
         public string ImageSource { get; set; }
+        private PartyMembership _party;
+        public PartyMembership Party {
+            get
+            {
+                return this._party;
+            }
+            set 
+            {
+                if(value is PartyMembership.Fascist)
+                {
+                    this.PartyMembershipImage = GameImages.FascistParty;
+                }
+                else if (value is PartyMembership.Liberal)
+                {
+                    this.PartyMembershipImage = GameImages.LiberalParty;
+                }
+
+                this._party = value;
+            }
+        }
+        public string PartyMembershipImage { get; set; }
 
         public Player(
             string username, string lobbyCode = "", string imageSource = GameImages.JoinLobbyImage,

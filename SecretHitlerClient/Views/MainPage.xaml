@@ -194,17 +194,7 @@
                 <Image Source="liberal_article.png" Grid.Column="7" Aspect="Fill" IsVisible="{Binding LiberalPolicy4}" />
                 <Image Source="board_arrow.png" Grid.Column="8" Aspect="Fill" />
 
-                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />
-
-                
-                <!-- Below is a test implementation using a Collection View (not working as expected) -->
-            <!--<CollectionView Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="10" ItemsSource="{Binding LiberalPolicices}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
-                        <Image Source="{Binding Image}" HorizontalOptions="Center" VerticalOptions="Center"/>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>-->
+                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />           
 
             </Grid>
         </Frame>
@@ -261,25 +251,25 @@
 
                 <!-- Defining the default background images -->
                 
-                <!-- 1 cell, 5-6  -->
+                <!-- 1 cell, 5-6 players -->
                 <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
-                <!-- 2 cells, 5-6 -->
+                <!-- 2 cells, 5-6 players -->
                 <Image Source="article_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
-                <!-- 3 cells, 5-6 -->
+                <!-- 3 cells, 5-6 players-->
                 <Image Source="fascist_event_5_6_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
 
-                <!-- 1 cell, 7-8 -->
-                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />                                       
-                <!-- 2 cells, 7-8 -->
+                <!-- 1 cell, 7-8 players -->
+                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+                <!-- 2 cells, 7-8 players -->
                 <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
-                <!-- 3 cells, 7-8 -->
+                <!-- 3 cells, 7-8 players -->
                 <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
 
-                <!-- 1 cell, 9-10 -->
+                <!-- 1 cell, 9-10 players -->
                 <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
-                <!-- 2 cells, 9-10 -->
+                <!-- 2 cells, 9-10 players -->
                 <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
-                <!-- 3 cells, 9-10 -->
+                <!-- 3 cells, 9-10 players -->
                 <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
 
                 <!-- 4,5,6 cells, any nr of players -->
@@ -346,3 +336,4 @@
         
     </Grid>
 </ContentPage>
+    

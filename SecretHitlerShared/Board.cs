@@ -21,8 +21,22 @@ namespace SecretHitlerShared
             this.LiberalPolicies = new ObservableCollection<PolicyCard>();
             this.FascistPolicies = new ObservableCollection<PolicyCard>();
 
-            // Test functions
-            this.AddTestCards();
+            this.CreateDeck();
+        }
+
+        private void CreateDeck()
+        {
+            // 11 fascist policies
+            for(byte i = 0; i < 11; i++ )
+            {
+                this._drawDeck.Add(new PolicyCard(PartyMembership.Fascist));
+            }
+
+            // 6 liberal policies
+            for(byte i = 0; i < 6; i++ )
+            {
+                this._drawDeck.Add(new PolicyCard(PartyMembership.Liberal));
+            }
         }
 
         public PolicyCard DrawNextPolicy()
@@ -38,21 +52,6 @@ namespace SecretHitlerShared
         private void EnactFascistPolicy()
         {
             throw new NotImplementedException();
-        }
-
-
-        // Test functions
-        private void AddTestCards()
-        {
-            // Add liberal Cards
-            this.LiberalPolicies.Add(new PolicyCard(PartyMembership.Liberal));
-            this.LiberalPolicies.Add(new PolicyCard(PartyMembership.Liberal));
-            this.LiberalPolicies.Add(new PolicyCard(PartyMembership.Liberal));
-
-            // Add fascist Cards
-            this.FascistPolicies.Add(new PolicyCard(PartyMembership.Fascist));
-            this.FascistPolicies.Add(new PolicyCard(PartyMembership.Fascist));
-            this.FascistPolicies.Add(new PolicyCard(PartyMembership.Fascist));
         }
     }
 }

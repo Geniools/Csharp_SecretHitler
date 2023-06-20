@@ -42,7 +42,10 @@ namespace SecretHitler
             this.Players = new ObservableCollection<Player>();
             this.Chat = new Chat();
             this.GameStatus = new GameStatus();
-            this.ElectionTracker = 1;
+            this.ElectionTracker = 0;
+
+            // Test commands
+            this.AddTestPlayers();
         }
 
         // Event handlers / Pre game logic =====================================================================================
@@ -114,10 +117,111 @@ namespace SecretHitler
             // Will prevent other players from joining
             this.GameStarted = true;
 
+            if(this.IsPrimary)
+            {
+                // Randomly assign roles to players
+                List<Player> finalPlayers = this.AssignRandomRolesToPlayers();
+                this.Players = new ObservableCollection<Player>(finalPlayers);
+
+                //await this.SignalRService.SendFinalPlayingPlayers(finalPlayers);
+            }
+
             // When interacting with the UI, use the dispatcher (has something to do with Threading...)
             await Shell.Current.Dispatcher.DispatchAsync(async () => 
                 await Shell.Current.GoToAsync(nameof(MainPage))
             );
+        }
+
+        private List<Player> AssignRandomRolesToPlayers()
+        {
+            Random randomGenerator = new Random();
+
+            // Create a copy of the players list to avoid concurrency issues
+            List<Player> players = new List<Player>(this.Players);
+
+            // Create a list of roles
+            List<Player> assignedPlayers = new List<Player>();
+            int liberalsNeeded = 0;
+            int fascistNeeded = 0;
+
+            // Determine the number of liberals and fascist needed for the game (based on the amount of players)
+            switch (this.Players.Count)
+            {
+                case 5:
+                    liberalsNeeded = 3;
+                    fascistNeeded = 1;
+                    break;
+                case 6:
+                    liberalsNeeded = 4;
+                    fascistNeeded = 1;
+                    break;
+                case 7:
+                    liberalsNeeded = 4;
+                    fascistNeeded = 2;
+                    break;
+                case 8:
+                    liberalsNeeded = 5;
+                    fascistNeeded = 2;
+                    break;
+                case 9:
+                    liberalsNeeded = 5;
+                    fascistNeeded = 3;
+                    break;
+                case 10:
+                    liberalsNeeded = 6;
+                    fascistNeeded = 3;
+                    break;
+                default:
+                    throw new NotSupportedException($"The amount of players is not supported. Player range must be between 5 and 10. Players given: {this.Players.Count}");
+            }
+
+            int liberals = 0;
+            int fascist = 0;
+
+            // Assign the liberals
+            while (liberals < liberalsNeeded)
+            {
+                Player randomPlayer = players[randomGenerator.Next(this.Players.Count)];
+
+                if (!assignedPlayers.Contains(randomPlayer))
+                {
+                    randomPlayer.Role = SecretRole.Liberal;
+                    randomPlayer.Party = PartyMembership.Liberal;
+                    assignedPlayers.Add(randomPlayer);
+                    liberals++;
+                }
+            }
+
+            // Assign the fascists
+            while (fascist < fascistNeeded)
+            {
+                Player randomPlayer = players[randomGenerator.Next(this.Players.Count)];
+
+                if (!assignedPlayers.Contains(randomPlayer))
+                {
+                    randomPlayer.Role = SecretRole.Fascist;
+                    randomPlayer.Party = PartyMembership.Fascist;
+                    assignedPlayers.Add(randomPlayer);
+                    fascist++;
+                }
+            }
+
+            // Assign Hitler (must the be last player left unnasigned)
+            foreach (Player player in players)
+            {
+                if(!assignedPlayers.Contains(player))
+                {
+                    player.Role = SecretRole.Hitler;
+                    player.Party = PartyMembership.Fascist;
+                    assignedPlayers.Add(player);
+                    break;
+                }
+            }
+
+            // Randomize the players in the list
+            List<Player> randomizedPlayers = assignedPlayers.OrderBy(player => randomGenerator.Next()).ToList();
+
+            return randomizedPlayers;
         }
 
         private void ClearAllPlayers()
@@ -166,6 +270,22 @@ namespace SecretHitler
             }
 
             return false;
+        }
+
+
+        // TEST FUNCTIONS =====================================================================================================
+        // Test function to add players
+        private void AddTestPlayers()
+        {
+            this.Players.Add(new Player("Test1"));
+            this.Players.Add(new Player("Test2"));
+            this.Players.Add(new Player("Test3"));
+            this.Players.Add(new Player("Test4"));
+            this.Players.Add(new Player("Test5"));
+            this.Players.Add(new Player("Test6"));
+            this.Players.Add(new Player("Test7"));
+            this.Players.Add(new Player("Test8"));
+            this.Players.Add(new Player("Test9"));
         }
     }
 }

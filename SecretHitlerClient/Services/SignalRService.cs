@@ -104,16 +104,19 @@ namespace SecretHitler.Services
             // Clear all players from other clients
             await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.ThisPlayer.LobbyCode);
 
-            // Notify all players of the other connected players
-            foreach (Player player in connectedPlayers)
-            {
-                await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
-            }
-
             // Start the game
             if (!string.IsNullOrEmpty(this.ThisPlayer.LobbyCode))
             {
                 await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.ThisPlayer.LobbyCode);
+            }
+        }
+
+        internal async Task SendFinalPlayingPlayers(List<Player> finalPlayers)
+        {
+            // Notify all players of the other connected players
+            foreach (Player player in finalPlayers)
+            {
+                await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
             }
         }
     }

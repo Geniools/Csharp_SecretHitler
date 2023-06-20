@@ -50,10 +50,11 @@ namespace SecretHitler.ViewModel
 
         public MainPageViewModel(GameManager gameManager) : base(gameManager)
         {
+            // Get the needed properties from the GameManager
             this.Players = this.GameManager.Players;
             this.ElectionTracker = this.GameManager.ElectionTracker;
 
-            // Assign the vissibility of the policies
+            // Assign the (default) vissibility of the policies
             this.LiberalPolicy1 = false;
             this.LiberalPolicy2 = false;
             this.LiberalPolicy3 = false;
@@ -67,52 +68,22 @@ namespace SecretHitler.ViewModel
             this.FascistPolicy5 = false;
             this.FascistPolicy6 = false;
 
-            // Test commands
-            this.AddPlayers();
+            //this.SetPlayerPicture();
+        }
 
-            this.ArrangePlayers();
-
-            // Change the picture of the players
-            foreach (Player pl in this.Players)
+        private void SetPlayerPicture(Player player = null, string picture = GameImages.PlayerIcon)
+        {
+            if (player is null)
             {
-                pl.ImageSource = GameImages.PlayerImage;
+                // Change the picture of the players
+                foreach (Player pl in this.Players)
+                {
+                    pl.ImageSource = picture;
+                }
             }
-        }
-
-        // Test function to add players
-        private void AddPlayers()
-        {
-            this.GameManager.Players.Add(new Player("Test1"));
-            this.GameManager.Players.Add(new Player("Test2"));
-            this.GameManager.Players.Add(new Player("Test3"));
-            this.GameManager.Players.Add(new Player("Test4"));
-            this.GameManager.Players.Add(new Player("Test5"));
-            this.GameManager.Players.Add(new Player("Test6"));
-            this.GameManager.Players.Add(new Player("Test7"));
-            this.GameManager.Players.Add(new Player("Test8"));
-            this.GameManager.Players.Add(new Player("Test9"));
-        }
-
-        private void ArrangePlayers()
-        {
-            // Assign the displayed Row and Column to each player
-            //for (int i = 0; i < this.Players.Count; i++)
-            //{
-            //    if (i > 5)
-            //    {
-            //        this.Players[i].RowNr = i - 5;
-            //        this.Players[i].ColumnNr = 0;
-            //    }
-            //    else
-            //    {
-            //        this.Players[i].RowNr = i;
-            //        this.Players[i].ColumnNr = 0;
-            //    }
-            //}
-
-            for (int i = 0; i < this.Players.Count; i++)
+            else
             {
-                this.Players[i].ColumnNr = i;
+                player.ImageSource = picture;
             }
         }
     }
