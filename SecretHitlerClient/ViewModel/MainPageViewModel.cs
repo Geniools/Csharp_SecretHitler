@@ -54,6 +54,10 @@ namespace SecretHitler.ViewModel
         // Election tracker
         [ObservableProperty]
         private byte _electionTracker;
+
+        // Label for events
+        [ObservableProperty]
+        private string _eventLabel;
         
 
         public MainPageViewModel(GameManager gameManager) : base(gameManager)
@@ -80,9 +84,10 @@ namespace SecretHitler.ViewModel
             this.BoardVisibility = false;
 
             // Assign the (default) visibility of the voting buttons
-            this.VotingVisibility = true;
+            this.VotingVisibility = false;
 
             //this.SetPlayerPicture();
+            this.EventLabel = "Default event";
         }
 
         [RelayCommand]

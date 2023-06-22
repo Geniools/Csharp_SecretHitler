@@ -386,6 +386,34 @@
             </Grid>
         </Frame>
 
+        <Frame
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
+            Grid.Row="4"
+            Grid.RowSpan="3"
+            Grid.Column="2"
+            Grid.ColumnSpan="4"
+            IsVisible="true"
+            >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    FontSize="60"
+                    FontFamily="GermanicaBold"
+                    TextColor="#FBB969"
+                    Text="{Binding EventLabel}"
+                    />
+                
+                
+                
+            </Grid>
+           
+        </Frame>
+
         <!--Role--><!--
         <Grid Grid.Row="0" Grid.Column="6">
             <Button Text="Role" WidthRequest="100" HeightRequest="50"/>

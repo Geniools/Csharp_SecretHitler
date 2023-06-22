@@ -37,6 +37,9 @@ namespace SecretHitlerShared
             {
                 this._drawDeck.Add(new PolicyCard(PartyMembership.Liberal));
             }
+
+            // Shuffle the deck
+            //this.ShuffleDeck();
         }
 
         public PolicyCard DrawNextPolicy()
