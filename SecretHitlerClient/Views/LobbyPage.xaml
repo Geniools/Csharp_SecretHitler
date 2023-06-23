@@ -55,18 +55,15 @@
                 <!--make the page like the main page-->
                 <!--same color and font-->
                 
-                    <VerticalStackLayout
+                <VerticalStackLayout
                     BindableLayout.ItemsSource="{Binding Players}"
                     Grid.Row="2"
                     Spacing="10"
                     >
-                    <ScrollView
-                    Orientation="Vertical"
-                    >
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate x:DataType="{x:Type model:Player}">
-                                <Grid>
-                                    <Label
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="{x:Type model:Player}">
+                            <Grid>
+                                <Label
                                     Text="{Binding Username}"
                                     FontSize="18"
                                     VerticalOptions="Center"
@@ -74,18 +71,17 @@
                                     TextTransform="Uppercase"
                                     />
 
-                                    <Image
+                                <Image
                                     Source="{Binding ImageSource}"
                                     WidthRequest="50"
                                     HeightRequest="50"
                                     HorizontalOptions="End" 
                                     />
-                                </Grid>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </ScrollView>
+                            </Grid>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
                 </VerticalStackLayout>
-                
+
                 <HorizontalStackLayout Grid.Row="3">
                     <!--Making the alignment centered with Horizontal/Verticaltxtalignment-->
                     <!--Change maybe Horizantalstacklayout to grid -> play with it, avoid padding-->
