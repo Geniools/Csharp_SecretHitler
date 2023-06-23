@@ -114,12 +114,13 @@ here: https://www.secrethitler.com/assets/Secret_Hitler_Rules.pdf.
 
 ### Calculations
 
-|    Case    |    Calculation    |
-|:----------:|:-----------------:|
-| AssignRole | `Example*Example` |
-|   Round    |                   |
-|   Policy   |                   |
-|            |                   |
+|     Case      |    Calculation     |
+|:-------------:|:------------------:|
+|  AssignRole   |     `Random()`     |
+|     Round     | `for(i <= 4; i++)` |
+|  AssignParty  |     `Random()`     |
+| ShufflePolicy |     `Random()`     |
+| AssignHitler  |     `Random()`     |
 
 ### Remarks
 
