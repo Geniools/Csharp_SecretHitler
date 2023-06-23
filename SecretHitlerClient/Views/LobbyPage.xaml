@@ -54,13 +54,14 @@
                 <Label x:Name="CreatingTitleLabel" />
                 <!--make the page like the main page-->
                 <!--same color and font-->
-                <ScrollView
-                    Orientation="Vertical"
-                    HorizontalOptions="End">
+                
                     <VerticalStackLayout
                     BindableLayout.ItemsSource="{Binding Players}"
                     Grid.Row="2"
                     Spacing="10"
+                    >
+                    <ScrollView
+                    Orientation="Vertical"
                     >
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="{x:Type model:Player}">
@@ -82,9 +83,9 @@
                                 </Grid>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
-                    </VerticalStackLayout>
-                </ScrollView>
-
+                    </ScrollView>
+                </VerticalStackLayout>
+                
                 <HorizontalStackLayout Grid.Row="3">
                     <!--Making the alignment centered with Horizontal/Verticaltxtalignment-->
                     <!--Change maybe Horizantalstacklayout to grid -> play with it, avoid padding-->
