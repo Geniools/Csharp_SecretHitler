@@ -193,7 +193,7 @@ Description: User is Fuhrer
 |  2   |       |  isHitler(null)   |        null         |
 |  3   |  " "  |   isHitler(" ")   | `Hitler must exist` |
 
-#### Test Case 4
+#### Test Case 5
 
 Description: Player is on the `player` list
 
@@ -202,7 +202,7 @@ Description: Player is on the `player` list
 |  1   | Chris | _players{get} |     `Chris`     |
 |  2   | null  | _players{get} |      null       |
 
-#### Test Case 5
+#### Test Case 6
 
 Description: Leave the lobby
 
@@ -212,7 +212,7 @@ Description: Leave the lobby
 |  2   |       | Players.Add() |                              |
 |  3   |       |  ExitLobby()  | `You have been disconnected` |
 
-#### Test Case 6
+#### Test Case 7
 
 Description: Player displays on the Main Screen
 
@@ -222,7 +222,7 @@ Description: Player displays on the Main Screen
 |  2   |                             |  _players{get}   | `Chris, Alex, Nathan, Andrei` |
 |  3   |                             | _players.Count() |               4               |
 
-#### Test Case 7
+#### Test Case 8
 
 Description: Role, Party and Username is displayed
 
@@ -232,7 +232,7 @@ Description: Role, Party and Username is displayed
 |  2   |       |  Party{get}   |    `Facist`     |
 |  3   |       | Username{get} |     `Chris`     |
 
-#### Test Case 8
+#### Test Case 9
 
 Description: Hitler is hidden
 
