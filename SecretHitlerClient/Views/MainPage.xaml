@@ -386,6 +386,31 @@
             </Grid>
         </Frame>
 
+        <!--Card picker-->
+        <Frame 
+             BackgroundColor="Transparent"
+             BorderColor="Transparent"
+             Grid.Row="4"
+             Grid.RowSpan="3"
+             Grid.Column="2"
+             Grid.ColumnSpan="4"
+             IsVisible="{Binding CardPickerVisibility}"
+             >
+
+            <Grid
+                ColumnSpacing="50"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </Frame>
+
+
         <CollectionView 
             ItemsSource="{Binding Players}" 
             Grid.Column="1"
