@@ -26,7 +26,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -67,7 +67,7 @@
                             Grid.Row="0" 
                             HorizontalOptions="Center" 
                             />
-                        
+
                         <Image
                             Source="{Binding ImageSource}" 
                             Grid.Row="1" 
@@ -102,7 +102,7 @@
                 FontSize="Medium"
                 TextColor="#331800"
                 />
-            
+
             <Label 
                 Text="{Binding ElectionTracker}" 
                 HorizontalOptions="Center"
@@ -120,7 +120,7 @@
             Grid.Column="1"
             Grid.ColumnSpan="6"
             Grid.RowSpan="7">
-            
+
             <Rectangle BackgroundColor="#855E42">
                 <Rectangle.Shadow>
                     <Shadow
@@ -132,7 +132,7 @@
                 </Rectangle.Shadow>
             </Rectangle>
         </Grid>
-        
+
         <!-- Liberal text -->
         <Frame 
             Grid.Row="1" 
@@ -143,7 +143,7 @@
             Margin="0,0,0,-50"
             IsVisible="{Binding BoardVisibility}"
             >
-            
+
             <Label 
                 Text="Liberal" 
                 HorizontalTextAlignment="Center"
@@ -151,7 +151,7 @@
                 FontFamily="GermanicaBold" 
                 TextColor="#331800" />
         </Frame>
-        
+
         <!-- Liberal board below -->
         <Frame 
             Margin="150,0,150,0" 
@@ -181,7 +181,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
-                    
+
                 <!-- Defining the default background images -->
                 <Image Margin="10" Source="liberal_article_draw_pile.png" Grid.Column="0" Aspect="Fill"/>
 
@@ -206,7 +206,7 @@
                 <Image Source="liberal_article.png" Grid.Column="7" Aspect="Fill" IsVisible="{Binding LiberalPolicy4}" />
                 <Image Source="board_arrow.png" Grid.Column="8" Aspect="Fill" />
 
-                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />           
+                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />
 
             </Grid>
         </Frame>
@@ -222,7 +222,7 @@
             BorderColor="Transparent"
             IsVisible="{Binding BoardVisibility}"
             >
-            
+
             <Label 
                 HorizontalTextAlignment="Center"
                 Text="Fascist" 
@@ -263,7 +263,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Defining the default background images -->
-                
+
                 <!-- 1 cell, 5-6 players -->
                 <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
                 <!-- 2 cells, 5-6 players -->
@@ -358,7 +358,7 @@
              Grid.ColumnSpan="4"
              IsVisible="{Binding VotingVisibility}"
              >
-            
+
             <Grid
                 ColumnSpacing="50"
                 >
@@ -366,7 +366,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <ImageButton 
                     x:Name="ja_image"
                     Source="voting_ja.png"
@@ -374,7 +374,7 @@
                     CornerRadius="20"
                     Command="{Binding VotingJaCommand}"
                     />
-                
+
                 <ImageButton 
                     x:Name="nein_image"
                     Source="voting_nein.png"
@@ -382,37 +382,55 @@
                     CornerRadius="20"
                     Command="{Binding VotingNeinCommand}"
                     />
-                
+
             </Grid>
         </Frame>
 
-        <Frame
-            BackgroundColor="Transparent"
-            BorderColor="Transparent"
-            Grid.Row="4"
-            Grid.RowSpan="3"
-            Grid.Column="2"
-            Grid.ColumnSpan="4"
-            IsVisible="true"
-            >
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+        <CollectionView 
+            ItemsSource="{Binding Players}" 
+            Grid.Column="1"
+            Grid.ColumnSpan="6" 
+            Grid.Row="4">
+            <!-- IsVisible="{Binding BoardVisibility}"> --> 
 
-                <Label
-                    FontSize="60"
-                    FontFamily="GermanicaBold"
-                    TextColor="#FBB969"
-                    Text="{Binding EventLabel}"
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout 
+                    Orientation="Horizontal"
+                    HorizontalItemSpacing="10"
+                />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate 
+                x:DataType="{x:Type model:Player}">
+
+                    <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="2*" />
+                    </Grid.RowDefinitions>
+
+                    <Label
+                    Text="{Binding Username}"
+                    TextColor="#855E42" 
+                    FontSize="Small"
+                    Grid.Row="0" 
+                    HorizontalOptions="Center" 
                     />
-                
-                
-                
-            </Grid>
-           
-        </Frame>
+
+                    <ImageButton
+                    x:Name="SelectPlayer"
+                    Source="{Binding ImageSource}"
+                    Grid.Row ="1"
+                    CornerRadius="5"
+                    Command="{Binding SelectPlayerCommand, Source={x:Reference Name=MainPageViewModel}}"
+                    />
+
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
 
         <!--Role--><!--
         <Grid Grid.Row="0" Grid.Column="6">

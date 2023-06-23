@@ -66,7 +66,7 @@ namespace SecretHitler.ViewModel
             this.Players = this.GameManager.Players;
             this.ElectionTracker = this.GameManager.ElectionTracker;
 
-            // Assign the (default) vissibility of the policies
+            // Assign the (default) visibility of the policies
             this.LiberalPolicy1 = false;
             this.LiberalPolicy2 = false;
             this.LiberalPolicy3 = false;
@@ -124,6 +124,12 @@ namespace SecretHitler.ViewModel
             {
                 player.ImageSource = picture;
             }
+        }
+
+        [RelayCommand]
+        private async Task SelectPlayer()
+        {
+            
         }
     }
 }
