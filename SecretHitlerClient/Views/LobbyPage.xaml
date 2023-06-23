@@ -12,7 +12,7 @@
             HorizontalOptions="Center"
             VerticalOptions="Center"
             WidthRequest="300"
-            HeightRequest="500"
+            HeightRequest="{Binding Players, Converter={StaticResource PlayerCountToHeightConverter}}"
             BackgroundColor="#855E42"
             >
 
@@ -50,8 +50,10 @@
                             />
                     </Grid>
                 </HorizontalStackLayout>
-
-                <Label x:Name="CreatingTitleLabel" />
+                 
+                
+                <Label x:Name="CreatingTitleLabel" 
+                       />
                 <!--make the page like the main page-->
                 <!--same color and font-->
                 
@@ -63,6 +65,7 @@
                     <BindableLayout.ItemTemplate>
                         <DataTemplate x:DataType="{x:Type model:Player}">
                             <Grid>
+                                
                                 <Label
                                     Text="{Binding Username}"
                                     FontSize="18"
