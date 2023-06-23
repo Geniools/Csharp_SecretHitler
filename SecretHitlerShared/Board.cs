@@ -60,7 +60,43 @@ namespace SecretHitlerShared
 
         public PolicyCard DrawNextPolicy()
         {
+            if( this._drawDeck.Count == 0 )
+            {
+                CreateDeck();
+            }
             return this._drawDeck.Pop();
+        }
+
+        public PolicyCard[] PeekThreePolicies()
+        {
+            PolicyCard[] cards = new PolicyCard[3];
+            if( this._drawDeck.Count < 3 )
+            {
+                CreateDeck();
+            }
+            for ( int i = 0; i < 3; i++ )
+            {
+                cards[i] = _drawDeck.Pop();
+            }
+            for( int i = 0; i < 3; i++ )
+            {
+                _drawDeck.Push(cards[i]);
+            }
+            return cards;
+        }
+
+        public PolicyCard[] GetThreePolicies()
+        {
+            PolicyCard[] cards = new PolicyCard[3];
+            if (this._drawDeck.Count < 3)
+            {
+                CreateDeck();
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                cards[i] = _drawDeck.Pop();
+            }
+            return cards;
         }
 
         private void EnactLiberalPolicy()
