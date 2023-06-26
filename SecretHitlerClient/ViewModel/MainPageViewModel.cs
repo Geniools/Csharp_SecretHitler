@@ -55,6 +55,10 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private bool _cardPickerVisibility;
 
+        // Player selection visibility
+        [ObservableProperty]
+        private bool _playerSelectionVisibility;
+
         // Election tracker
         [ObservableProperty]
         private byte _electionTracker;
@@ -92,6 +96,9 @@ namespace SecretHitler.ViewModel
 
             // Assign the (default) visibility of the card picker
             this.CardPickerVisibility = true;
+
+            // Assign the (default) visibility of the player selection
+            this.PlayerSelectionVisibility = false;
 
             //this.SetPlayerPicture();
             this.EventLabel = "Default event";

@@ -415,8 +415,8 @@
             ItemsSource="{Binding Players}" 
             Grid.Column="1"
             Grid.ColumnSpan="6" 
-            Grid.Row="4">
-            <!-- IsVisible="{Binding BoardVisibility}"> --> 
+            Grid.Row="4"
+            IsVisible="{Binding PlayerSelectionVisibility}">
 
             <CollectionView.ItemsLayout>
                 <GridItemsLayout 

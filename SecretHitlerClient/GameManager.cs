@@ -3,34 +3,26 @@ using System.Collections.ObjectModel;
 using SecretHitler.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using SecretHitlerShared;
+using System.Threading.Tasks;
 
 namespace SecretHitler
 {
-    public class GameManager : BindableObject
+    /// <summary>
+    /// For better code readability, the GameManager class is split into multiple classes.
+    /// The GameManager class is the main class of the application.
+    /// </summary>
+    public partial class GameManager : BindableObject
     {
-        // Services
-        public SignalRService SignalRService { get; private set; }
-        public const string HubName = "gameHub";
-
-        // Game specific properties
-        public bool IsPrimary { get; set; }
-        public bool GameStarted { get; set; }
-
-        // Game state
         public ObservableCollection<Player> Players { get; private set; }
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
-        public GameStatus GameStatus { get; private set; }
-        public Player Winner { get; private set; }
-        public Player CurrentPresident { get; private set; }
-        public Player CurrentChancelor { get; private set; }
         public byte ElectionTracker { get; private set; }
 
         public GameManager()
         {
             // Create the SignalRService
             this.SignalRService = new SignalRService(HubName, "https://secrethitler.azurewebsites.net");
-            
+
             // Subscribe to events
             SignalRService.PlayerConnected += this.AddPlayer;
             SignalRService.PlayerDisconnected += this.DisconnectPlayer;
@@ -40,13 +32,28 @@ namespace SecretHitler
             // Create a new game
             this.Board = new Board();
             this.Players = new ObservableCollection<Player>();
-            this.Chat = new Chat();
             this.GameStatus = new GameStatus();
             this.ElectionTracker = 0;
+            this.Chat = new Chat();
 
             // Test commands
             this.AddTestPlayers();
         }
+    }
+
+    /// <summary>
+    /// For better code readability, the GameManager class is split into multiple classes
+    /// This file contains the SignalR related functions
+    /// </summary>
+    public partial class GameManager : BindableObject
+    {
+        // Services
+        public SignalRService SignalRService { get; private set; }
+        public const string HubName = "gameHub";
+        
+        // Game specific properties
+        public bool IsPrimary { get; set; }
+        public bool GameStarted { get; set; }
 
         // Event handlers / Pre game logic =====================================================================================
 
@@ -82,7 +89,7 @@ namespace SecretHitler
                 }
 
                 // If there was an error, disconnect the player (with the explenatory message)
-                if(errorCode != -1)
+                if (errorCode != -1)
                 {
                     if (this.IsPrimary)
                     {
@@ -117,21 +124,102 @@ namespace SecretHitler
             // Will prevent other players from joining
             this.GameStarted = true;
 
-            if(this.IsPrimary)
+            if (this.IsPrimary)
             {
                 // Randomly assign roles to players
                 List<Player> finalPlayers = this.AssignRandomRolesToPlayers();
                 this.Players = new ObservableCollection<Player>(finalPlayers);
 
+                // Set the primary player (the one who started the game)
+                await this.SignalRService.SetPrimaryPlayer(SignalRService.ThisPlayer);
+                // Send the final players to all players (with roles assigned)
                 //await this.SignalRService.SendFinalPlayingPlayers(finalPlayers);
             }
 
             // When interacting with the UI, use the dispatcher (has something to do with Threading...)
-            await Shell.Current.Dispatcher.DispatchAsync(async () => 
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
                 await Shell.Current.GoToAsync(nameof(MainPage))
             );
         }
 
+        private void ClearAllPlayers()
+        {
+            if (!this.IsPrimary)
+            {
+                this.Players.Clear();
+            }
+        }
+    }
+
+    /// <summary>
+    /// For better code readability, the GameManager class is split into multiple classes
+    /// This file contains the game logic
+    /// </summary>
+    public partial class GameManager : BindableObject
+    {        
+        public GameStatus GameStatus { get; private set; }
+
+        // Game logic ==========================================================================================================
+
+        private async Task PlayNextRound()
+        {
+            // Election phase
+            await this.SetNextPresident();
+
+            await this.MakePresidentSelectChancellor();
+        }
+
+        private async Task SetNextPresident()
+        {
+            throw new NotImplementedException();
+        }
+
+        private Task MakePresidentSelectChancellor()
+        {
+            // TODO: Send a message to the president to select a chancellor
+            throw new NotImplementedException();
+        }
+
+
+        private async Task EndGame()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task RunNextElection()
+        {
+            throw new NotImplementedException();
+        }
+
+        // Helper functions / Utility functions ===============================================================================
+
+        /// <summary>
+        /// Will return true if a player with the same username already exists in the game
+        /// </summary>
+        /// <param player="comparedPlayer">The Player to be compared with</param>
+        /// <returns>True if such a player exists, false otherwise</returns>
+        private bool ContainsUsername(Player comparedPlayer)
+        {
+            // Create a copy of the players list to avoid concurrency issues
+            List<Player> players = new List<Player>(this.Players);
+
+            foreach (Player player in players)
+            {
+                if (comparedPlayer.Equals(player))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Will assign random roles to the players playing the game based on their number
+        /// Should be called only once, at the beginning of the game by the "Primary" player
+        /// </summary>
+        /// <returns>A list of players assigned random roles for the game.</returns>
+        /// <exception cref="NotSupportedException">If the player number is not between 5 and 10.</exception>
         private List<Player> AssignRandomRolesToPlayers()
         {
             Random randomGenerator = new Random();
@@ -209,7 +297,7 @@ namespace SecretHitler
             // Assign Hitler (must the be last player left unnasigned)
             foreach (Player player in players)
             {
-                if(!assignedPlayers.Contains(player))
+                if (!assignedPlayers.Contains(player))
                 {
                     player.Role = SecretRole.Hitler;
                     player.Party = PartyMembership.Fascist;
@@ -224,56 +312,8 @@ namespace SecretHitler
             return randomizedPlayers;
         }
 
-        private void ClearAllPlayers()
-        {
-            if (!this.IsPrimary)
-            {
-                this.Players.Clear();
-            }
-        }
-
-        // Game logic ==========================================================================================================
-
-        private Task EndGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        private Player RunNextElection()
-        {
-            throw new NotImplementedException();
-        }
-
-        private Player SetNextPresident()
-        {
-            throw new NotImplementedException();
-        }
-
-        // Helper functions / Utility functions ===============================================================================
-
-        /// <summary>
-        /// Will return true if a player with the same username already exists in the game
-        /// </summary>
-        /// <param player="comparedPlayer">The Player to be compared with</param>
-        /// <returns>True if such a player exists, false otherwise</returns>
-        private bool ContainsUsername(Player comparedPlayer)
-        {
-            // Create a copy of the players list to avoid concurrency issues
-            List<Player> players = new List<Player>(this.Players);
-
-            foreach (Player player in players)
-            {
-                if (comparedPlayer.Equals(player))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
         // TEST FUNCTIONS =====================================================================================================
+
         // Test function to add players
         private void AddTestPlayers()
         {

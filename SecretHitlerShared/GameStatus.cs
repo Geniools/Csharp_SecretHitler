@@ -3,16 +3,21 @@ namespace SecretHitlerShared
 {
     public class GameStatus
     {
-        private readonly HashSet<Player> _playersEligibleChancelor;
-        private readonly HashSet<Player> _playersEligiblePresident;
-        private Player _previousPresident;
-        private Player _previousChancelor;
-        private PresidentialsPowers _presidentialsPowers;
+        public HashSet<Player> PlayersEligiblePresident { get; set; }
+        public HashSet<Player> PlayersEligibleChancelor { get; set; }
+
+        public Player CurrentPresident { get; set; }
+        public Player PreviousPresident { get; set; }
+
+        public Player CurrentChancelor { get; set; }
+        public Player PreviousChancelor { get; set; }
+
+        public PresidentialsPowers PresidentialPower { get; set; }
 
         public GameStatus()
         {
-            _playersEligibleChancelor = new HashSet<Player>();
-            _playersEligiblePresident = new HashSet<Player>();
+            this.PlayersEligiblePresident = new HashSet<Player>();
+            this.PlayersEligibleChancelor = new HashSet<Player>();
         }
     }
 }

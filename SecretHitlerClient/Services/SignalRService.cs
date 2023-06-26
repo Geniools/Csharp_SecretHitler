@@ -19,7 +19,7 @@ namespace SecretHitler.Services
 
         // Other properties
         internal Player ThisPlayer { get; set; }
-        internal Player MasterPlayer { get; set; }
+        internal Player PrimaryPlayer { get; set; }
 
         public SignalRService(string hubName, string baseUrl = "http://localhost", int portNr = 80)
         {
@@ -68,6 +68,12 @@ namespace SecretHitler.Services
                 this.PlayerDisconnected?.Invoke(message);
             });
 
+            // Set the primary player
+            this.HubConnection.On<Player>(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer =>
+            {
+                this.PrimaryPlayer = primaryPlayer;
+            });
+
             // Before starting a new game, clear all players from other clients
             this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
             {
@@ -99,7 +105,7 @@ namespace SecretHitler.Services
             await this.HubConnection.InvokeAsync(ServerCallbacks.PlayerConnectedName, player);
         }
 
-        internal async Task StartOnlineGame(List<Player> connectedPlayers)
+        internal async Task StartOnlineGame()
         {
             // Clear all players from other clients
             await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.ThisPlayer.LobbyCode);
@@ -109,6 +115,11 @@ namespace SecretHitler.Services
             {
                 await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.ThisPlayer.LobbyCode);
             }
+        }
+
+        internal async Task SetPrimaryPlayer(Player primaryPlayer)
+        {
+            await this.HubConnection.InvokeAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
         }
 
         internal async Task SendFinalPlayingPlayers(List<Player> finalPlayers)
