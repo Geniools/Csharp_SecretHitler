@@ -68,12 +68,16 @@ namespace SecretHitler.ViewModel
         // Label for events
         [ObservableProperty]
         private string _eventLabel;
+
+        [ObservableProperty]
+        private bool _eventLabelVisibility;
         
 
         public MainPageViewModel(GameManager gameManager) : base(gameManager)
         {
             // Subscibe to events
-            this.GameManager.SignalRService.PresidentSelected += this.PresidentSelected;
+            this.GameManager.SignalRService.OnPresidentSelected += this.PresidentSelected;
+            this.GameManager.SignalRService.OnChancellorVoting += this.ChancellorVoting;
 
             // Get the needed properties from the GameManager
             this.Players = this.GameManager.SignalRService.Players;
@@ -109,11 +113,22 @@ namespace SecretHitler.ViewModel
             this.EventLabel = "Default event";
         }
 
+        private void ChancellorVoting(Player player)
+        {
+            // Update the UI
+            this.BoardVisibility = false;
+            this.VotingVisibility = true;
+            this.CardPickerVisibility = false;
+            this.PlayerSelectionVisibility = false;
+            this.EventLabel = $"Vote for {player.Username} to be the chancellor";
+        }
+
         [RelayCommand]
         private async Task VotingJa()
         {
             // When the players votes ja, this will be executed
             this.VotingVisibility = false;
+            await this.GameManager.SignalRService.VoteBallot(BallotType.Ja);
         }
 
         [RelayCommand]
@@ -121,6 +136,7 @@ namespace SecretHitler.ViewModel
         {
             // When the players votes nein, this will be executed
             this.VotingVisibility = false;
+            await this.GameManager.SignalRService.VoteBallot(BallotType.Nein);
         }
 
         [RelayCommand]
@@ -141,12 +157,6 @@ namespace SecretHitler.ViewModel
                     }
                 }
             });
-        }
-
-        [RelayCommand]
-        private async Task SelectPlayer()
-        {
-
         }
 
         [RelayCommand]

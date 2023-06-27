@@ -12,6 +12,7 @@ namespace SecretHitlerShared
         public Player? PreviousChancelor { get; set; }
 
         public PresidentialsPowers PresidentialPower { get; set; }
+        public PlayerSelectionStatus PlayerSelectionStatus { get; set; }
 
         public GameStatus()
         {

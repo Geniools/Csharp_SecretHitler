@@ -53,7 +53,7 @@
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:Player}">
-                    <Grid Padding="10">
+                    <Grid Padding="5">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -63,7 +63,7 @@
                         <Label
                             Text="{Binding Username}"
                             TextColor="#855E42" 
-                            FontSize="Small"
+                            FontSize="Micro"
                             Grid.Row="0" 
                             HorizontalOptions="Center" 
                             />
@@ -340,21 +340,15 @@
             Grid.ColumnSpan="4"
             BorderColor="Transparent"
             BackgroundColor="Transparent"
-            IsVisible="{Binding VotingVisibility}"
+            IsVisible="{Binding EventLabelVisibility}"
             >
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
                 <Label 
-                    Text="Voting for:" 
+                    Text="{Binding EventLabel}" 
                     FontSize="60"
                     FontFamily="GermanicaBold"
                     TextColor="#FBB969"
-                    />
-
-                <Label
-                    Text="Player here"
-                    FontSize="60"
-                    TextColor="White"
                     />
             </HorizontalStackLayout>
         </Frame>
@@ -421,12 +415,12 @@
             </Grid>
         </Frame>
 
-
         <CollectionView 
             ItemsSource="{Binding Players}" 
             Grid.Column="1"
-            Grid.ColumnSpan="6" 
             Grid.Row="4"
+            Grid.ColumnSpan="6"
+            HorizontalOptions="Center"
             IsVisible="{Binding PlayerSelectionVisibility}">
 
             <CollectionView.ItemsLayout>
@@ -459,7 +453,7 @@
                         Source="{Binding ImageSource}"
                         Grid.Row ="1"
                         CornerRadius="5"
-                        Command="{Binding SelectPlayerCommand, Source={x:Reference Name=MainPageViewModel}}"
+                        Command="{Binding PlayerSelected}"
                         />
                         
                     </Grid>

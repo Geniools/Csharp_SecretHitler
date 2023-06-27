@@ -8,19 +8,16 @@ namespace SecretHitlerShared
     public class Board
     {
         private Stack<PolicyCard> _drawDeck;
+
+        public Dictionary<Player, BallotType> VotingResults { get; private set; }
+
         public byte PlayedLiberalCards { get; private set; }
         public byte PlayedFascistsCards { get; private set; }
 
-        public ObservableCollection<PolicyCard> LiberalPolicies { get; private set; }
-        public ObservableCollection<PolicyCard> FascistPolicies { get; private set; }
-
-
         public Board()
         {
-            _drawDeck = new Stack<PolicyCard>();
-
-            this.LiberalPolicies = new ObservableCollection<PolicyCard>();
-            this.FascistPolicies = new ObservableCollection<PolicyCard>();
+            this._drawDeck = new Stack<PolicyCard>();
+            this.VotingResults = new Dictionary<Player, BallotType>();
 
             this.CreateDeck();
         }

@@ -17,6 +17,8 @@ namespace SecretHitlerShared
         public const string SessionStartedName = "SessionStarted";
         public const string PresidentSelectedName = "PresidentSelected";
         public const string EndGameName = "EndGame";
+        public const string ChancellorVotingName = "ChancellorVoting";
+        public const string VotingBallotName = "VotingBallot";
 
         public const string ChatMessageName = "ChatMessage";
         public const string ElectionVoteName = "ElectionVote";

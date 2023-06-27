@@ -15,11 +15,13 @@ namespace SecretHitler.Services
         private readonly string _hubName;
 
         // Events
-        public event Action<Player> PlayerConnected;
-        public event Action<string> PlayerDisconnected;
-        public event Action GameStarted;
-        public event Action ClearAllPlayers;
-        public event Action PresidentSelected;
+        public event Action<Player> OnPlayerConnected;
+        public event Action<string> OnPlayerDisconnected;
+        public event Action OnGameStarted;
+        public event Action OnClearAllPlayers;
+        public event Action OnPresidentSelected;
+        public event Action<Player> OnChancellorVoting;
+        public event Action<Player, BallotType> OnBallotVoted;
 
         // Other properties
         internal Player ThisPlayer { get; set; }
@@ -64,14 +66,14 @@ namespace SecretHitler.Services
             // Handle the PlayerConnected event
             this.HubConnection.On<Player>(ServerCallbacks.PlayerConnectedName, connectedPlayer =>
             {
-                this.PlayerConnected?.Invoke(connectedPlayer);
+                this.OnPlayerConnected?.Invoke(connectedPlayer);
             });
 
             // Will be called when a player disconnects (this player) - will be triggered by the "primary" client
             this.HubConnection.On<Player, string>(ServerCallbacks.DisconnectPlayerName, (disconnectingPlayer, message) =>
             {
                 //Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
-                this.PlayerDisconnected?.Invoke(message);
+                this.OnPlayerDisconnected?.Invoke(message);
             });
 
             // Set the primary player
@@ -83,19 +85,31 @@ namespace SecretHitler.Services
             // Before starting a new game, clear all players from other clients
             this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
             {
-                this.ClearAllPlayers?.Invoke();
+                this.OnClearAllPlayers?.Invoke();
             });
 
             // Handle the GameStarted event
             this.HubConnection.On(ServerCallbacks.StartGameName, () =>
             {
-                this.GameStarted?.Invoke();
+                this.OnGameStarted?.Invoke();
             });
 
             // Handle the PresidentSelected event
             this.HubConnection.On(ServerCallbacks.PresidentSelectedName, () =>
             {
-                this.PresidentSelected?.Invoke();
+                this.OnPresidentSelected?.Invoke();
+            });
+
+            // Handle the Voting event
+            this.HubConnection.On<Player>(ServerCallbacks.ChancellorVotingName, player =>
+            {
+                this.OnChancellorVoting?.Invoke(player);
+            });
+
+            // Handle the VotingBallot event
+            this.HubConnection.On<Player, BallotType>(ServerCallbacks.VotingBallotName, (player, card) =>
+            {
+                this.OnBallotVoted?.Invoke(player, card);
             });
 
             // Set the default connection limit
@@ -108,6 +122,11 @@ namespace SecretHitler.Services
             this.ThisPlayer.ConnectionId = this.HubConnection.ConnectionId;
         }
         
+        internal async Task VoteBallot(BallotType ballot)
+        {
+            await this.HubConnection.InvokeAsync(ServerCallbacks.VotingBallotName, this.ThisPlayer, ballot);
+        }
+
         internal async Task ConnectPlayer(Player player)
         {
             this.ThisPlayer = player;

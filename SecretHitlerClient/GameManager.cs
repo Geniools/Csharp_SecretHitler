@@ -1,9 +1,7 @@
 ﻿using SecretHitler.Services;
-using System.Collections.ObjectModel;
 using SecretHitler.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using SecretHitlerShared;
-using System.Threading.Tasks;
 
 namespace SecretHitler
 {
@@ -23,10 +21,17 @@ namespace SecretHitler
             this.SignalRService = new SignalRService(HubName, "https://secrethitler.azurewebsites.net");
 
             // Subscribe to events
-            SignalRService.PlayerConnected += this.AddPlayer;
-            SignalRService.PlayerDisconnected += this.DisconnectPlayer;
-            SignalRService.ClearAllPlayers += this.ClearAllPlayers;
-            SignalRService.GameStarted += this.StartLocalGame;
+            SignalRService.OnPlayerConnected += this.AddPlayer;
+            SignalRService.OnPlayerDisconnected += this.DisconnectPlayer;
+            SignalRService.OnClearAllPlayers += this.ClearAllPlayers;
+            SignalRService.OnGameStarted += this.StartLocalGame;
+
+            foreach (Player player in this.SignalRService.Players)
+            {
+                player.OnPlayerSelected += this.PlayerSelected;
+            }
+
+            SignalRService.OnBallotVoted += this.BallotVotes;
 
             // Create a new game
             this.Board = new Board();
@@ -36,6 +41,17 @@ namespace SecretHitler
 
             // Test commands
             //this.AddTestPlayers();
+        }
+
+        private void BallotVotes(Player player, BallotType type)
+        {
+            this.Board.VotingResults.Add(player, type);
+
+            // Check if all players have voted
+            if(this.SignalRService.Players.Count == this.Board.VotingResults.Count)
+            {
+                // TODO: Check if the vote was accepted
+            }
         }
     }
 
@@ -141,6 +157,16 @@ namespace SecretHitler
                 this.SignalRService.Players.Clear();
             }
         }
+
+        private async void PlayerSelected(Player player)
+        {
+            if(this.GameStatus.PlayerSelectionStatus is PlayerSelectionStatus.ChancellorSelection)
+            {
+                this.Board.VotingResults.Clear();
+                // Perform voting logic
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorVotingName, player);
+            }
+        }
     }
 
     /// <summary>
@@ -162,17 +188,8 @@ namespace SecretHitler
         private async Task SetNextPresident()
         {
             Player president = this.GameStatus.GetNextPresident();
+            this.GameStatus.PlayerSelectionStatus = PlayerSelectionStatus.ChancellorSelection;
             await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
-        }
-
-        private async Task EndGame()
-        {
-            throw new NotImplementedException();
-        }
-
-        private async Task RunNextElection()
-        {
-            throw new NotImplementedException();
         }
 
         // Helper functions / Utility functions ===============================================================================

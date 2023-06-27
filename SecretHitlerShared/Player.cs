@@ -1,11 +1,11 @@
 ﻿
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace SecretHitlerShared
 {
     public class Player
     {
+        // Events
+        public Action<Player>? OnPlayerSelected;
+
         // Hub properties
         public string LobbyCode { get; set; }
         public string ConnectionId { get; set; }
@@ -108,6 +108,11 @@ namespace SecretHitlerShared
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public async Task PlayerSelected()
+        {
+            this.OnPlayerSelected?.Invoke(this);
         }
     }
 }

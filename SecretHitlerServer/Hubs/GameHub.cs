@@ -52,7 +52,15 @@ namespace Server.Hubs
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EndGameName);
         }
 
+        public async Task VotingBallot(Player votingPlayer, BallotType ballotCard, string primaryPlayer)
+        {
+            await Clients.Client(primaryPlayer).SendAsync(ServerCallbacks.VotingBallotName, votingPlayer, ballotCard);
+        }
 
+        public async Task ChancellorVoting(Player player)
+        {
+            await Clients.Group(player.LobbyCode).SendAsync(ServerCallbacks.ChancellorVotingName, player);
+        }
 
 
         public async Task PresidentSelected(Player player)
