@@ -125,6 +125,37 @@ namespace SecretHitler.ViewModel
         private async Task RevealFascistPlayerIcons()
         {
             // TODO: First check if the player is a fascist, otherwise do nothing
+            if(this.GameManager.SignalRService.ThisPlayer.IsFascist())
+            {
+                // Check if the picture is already changed
+                if(this.IsDisplayingDefaultPictures())
+                {
+                    this.SetPlayerPicture(picture: GameImages.FascistIcon);
+                }
+                else
+                {
+                    this.SetPlayerPicture();
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task SelectPlayer()
+        {
+
+        }
+
+        private bool IsDisplayingDefaultPictures()
+        {
+            foreach(Player pl in this.Players)
+            {
+                if(pl.ImageSource != GameImages.PlayerIcon)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void SetPlayerPicture(Player player = null, string picture = GameImages.PlayerIcon)
@@ -151,12 +182,6 @@ namespace SecretHitler.ViewModel
             this.CardPickerVisibility = false;
             this.PlayerSelectionVisibility = true;
             this.EventLabel = "Select a player to be the chancellor";
-        }
-
-        [RelayCommand]
-        private async Task SelectPlayer()
-        {
-            
         }
     }
 }

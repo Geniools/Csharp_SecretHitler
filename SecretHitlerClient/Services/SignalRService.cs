@@ -95,7 +95,7 @@ namespace SecretHitler.Services
             // Handle the PresidentSelected event
             this.HubConnection.On<Player>(ServerCallbacks.PresidentSelectedName, president =>
             {
-                //Console.WriteLine($"President selected: {president.Name}");
+                this.PresidentSelected?.Invoke();
             });
 
             // Set the default connection limit

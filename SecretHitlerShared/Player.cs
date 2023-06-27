@@ -85,6 +85,16 @@ namespace SecretHitlerShared
             return this.Role is SecretRole.Hitler;
         }
 
+        public bool IsFascist()
+        {
+            return this.IsHitler() || this.Role is SecretRole.Fascist;
+        }
+
+        public bool IsLiberal()
+        {
+            return this.Role is SecretRole.Liberal;
+        }
+
         public override bool Equals(object? obj)
         {
             if (obj is Player player)
