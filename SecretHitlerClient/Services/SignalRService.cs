@@ -132,10 +132,11 @@ namespace SecretHitler.Services
             // Notify all players of the other connected players
             foreach (Player player in this.Players)
             {
-                Task.Run(async () =>
-                {
-                    await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
-                });
+                //Task.Run(async () =>
+                //{
+                //    await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
+                //});
+                this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
             }
 
 
