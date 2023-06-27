@@ -12,7 +12,7 @@
             HorizontalOptions="Center"
             VerticalOptions="Center"
             WidthRequest="300"
-            HeightRequest="{Binding Players, Converter={StaticResource PlayerCountToHeightConverter}}"
+            HeightRequest="800"
             BackgroundColor="#855E42"
             >
 
