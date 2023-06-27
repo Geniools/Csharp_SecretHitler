@@ -1,11 +1,7 @@
 ﻿
-using CommunityToolkit.Mvvm;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace SecretHitlerShared
 {
-    public partial class Player : ObservableObject
+    public partial class Player
     {
         // Events
         public Action<Player>? OnPlayerSelected;
@@ -49,13 +45,8 @@ namespace SecretHitlerShared
                 this._role = value;
             }
         }
-        public string ImageSource { 
-            get; 
-            set
-            { 
-                SetProperty
-            }
-        }
+        public string ImageSource { get; set; }
+
         private PartyMembership _party;
         public PartyMembership Party {
             get
@@ -103,12 +94,12 @@ namespace SecretHitlerShared
 
         public bool IsFascist()
         {
-            return this.IsHitler() || this.Role is SecretRole.Fascist;
+            return this.Party is PartyMembership.Fascist;
         }
 
         public bool IsLiberal()
         {
-            return this.Role is SecretRole.Liberal;
+            return this.Party is PartyMembership.Liberal;
         }
 
         public override bool Equals(object? obj)

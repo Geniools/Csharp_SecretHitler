@@ -22,6 +22,7 @@ namespace SecretHitler.Services
         public event Action OnPresidentSelected;
         public event Action<Player> OnChancellorVoting;
         public event Action<Player, BallotType> OnBallotVoted;
+        public event Action<PlayerSelectionStatus> OnPlayerSelectionStatus;
 
         // Other properties
         internal Player ThisPlayer { get; set; }
@@ -112,6 +113,12 @@ namespace SecretHitler.Services
                 this.OnBallotVoted?.Invoke(player, card);
             });
 
+            // Handle the PlayerSelectionStatus event
+            this.HubConnection.On<PlayerSelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
+            {
+                this.OnPlayerSelectionStatus?.Invoke(status);
+            });
+
             // Set the default connection limit
             ServicePointManager.DefaultConnectionLimit = 10;
 
@@ -124,7 +131,7 @@ namespace SecretHitler.Services
         
         internal async Task VoteBallot(BallotType ballot)
         {
-            await this.HubConnection.InvokeAsync(ServerCallbacks.VotingBallotName, this.ThisPlayer, ballot);
+            await this.HubConnection.InvokeAsync(ServerCallbacks.VotingBallotName, this.ThisPlayer, this.PrimaryPlayer.ConnectionId, ballot);
         }
 
         internal async Task ConnectPlayer(Player player)

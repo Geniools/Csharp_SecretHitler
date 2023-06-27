@@ -95,15 +95,5 @@ namespace SecretHitlerShared
             }
             return cards;
         }
-
-        private void EnactLiberalPolicy()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void EnactFascistPolicy()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

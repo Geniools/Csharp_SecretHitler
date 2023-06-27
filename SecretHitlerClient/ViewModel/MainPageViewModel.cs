@@ -129,6 +129,8 @@ namespace SecretHitler.ViewModel
             this.VotingVisibility = true;
             this.CardPickerVisibility = false;
             this.PlayerSelectionVisibility = false;
+            // Label text
+            this.EventLabelVisibility = true;
             this.EventLabel = $"Vote for {player.Username} to be the chancellor";
         }
 
@@ -211,6 +213,8 @@ namespace SecretHitler.ViewModel
             this.CardPickerVisibility = false;
             // Change the visibility of the player selection
             this.PlayerSelectionVisibility = true;
+            // Update the label
+            this.EventLabelVisibility = true;
             this.EventLabel = "Select a player to be the chancellor";
         }
 

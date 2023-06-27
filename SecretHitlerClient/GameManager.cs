@@ -34,6 +34,7 @@ namespace SecretHitler
                 player.OnPlayerSelected += this.PlayerSelected;
             }
 
+            SignalRService.OnPlayerSelectionStatus += this.PlayerSelectionStatusChange;
             SignalRService.OnBallotVoted += this.BallotVotes;
 
             // Create a new game
@@ -53,7 +54,37 @@ namespace SecretHitler
             // Check if all players have voted
             if(this.SignalRService.Players.Count == this.Board.VotingResults.Count)
             {
-                // TODO: Check if the vote was accepted
+                // Check if the vote was accepted
+                int ja = 0;
+                int nein = 0;
+
+                foreach(BallotType ballot in this.Board.VotingResults.Values)
+                {
+                    if(ballot is BallotType.Ja)
+                    {
+                        ja++;
+                    }
+                    else
+                    {
+                        nein++;
+                    }
+                }
+
+                // If the vote was accepted, the player is elected
+                if (ja > nein)
+                {
+                    // TODO: Notify the players that the player is elected
+                    // TODO: Start the process of enacting a policy
+                }
+                else
+                {
+                    this.ElectionTracker++;
+                    // Check if the election tracker is at 3 (country is thrown into chaos)
+                    if(this.ElectionTracker == 3)
+                    {
+                        // TODO: Reveal and enact the first policy from the top of the deck
+                    }
+                }
             }
         }
     }
@@ -153,6 +184,11 @@ namespace SecretHitler
             );
         }
 
+        private void PlayerSelectionStatusChange(PlayerSelectionStatus status)
+        {
+            this.GameStatus.PlayerSelectionStatus = status;
+        }
+
         private void ClearAllPlayers()
         {
             if (!this.IsPrimary)
@@ -187,7 +223,7 @@ namespace SecretHitler
             // Election phase
             Player president = this.GameStatus.GetNextPresident();
             // Set the status to chancellor selection
-            this.GameStatus.PlayerSelectionStatus = PlayerSelectionStatus.ChancellorSelection;
+            await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName,this.SignalRService.ThisPlayer.LobbyCode, PlayerSelectionStatus.ChancellorSelection);
             // Notify the president
             await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
         }
