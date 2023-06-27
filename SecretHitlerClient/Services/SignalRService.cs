@@ -129,14 +129,18 @@ namespace SecretHitler.Services
             // Set the primary player (the one who started the game)
             await this.SetPrimaryPlayer(this.ThisPlayer);
 
-            // Notify all players of the other connected players
-            foreach (Player player in this.Players)
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
             {
-                await Task.Run(async () =>
+                // Notify all players of the other connected players
+                foreach (Player player in this.Players)
                 {
-                    await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, player);
-                });
-            }
+                    await Task.Run(async () =>
+                    {
+                        await this.HubConnection.SendAsync(ServerCallbacks.ConnectPlayerName, player);
+                    });
+                }
+            });
+
 
             // Start the game
             if (!string.IsNullOrEmpty(this.ThisPlayer.LobbyCode))
