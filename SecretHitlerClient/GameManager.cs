@@ -35,7 +35,7 @@ namespace SecretHitler
             this.Chat = new Chat();
 
             // Test commands
-            this.AddTestPlayers();
+            //this.AddTestPlayers();
         }
     }
 
