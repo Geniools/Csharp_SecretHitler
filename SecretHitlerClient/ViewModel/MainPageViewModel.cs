@@ -145,6 +145,12 @@ namespace SecretHitler.ViewModel
 
         }
 
+        [RelayCommand]
+        private async Task PlayNextRound()
+        {
+            await this.GameManager.PlayNextRound();
+        }
+
         private bool IsDisplayingDefaultPictures()
         {
             foreach(Player pl in this.Players)

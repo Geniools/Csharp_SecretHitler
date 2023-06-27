@@ -87,6 +87,16 @@
             Command="{Binding RevealFascistPlayerIconsCommand}"
             />
 
+        <Button
+            Text="Next round"
+            Grid.Row="1"
+            Grid.Column="7"
+            FontFamily="GermanicaBold"
+            TextColor="Black"
+            FontSize="Medium"
+            Command="{Binding PlayNextRoundCommand}"
+            />
+
         <!-- Failed elections tracker -->
         <Grid Grid.RowSpan="2">
             <Grid.RowDefinitions>

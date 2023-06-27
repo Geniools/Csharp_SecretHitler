@@ -153,7 +153,7 @@ namespace SecretHitler
 
         // Game logic ==========================================================================================================
 
-        private async Task PlayNextRound()
+        public async Task PlayNextRound()
         {
             // Election phase
             await this.SetNextPresident();
