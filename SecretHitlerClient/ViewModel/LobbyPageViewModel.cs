@@ -15,14 +15,14 @@ namespace SecretHitler.ViewModel
 
         public LobbyPageViewModel(GameManager gameManager) : base(gameManager)
         {
-            this.Players = this.GameManager.Players;
+            this.Players = this.GameManager.SignalRService.Players;
             this.LobbyWaitingText = "Waiting for players to join";
         }
 
         [RelayCommand]
         private async Task StartGame()
         {
-            await this.GameManager.SignalRService.StartOnlineGame();
+            this.GameManager.SignalRService.StartOnlineGame();
         }
     }
 }
