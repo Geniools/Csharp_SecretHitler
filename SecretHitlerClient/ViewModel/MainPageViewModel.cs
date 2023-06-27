@@ -70,8 +70,11 @@ namespace SecretHitler.ViewModel
 
         public MainPageViewModel(GameManager gameManager) : base(gameManager)
         {
+            // Subscibe to events
+            this.GameManager.SignalRService.PresidentSelected += this.PresidentSelected;
+
             // Get the needed properties from the GameManager
-            this.Players = this.GameManager.Players;
+            this.Players = this.GameManager.SignalRService.Players;
             this.ElectionTracker = this.GameManager.ElectionTracker;
 
             // Assign the (default) visibility of the policies
@@ -138,6 +141,16 @@ namespace SecretHitler.ViewModel
             {
                 player.ImageSource = picture;
             }
+        }
+
+        private void PresidentSelected()
+        {
+            // Change the UI based on the selected president
+            this.BoardVisibility = false;
+            this.VotingVisibility = false;
+            this.CardPickerVisibility = false;
+            this.PlayerSelectionVisibility = true;
+            this.EventLabel = "Select a player to be the chancellor";
         }
 
         [RelayCommand]

@@ -13,7 +13,6 @@ namespace SecretHitler
     /// </summary>
     public partial class GameManager : BindableObject
     {
-        public ObservableCollection<Player> Players { get; private set; }
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
         public byte ElectionTracker { get; private set; }
@@ -31,7 +30,6 @@ namespace SecretHitler
 
             // Create a new game
             this.Board = new Board();
-            this.Players = new ObservableCollection<Player>();
             this.GameStatus = new GameStatus();
             this.ElectionTracker = 0;
             this.Chat = new Chat();
@@ -76,14 +74,14 @@ namespace SecretHitler
                 {
                     errorCode = 2;
                     // Check if the lobby is full
-                    if (this.Players.Count <= 10)
+                    if (this.SignalRService.Players.Count <= 10)
                     {
                         errorCode = 3;
                         // Check if the game has already started
                         if (!this.GameStarted)
                         {
                             errorCode = -1;
-                            this.Players.Add(player);
+                            this.SignalRService.Players.Add(player);
                         }
                     }
                 }
@@ -124,16 +122,10 @@ namespace SecretHitler
             // Will prevent other players from joining
             this.GameStarted = true;
 
-            if (this.IsPrimary)
+            // Add all players to the game status
+            foreach(Player player in this.SignalRService.Players)
             {
-                // Randomly assign roles to players
-                List<Player> finalPlayers = this.AssignRandomRolesToPlayers();
-                this.Players = new ObservableCollection<Player>(finalPlayers);
-
-                // Set the primary player (the one who started the game)
-                await this.SignalRService.SetPrimaryPlayer(SignalRService.ThisPlayer);
-                // Send the final players to all players (with roles assigned)
-                //await this.SignalRService.SendFinalPlayingPlayers(finalPlayers);
+                this.GameStatus.AddPlayer(player);
             }
 
             // When interacting with the UI, use the dispatcher (has something to do with Threading...)
@@ -146,7 +138,7 @@ namespace SecretHitler
         {
             if (!this.IsPrimary)
             {
-                this.Players.Clear();
+                this.SignalRService.Players.Clear();
             }
         }
     }
@@ -171,7 +163,8 @@ namespace SecretHitler
 
         private async Task SetNextPresident()
         {
-            throw new NotImplementedException();
+            Player president = this.GameStatus.GetNextPresident();
+
         }
 
         private Task MakePresidentSelectChancellor()
@@ -201,7 +194,7 @@ namespace SecretHitler
         private bool ContainsUsername(Player comparedPlayer)
         {
             // Create a copy of the players list to avoid concurrency issues
-            List<Player> players = new List<Player>(this.Players);
+            List<Player> players = new List<Player>(this.SignalRService.Players);
 
             foreach (Player player in players)
             {
@@ -214,118 +207,20 @@ namespace SecretHitler
             return false;
         }
 
-        /// <summary>
-        /// Will assign random roles to the players playing the game based on their number
-        /// Should be called only once, at the beginning of the game by the "Primary" player
-        /// </summary>
-        /// <returns>A list of players assigned random roles for the game.</returns>
-        /// <exception cref="NotSupportedException">If the player number is not between 5 and 10.</exception>
-        private List<Player> AssignRandomRolesToPlayers()
-        {
-            Random randomGenerator = new Random();
-
-            // Create a copy of the players list to avoid concurrency issues
-            List<Player> players = new List<Player>(this.Players);
-
-            // Create a list of roles
-            List<Player> assignedPlayers = new List<Player>();
-            int liberalsNeeded = 0;
-            int fascistNeeded = 0;
-
-            // Determine the number of liberals and fascist needed for the game (based on the amount of players)
-            switch (this.Players.Count)
-            {
-                case 5:
-                    liberalsNeeded = 3;
-                    fascistNeeded = 1;
-                    break;
-                case 6:
-                    liberalsNeeded = 4;
-                    fascistNeeded = 1;
-                    break;
-                case 7:
-                    liberalsNeeded = 4;
-                    fascistNeeded = 2;
-                    break;
-                case 8:
-                    liberalsNeeded = 5;
-                    fascistNeeded = 2;
-                    break;
-                case 9:
-                    liberalsNeeded = 5;
-                    fascistNeeded = 3;
-                    break;
-                case 10:
-                    liberalsNeeded = 6;
-                    fascistNeeded = 3;
-                    break;
-                default:
-                    throw new NotSupportedException($"The amount of players is not supported. Player range must be between 5 and 10. Players given: {this.Players.Count}");
-            }
-
-            int liberals = 0;
-            int fascist = 0;
-
-            // Assign the liberals
-            while (liberals < liberalsNeeded)
-            {
-                Player randomPlayer = players[randomGenerator.Next(this.Players.Count)];
-
-                if (!assignedPlayers.Contains(randomPlayer))
-                {
-                    randomPlayer.Role = SecretRole.Liberal;
-                    randomPlayer.Party = PartyMembership.Liberal;
-                    assignedPlayers.Add(randomPlayer);
-                    liberals++;
-                }
-            }
-
-            // Assign the fascists
-            while (fascist < fascistNeeded)
-            {
-                Player randomPlayer = players[randomGenerator.Next(this.Players.Count)];
-
-                if (!assignedPlayers.Contains(randomPlayer))
-                {
-                    randomPlayer.Role = SecretRole.Fascist;
-                    randomPlayer.Party = PartyMembership.Fascist;
-                    assignedPlayers.Add(randomPlayer);
-                    fascist++;
-                }
-            }
-
-            // Assign Hitler (must the be last player left unnasigned)
-            foreach (Player player in players)
-            {
-                if (!assignedPlayers.Contains(player))
-                {
-                    player.Role = SecretRole.Hitler;
-                    player.Party = PartyMembership.Fascist;
-                    assignedPlayers.Add(player);
-                    break;
-                }
-            }
-
-            // Randomize the players in the list
-            List<Player> randomizedPlayers = assignedPlayers.OrderBy(player => randomGenerator.Next()).ToList();
-
-            return randomizedPlayers;
-        }
-
         // TEST FUNCTIONS =====================================================================================================
 
         // Test function to add players
         private void AddTestPlayers()
         {
-            this.Players.Add(new Player("Test1"));
-            this.Players.Add(new Player("Test2"));
-            this.Players.Add(new Player("Test3"));
-            this.Players.Add(new Player("Test4"));
-            this.Players.Add(new Player("Test5"));
-            this.Players.Add(new Player("Test6"));
-            this.Players.Add(new Player("Test7"));
-            this.Players.Add(new Player("Test8"));
-            this.Players.Add(new Player("Test9"));
+            this.SignalRService.Players.Add(new Player("Test1"));
+            this.SignalRService.Players.Add(new Player("Test2"));
+            this.SignalRService.Players.Add(new Player("Test3"));
+            this.SignalRService.Players.Add(new Player("Test4"));
+            this.SignalRService.Players.Add(new Player("Test5"));
+            this.SignalRService.Players.Add(new Player("Test6"));
+            this.SignalRService.Players.Add(new Player("Test7"));
+            this.SignalRService.Players.Add(new Player("Test8"));
+            this.SignalRService.Players.Add(new Player("Test9"));
         }
     }
 }
