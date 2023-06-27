@@ -127,41 +127,20 @@ namespace SecretHitler.Services
             this.Players = new ObservableCollection<Player>(finalPlayers);
 
             // Set the primary player (the one who started the game)
-            await this.SetPrimaryPlayer(this.ThisPlayer);
+            await this.HubConnection.InvokeAsync(ServerCallbacks.SetPrimaryPlayerName, this.ThisPlayer);
 
             // Notify all players of the other connected players
             foreach (Player player in this.Players)
             {
-                //Task.Run(async () =>
-                //{
-                //    await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
-                //});
-                this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
+                // WILL NOT WORK WITH TEST PLAYERS
+                await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
             }
-
 
             // Start the game
             if (!string.IsNullOrEmpty(this.ThisPlayer.LobbyCode))
             {
                 await this.HubConnection.InvokeAsync(ServerCallbacks.StartGameName, this.ThisPlayer.LobbyCode);
             }
-        }
-
-        internal async Task SetPrimaryPlayer(Player primaryPlayer)
-        {
-            await this.HubConnection.InvokeAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
-        }
-
-        internal async Task SendFinalPlayingPlayers(List<Player> finalPlayers)
-        {
-            await Shell.Current.Dispatcher.DispatchAsync(async () =>
-            {
-                // Notify all players of the other connected players
-                foreach (Player player in finalPlayers)
-                {
-                    await this.HubConnection.InvokeAsync(ServerCallbacks.ConnectPlayerName, player);
-                }
-            });
         }
 
         /// <summary>
