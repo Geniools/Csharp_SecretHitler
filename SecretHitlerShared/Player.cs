@@ -1,10 +1,11 @@
-﻿
+﻿using CommunityToolkit.Mvvm.Input;
+
 namespace SecretHitlerShared
 {
     public partial class Player
     {
         // Events
-        public Action<Player>? OnPlayerSelected;
+        public Action<Player> OnPlayerSelected;
 
         // Hub properties
         public string LobbyCode { get; set; }
@@ -117,7 +118,8 @@ namespace SecretHitlerShared
             return base.GetHashCode();
         }
 
-        public async Task PlayerSelected()
+        [RelayCommand]
+        private async Task PlayerSelected()
         {
             this.OnPlayerSelected?.Invoke(this);
         }

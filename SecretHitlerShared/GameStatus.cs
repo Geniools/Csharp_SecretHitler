@@ -5,11 +5,11 @@ namespace SecretHitlerShared
     {
         private LinkedList<Player> PlayingPlayers { get; set; }
 
-        public Player? CurrentPresident { get; set; }
-        public Player? PreviousPresident { get; set; }
+        public Player CurrentPresident { get; set; }
+        public Player PreviousPresident { get; set; }
 
-        public Player? CurrentChancelor { get; set; }
-        public Player? PreviousChancelor { get; set; }
+        public Player CurrentChancelor { get; set; }
+        public Player PreviousChancelor { get; set; }
 
         public PresidentialsPowers PresidentialPower { get; set; }
         public PlayerSelectionStatus PlayerSelectionStatus { get; set; }

@@ -22,7 +22,7 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task StartGame()
         {
-            this.GameManager.SignalRService.StartOnlineGame();
+            await this.GameManager.SignalRService.StartOnlineGame();
         }
     }
 }
