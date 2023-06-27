@@ -123,10 +123,10 @@ namespace SecretHitler
             this.GameStarted = true;
 
             // Add all players to the game status
-            //foreach(Player player in this.SignalRService.Players)
-            //{
-            //    this.GameStatus.AddPlayer(player);
-            //}
+            foreach (Player player in this.SignalRService.Players)
+            {
+                this.GameStatus.AddPlayer(player);
+            }
 
             // When interacting with the UI, use the dispatcher (has something to do with Threading...)
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
