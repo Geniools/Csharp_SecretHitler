@@ -415,11 +415,27 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <ImageButton
+                    x:Name="picking_card1"
+                    Grid.Column="0"
+                    Source="{Binding Card1}"
+                    Command="{Binding SelectCard1Command}"
+                    />
+                <ImageButton
+                    x:Name="picking_card2"
+                    Grid.Column="1"
+                    Source="{Binding Card2}"
+                    Command="{Binding SelectCard2Command}"
+                    />
+                <ImageButton
+                    x:Name="picking_card3"
+                    Grid.Column="2"
+                    Source="{Binding Card3}"
+                    Command="{Binding SelectCard3Command}"
+                    />
             </Grid>
-        </Frame>
+        </Frame>  
 
 
         <CollectionView 

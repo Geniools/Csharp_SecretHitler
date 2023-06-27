@@ -53,9 +53,15 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private bool _votingVisibility;
 
-        // Card picker visibility
+        // Card picker visibility and cards
         [ObservableProperty]
         private bool _cardPickerVisibility;
+        [ObservableProperty]
+        private String _card1;
+        [ObservableProperty]
+        private String _card2;
+        [ObservableProperty]
+        private String _card3;
 
         // Player selection visibility
         [ObservableProperty]
@@ -99,8 +105,11 @@ namespace SecretHitler.ViewModel
             // Assign the (default) visibility of the voting buttons
             this.VotingVisibility = false;
 
-            // Assign the (default) visibility of the card picker
-            this.CardPickerVisibility = true;
+            // Assign the (default) visibility of the card picker and card images
+            this.CardPickerVisibility = false;
+            this.Card1 = "liberal_article";
+            this.Card2 = "fascist_article";
+            this.Card3 = "liberal_article";
 
             // Assign the (default) visibility of the player selection
             this.PlayerSelectionVisibility = false;
@@ -193,6 +202,24 @@ namespace SecretHitler.ViewModel
             // Change the visibility of the player selection
             this.PlayerSelectionVisibility = true;
             this.EventLabel = "Select a player to be the chancellor";
+        }
+
+        [RelayCommand]
+        private async Task SelectCard1()
+        {
+            this.CardPickerVisibility = false;
+        }
+
+        [RelayCommand]
+        private async Task SelectCard2()
+        {
+            this.CardPickerVisibility = false;
+        }
+
+        [RelayCommand]
+        private async Task SelectCard3()
+        {
+            this.CardPickerVisibility = false;
         }
     }
 }
