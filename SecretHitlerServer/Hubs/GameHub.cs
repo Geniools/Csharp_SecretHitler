@@ -35,6 +35,8 @@ namespace Server.Hubs
             await Clients.Client(disconnectingPlayer.ConnectionId).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
         }
 
+
+
         public async Task StartGame(string lobbyCode)
         {
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.StartGameName);
@@ -50,19 +52,23 @@ namespace Server.Hubs
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EndGameName);
         }
 
-        public async Task SessionStarted(string lobbyCode)
-        {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.SessionStartedName);
-        }
 
-        public async Task SendChatMessage(string lobbyCode, Player player, string message)
+
+
+        public async Task PresidentSelected(Player player)
         {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, player, message);
+            await Clients.Client(player.ConnectionId).SendAsync(ServerCallbacks.PresidentSelectedName);
         }
 
         public async Task SendElectionVote(string lobbyCode, Player player, bool vote)
         {
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, player, vote);
+        }
+
+
+        public async Task SendChatMessage(string lobbyCode, Player player, string message)
+        {
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, player, message);
         }
     }
 }

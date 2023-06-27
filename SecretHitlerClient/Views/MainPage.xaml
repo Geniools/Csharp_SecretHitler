@@ -95,6 +95,7 @@
             TextColor="Black"
             FontSize="Medium"
             Command="{Binding PlayNextRoundCommand}"
+            IsVisible="{Binding IsPrimary}"
             />
 
         <!-- Failed elections tracker -->

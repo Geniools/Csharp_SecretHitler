@@ -15,6 +15,8 @@ namespace SecretHitler.ViewModel
         public bool SevenEightPlayerGame => this.Players.Count == 7 || this.Players.Count == 8;
         public bool NineTenPlayerGame => this.Players.Count == 9 || this.Players.Count == 10;
 
+        public bool IsPrimary => this.GameManager.IsPrimary;
+
         // Policies
 
         // Liberal policies visibility
@@ -124,19 +126,21 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task RevealFascistPlayerIcons()
         {
-            // TODO: First check if the player is a fascist, otherwise do nothing
-            if(this.GameManager.SignalRService.ThisPlayer.IsFascist())
-            {
-                // Check if the picture is already changed
-                if(this.IsDisplayingDefaultPictures())
+            await Shell.Current.Dispatcher.DispatchAsync(() => { 
+                // First check if the player is a fascist, otherwise do nothing
+                if(this.GameManager.SignalRService.ThisPlayer.IsFascist())
                 {
-                    this.SetPlayerPicture(picture: GameImages.FascistIcon);
+                    // Check if the picture is already changed
+                    if(this.IsDisplayingDefaultPictures())
+                    {
+                        this.SetPlayerPicture(picture: GameImages.FascistIcon);
+                    }
+                    else
+                    {
+                        this.SetPlayerPicture();
+                    }
                 }
-                else
-                {
-                    this.SetPlayerPicture();
-                }
-            }
+            });
         }
 
         [RelayCommand]

@@ -157,22 +157,13 @@ namespace SecretHitler
         {
             // Election phase
             await this.SetNextPresident();
-
-            await this.MakePresidentSelectChancellor();
         }
 
         private async Task SetNextPresident()
         {
             Player president = this.GameStatus.GetNextPresident();
-
+            await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
         }
-
-        private Task MakePresidentSelectChancellor()
-        {
-            // TODO: Send a message to the president to select a chancellor
-            throw new NotImplementedException();
-        }
-
 
         private async Task EndGame()
         {
