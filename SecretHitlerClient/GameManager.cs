@@ -14,6 +14,9 @@ namespace SecretHitler
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
         public byte ElectionTracker { get; private set; }
+        
+        // Event
+
 
         public GameManager()
         {
@@ -179,6 +182,19 @@ namespace SecretHitler
 
         // Game logic ==========================================================================================================
 
+        public void KillPlayer(Player player)
+        {
+            Shell.Current.DisplayAlert("player", player.ImageSource, "Okay");
+
+            foreach (Player playerCurrent in this.SignalRService.Players)
+            {
+                if (playerCurrent.Equals(player))
+                {
+                    playerCurrent.ImageSource = GameImages.KilledPlayerIcon;
+                    //Shell.Current.DisplayAlert("player", player.ImageSource, "Okay");
+                }
+            }
+        }
         public async Task PlayNextRound()
         {
             // Election phase

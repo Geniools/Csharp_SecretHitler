@@ -1,4 +1,7 @@
 ﻿
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
 namespace SecretHitlerShared
 {
     public class Player
@@ -16,6 +19,11 @@ namespace SecretHitlerShared
         public string Username { get; private set; }
 
         private SecretRole _role;
+
+
+        // Event
+        public event Action<Player> KillPlayer;
+
         public SecretRole Role { 
             get
             {
