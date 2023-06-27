@@ -1,4 +1,5 @@
 ﻿
+using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
@@ -16,6 +17,11 @@ namespace SecretHitlerShared
         public string Username { get; private set; }
 
         private SecretRole _role;
+
+
+        // Event
+        public event Action<Player> KillPlayer;
+
         public SecretRole Role { 
             get
             {
@@ -108,6 +114,14 @@ namespace SecretHitlerShared
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        [RelayCommand]
+        private async Task PrepKillPlayer()
+        {
+            Shell.Current.DisplayAlert("player", "sooo", "Okay");
+            this.ImageSource = GameImages.KilledPlayerIcon;
+            this.KillPlayer?.Invoke(this);
         }
     }
 }
