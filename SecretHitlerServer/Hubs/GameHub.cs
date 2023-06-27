@@ -72,11 +72,5 @@ namespace Server.Hubs
         {
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, player, vote);
         }
-
-
-        public async Task SendChatMessage(string lobbyCode, Player player, string message)
-        {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChatMessageName, player, message);
-        }
     }
 }

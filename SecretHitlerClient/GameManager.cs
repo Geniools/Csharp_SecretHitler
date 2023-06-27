@@ -182,29 +182,13 @@ namespace SecretHitler
 
         // Game logic ==========================================================================================================
 
-        public void KillPlayer(Player player)
-        {
-            Shell.Current.DisplayAlert("player", player.ImageSource, "Okay");
-
-            foreach (Player playerCurrent in this.SignalRService.Players)
-            {
-                if (playerCurrent.Equals(player))
-                {
-                    playerCurrent.ImageSource = GameImages.KilledPlayerIcon;
-                    //Shell.Current.DisplayAlert("player", player.ImageSource, "Okay");
-                }
-            }
-        }
         public async Task PlayNextRound()
         {
             // Election phase
-            await this.SetNextPresident();
-        }
-
-        private async Task SetNextPresident()
-        {
             Player president = this.GameStatus.GetNextPresident();
+            // Set the status to chancellor selection
             this.GameStatus.PlayerSelectionStatus = PlayerSelectionStatus.ChancellorSelection;
+            // Notify the president
             await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
         }
 

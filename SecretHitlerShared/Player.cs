@@ -1,10 +1,11 @@
 ﻿
+using CommunityToolkit.Mvvm;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace SecretHitlerShared
 {
-    public class Player
+    public partial class Player : ObservableObject
     {
         // Events
         public Action<Player>? OnPlayerSelected;
@@ -20,6 +21,7 @@ namespace SecretHitlerShared
 
         private SecretRole _role;
 
+        public bool CanBeChancellor { get; set; }
 
         // Event
         public event Action<Player> KillPlayer;
@@ -47,7 +49,13 @@ namespace SecretHitlerShared
                 this._role = value;
             }
         }
-        public string ImageSource { get; set; }
+        public string ImageSource { 
+            get; 
+            set
+            { 
+                SetProperty
+            }
+        }
         private PartyMembership _party;
         public PartyMembership Party {
             get
