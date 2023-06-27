@@ -190,6 +190,7 @@ namespace SecretHitler.ViewModel
             this.BoardVisibility = false;
             this.VotingVisibility = false;
             this.CardPickerVisibility = false;
+            // Change the visibility of the player selection
             this.PlayerSelectionVisibility = true;
             this.EventLabel = "Select a player to be the chancellor";
         }

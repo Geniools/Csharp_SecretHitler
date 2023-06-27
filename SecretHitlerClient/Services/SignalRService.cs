@@ -93,7 +93,7 @@ namespace SecretHitler.Services
             });
 
             // Handle the PresidentSelected event
-            this.HubConnection.On<Player>(ServerCallbacks.PresidentSelectedName, president =>
+            this.HubConnection.On(ServerCallbacks.PresidentSelectedName, () =>
             {
                 this.PresidentSelected?.Invoke();
             });
