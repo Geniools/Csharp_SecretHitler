@@ -347,7 +347,7 @@ namespace SecretHitler.ViewModel
             // Create a policy card based on the source of the card image
             if(cardName.Contains("fascist"))
             {
-                card = new PolicyCard(PartyMembership.Liberal);
+                card = new PolicyCard(PartyMembership.Fascist);
             }
 
             await Shell.Current.Dispatcher.DispatchAsync(async () =>
