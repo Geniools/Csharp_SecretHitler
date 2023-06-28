@@ -18,6 +18,7 @@ namespace SecretHitlerShared
         public const string PresidentSelectedName = "PresidentSelected";
         public const string EndGameName = "EndGame";
         public const string ChancellorVotingName = "ChancellorVoting";
+        public const string ChancellorSelectedName = "ChancellorSelected";
         public const string VotingBallotName = "VotingBallot";
         public const string PlayerSelectionStatusName = "PlayerSelectionStatus";
 

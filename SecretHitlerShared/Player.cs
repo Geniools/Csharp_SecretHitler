@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace SecretHitlerShared
 {
@@ -46,7 +47,9 @@ namespace SecretHitlerShared
                 this._role = value;
             }
         }
-        public string ImageSource { get; set; }
+
+        [ObservableProperty]
+        private string _imageSource;
 
         private PartyMembership _party;
         public PartyMembership Party {

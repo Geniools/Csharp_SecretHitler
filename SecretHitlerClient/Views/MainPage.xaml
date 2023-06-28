@@ -429,7 +429,7 @@
                     Command="{Binding SelectCard3Command}"
                     />
             </Grid>
-        </Frame>  
+        </Frame>
 
         <CollectionView 
             ItemsSource="{Binding Players}" 
@@ -460,7 +460,7 @@
                             Text="{Binding Username}"
                             TextColor="#855E42" 
                             FontSize="Small"
-                            Grid.Row="0" 
+                            Grid.Row="0"
                             HorizontalOptions="Center" 
                             />
 
@@ -477,24 +477,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-
-        <!--Role--><!--
-        <Grid Grid.Row="0" Grid.Column="6">
-            <Button Text="Role" WidthRequest="100" HeightRequest="50"/>
-        </Grid>-->
-
-        <!--Elected Policies-->
-        <!--<StackLayout>
-            <Label Text="Elected Policies:" />
-            <CollectionView ItemsSource="{Binding ElectedPolicies}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
-                        <Label Text="{Binding}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout> -->
-        
     </Grid>
 </ContentPage>
     

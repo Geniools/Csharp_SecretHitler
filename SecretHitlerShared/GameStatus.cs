@@ -10,6 +10,7 @@ namespace SecretHitlerShared
 
         public Player CurrentChancelor { get; set; }
         public Player PreviousChancelor { get; set; }
+        public Player CandidateChancellor { get; set; }
 
         public PresidentialsPowers PresidentialPower { get; set; }
         public PlayerSelectionStatus PlayerSelectionStatus { get; set; }
@@ -27,6 +28,13 @@ namespace SecretHitlerShared
         public void RemovePlayer(Player player)
         {
             this.PlayingPlayers.Remove(player);
+        }
+
+        public Player EnactCandidateChancellor()
+        {
+            this.PreviousChancelor = this.CurrentChancelor;
+            this.CurrentChancelor = this.CandidateChancellor;
+            return this.CurrentChancelor;
         }
 
         public Player GetNextPresident()

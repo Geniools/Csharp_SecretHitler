@@ -19,8 +19,9 @@ namespace SecretHitler.Services
         public event Action<string> OnPlayerDisconnected;
         public event Action OnGameStarted;
         public event Action OnClearAllPlayers;
-        public event Action OnPresidentSelected;
+        public event Action<Player> OnPresidentSelected;
         public event Action<Player> OnChancellorVoting;
+        public event Action<Player> OnChancellorSelected;
         public event Action<Player, BallotType> OnBallotVoted;
         public event Action<PlayerSelectionStatus> OnPlayerSelectionStatus;
 
@@ -64,6 +65,7 @@ namespace SecretHitler.Services
                 .Build();
 
             // This function must contain all event handlers
+
             // Handle the PlayerConnected event
             this.HubConnection.On<Player>(ServerCallbacks.PlayerConnectedName, connectedPlayer =>
             {
@@ -76,7 +78,13 @@ namespace SecretHitler.Services
                 //Console.WriteLine($"Player {disconnectingPlayer.ConnectionId} disconnected: {message}");
                 this.OnPlayerDisconnected?.Invoke(message);
             });
-
+            
+            // Handle the GameStarted event
+            this.HubConnection.On(ServerCallbacks.StartGameName, () =>
+            {
+                this.OnGameStarted?.Invoke();
+            });
+            
             // Set the primary player
             this.HubConnection.On<Player>(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer =>
             {
@@ -87,18 +95,18 @@ namespace SecretHitler.Services
             this.HubConnection.On(ServerCallbacks.ClearAllPlayersName, () =>
             {
                 this.OnClearAllPlayers?.Invoke();
-            });
-
-            // Handle the GameStarted event
-            this.HubConnection.On(ServerCallbacks.StartGameName, () =>
-            {
-                this.OnGameStarted?.Invoke();
-            });
+            });            
 
             // Handle the PresidentSelected event
-            this.HubConnection.On(ServerCallbacks.PresidentSelectedName, () =>
+            this.HubConnection.On<Player>(ServerCallbacks.PresidentSelectedName, currentPresident =>
             {
-                this.OnPresidentSelected?.Invoke();
+                this.OnPresidentSelected?.Invoke(currentPresident);
+            });
+
+            // Handle the PlayerSelectionStatus event
+            this.HubConnection.On<PlayerSelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
+            {
+                this.OnPlayerSelectionStatus?.Invoke(status);
             });
 
             // Handle the Voting event
@@ -107,16 +115,16 @@ namespace SecretHitler.Services
                 this.OnChancellorVoting?.Invoke(player);
             });
 
+            // Handle the ChancellorSelected event
+            this.HubConnection.On<Player>(ServerCallbacks.ChancellorSelectedName, currentChancellor =>
+            {
+                this.OnChancellorSelected?.Invoke(currentChancellor);
+            });
+
             // Handle the VotingBallot event
             this.HubConnection.On<Player, BallotType>(ServerCallbacks.VotingBallotName, (player, card) =>
             {
                 this.OnBallotVoted?.Invoke(player, card);
-            });
-
-            // Handle the PlayerSelectionStatus event
-            this.HubConnection.On<PlayerSelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
-            {
-                this.OnPlayerSelectionStatus?.Invoke(status);
             });
 
             // Set the default connection limit
@@ -129,9 +137,9 @@ namespace SecretHitler.Services
             this.ThisPlayer.ConnectionId = this.HubConnection.ConnectionId;
         }
         
-        internal async Task VoteBallot(BallotType ballot)
+        internal async Task VoteBallot(BallotType votingCard)
         {
-            await this.HubConnection.InvokeAsync(ServerCallbacks.VotingBallotName, this.ThisPlayer, this.PrimaryPlayer.ConnectionId, ballot);
+            await this.HubConnection.InvokeAsync(ServerCallbacks.VotingBallotName, this.ThisPlayer, this.PrimaryPlayer.ConnectionId, votingCard);
         }
 
         internal async Task ConnectPlayer(Player player)

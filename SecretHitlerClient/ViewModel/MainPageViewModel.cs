@@ -87,7 +87,7 @@ namespace SecretHitler.ViewModel
 
             // Get the needed properties from the GameManager
             this.Players = this.GameManager.SignalRService.Players;
-            this.ElectionTracker = this.GameManager.ElectionTracker;
+            this.ElectionTracker = this.GameManager.FailedElectionTracker;
 
             // Assign the (default) visibility of the policies
             this.LiberalPolicy1 = false;
@@ -104,7 +104,7 @@ namespace SecretHitler.ViewModel
             this.FascistPolicy6 = false;
 
             // Assign the (default) visibility of the board
-            this.BoardVisibility = false;
+            this.BoardVisibility = true;
 
             // Assign the (default) visibility of the voting buttons
             this.VotingVisibility = false;
@@ -124,6 +124,12 @@ namespace SecretHitler.ViewModel
 
         private void ChancellorVoting(Player player)
         {
+            // If this is the primary player, set the candidate chancellor
+            if(this.GameManager.IsPrimary)
+            {
+                this.GameManager.GameStatus.CandidateChancellor = player;
+            }
+
             // Update the UI
             this.BoardVisibility = false;
             this.VotingVisibility = true;
@@ -131,7 +137,7 @@ namespace SecretHitler.ViewModel
             this.PlayerSelectionVisibility = false;
             // Label text
             this.EventLabelVisibility = true;
-            this.EventLabel = $"Vote for {player.Username} to be the chancellor";
+            this.EventLabel = $"Vote for {player.Username} as chancellor";
         }
 
         [RelayCommand]
@@ -205,17 +211,22 @@ namespace SecretHitler.ViewModel
             }
         }
 
-        private void PresidentSelected()
+        private void PresidentSelected(Player currentPresident)
         {
-            // Change the UI based on the selected president
-            this.BoardVisibility = false;
-            this.VotingVisibility = false;
-            this.CardPickerVisibility = false;
-            // Change the visibility of the player selection
-            this.PlayerSelectionVisibility = true;
-            // Update the label
-            this.EventLabelVisibility = true;
-            this.EventLabel = "Select a player to be the chancellor";
+            this.GameManager.PresidentSelected(currentPresident);
+            // If this is the president, change the UI
+            if(this.GameManager.SignalRService.ThisPlayer.Equals(currentPresident))
+            {
+                // Change the UI based on the selected president
+                this.BoardVisibility = false;
+                this.VotingVisibility = false;
+                this.CardPickerVisibility = false;
+                // Change the visibility of the player selection
+                this.PlayerSelectionVisibility = true;
+                // Update the label
+                this.EventLabelVisibility = true;
+                this.EventLabel = "Propose a candidate chancellor";
+            }
         }
 
         [RelayCommand]
