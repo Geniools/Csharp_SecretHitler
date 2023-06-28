@@ -3,17 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SecretHitler.Views.MainPage"
              xmlns:viewmodel="clr-namespace:SecretHitler.ViewModel"
-             xmlns:model="clr-namespace:SecretHitler.Model"
+             xmlns:model="clr-namespace:SecretHitlerShared"
              x:DataType="viewmodel:MainPageViewModel"
+             NavigationPage.HasBackButton="false"
              Title="MainPage">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
+    </Shell.BackButtonBehavior>
 
     <!--Board Layout-->
     <Grid BackgroundColor="#FBB969">
 
         <!--Defining Grid-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -22,275 +26,490 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="150" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
+        <!-- Players layout -->
+        <CollectionView 
+            ItemsSource="{Binding GameManager.SignalRService.Players}" 
+            Grid.Column="1"
+            Grid.ColumnSpan="5" >
 
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout 
+                    Orientation="Horizontal"
+                    HorizontalItemSpacing="10"
+                    />
+            </CollectionView.ItemsLayout>
 
-        <!--Players-->
-        <CollectionView Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Players}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="{x:Type model:Player}">
-                    <VerticalStackLayout>
-                        <Image Source="{Binding Role}" WidthRequest="50" HeightRequest="50" HorizontalOptions="Center"/>
-                        <Label Text="{Binding Username}" HorizontalOptions="Center" />
-                        <Image Source="profile.png" 
-                           WidthRequest="50"
-                           HeightRequest="50"
-                           HorizontalOptions="Center"/>
-                    </VerticalStackLayout>
+                    <Grid Padding="5">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            Text="{Binding Username}"
+                            TextColor="#855E42" 
+                            FontSize="Micro"
+                            Grid.Row="0" 
+                            HorizontalOptions="Center" 
+                            />
+
+                        <Image
+                            Source="{Binding ImageSource}" 
+                            Grid.Row="1" 
+                            Aspect="AspectFit"
+                            />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        <!--Buttons that aid the game-->
+        <!--<Frame
+            Grid.Column="6"
+            Grid.ColumnSpan="2"
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
+            Padding="10"
+            >
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Button
+                    Text="Next round"
+                    WidthRequest="200"
+                    FontFamily="GermanicaBold"
+                    TextColor="#FBB969"
+                    FontSize="Medium"
+                    BackgroundColor="Black"
+                    Command="{Binding PlayNextRoundCommand}"
+                    IsVisible="{Binding IsPrimary}"
+                    />
+
+                <Button 
+                    Text="Who is who?"
+                    WidthRequest="200"
+                    FontFamily="GermanicaBold"
+                    TextColor="Black"
+                    BackgroundColor="White"
+                    FontSize="Medium"
+                    Command="{Binding RevealFascistPlayerIconsCommand}"
+                    />
+            </HorizontalStackLayout>
+        </Frame>-->
+
+        <Button
+            Grid.Column="7"
+            Text="Next round"
+            FontFamily="GermanicaBold"
+            TextColor="#FBB969"
+            FontSize="Medium"
+            BackgroundColor="Black"
+            Command="{Binding PlayNextRoundCommand}"
+            IsVisible="{Binding IsPrimary}"
+            />
+
+        <!-- Failed elections tracker -->
+        <Grid Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Label 
+                Text="Failed Elections"
+                HorizontalOptions="Center" 
+                VerticalOptions="Center" 
+                FontFamily="GermanicaBold" 
+                FontSize="Medium"
+                TextColor="#331800"
+                />
+
+            <Label 
+                Text="{Binding GameManager.FailedElectionTracker}" 
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                Grid.Row="1"
+                FontFamily="GermanicaBold" 
+                FontSize="Large"
+                TextColor="Black"
+                />
+        </Grid>
+
+        <!-- Table -->
+        <Grid 
+            Grid.Row="1"
+            Grid.Column="1"
+            Grid.ColumnSpan="6"
+            Grid.RowSpan="7">
+
+            <Rectangle BackgroundColor="#855E42">
+                <Rectangle.Shadow>
+                    <Shadow
+                        Brush="#331800"
+                        Offset="10, 10"
+                        Radius="7"
+                        Opacity="0.3"
+                        />
+                </Rectangle.Shadow>
+            </Rectangle>
+        </Grid>
+
+        <!-- Liberal text -->
+        <Frame 
+            Grid.Row="1" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2" 
+            BackgroundColor="White"
+            HeightRequest="150"
+            Margin="0,0,0,-50"
+            IsVisible="{Binding BoardVisibility}"
+            >
+
+            <Label 
+                Text="Liberal" 
+                HorizontalTextAlignment="Center"
+                FontSize="80" 
+                FontFamily="GermanicaBold" 
+                TextColor="#331800" />
+        </Frame>
+
+        <!-- Liberal board below -->
+        <Frame 
+            Margin="150,0,150,0" 
+            Grid.Row="2"
+            Grid.Column="1"
+            Grid.ColumnSpan="6" 
+            Grid.RowSpan="2"
+            BackgroundColor="White"
+            BorderColor="Transparent"
+            IsVisible="{Binding BoardVisibility}"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Defining the default background images -->
+                <Image Margin="10" Source="liberal_article_draw_pile.png" Grid.Column="0" Aspect="Fill"/>
+
+                <Image Source="article_background.png" Grid.Column="1" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="3" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="5" Aspect="Fill"/>
+                <Image Source="article_background.png" Grid.Column="7" Aspect="Fill"/>
+                <Image Source="liberal_article_last_background.png" Grid.Column="9" Aspect="Fill"/>
+
+                <Image Margin="10" Source="liberal_article_discard_pile.png" Grid.Column="10" Aspect="Fill"/>
+
+                <!-- Actual articles enacted -->
+                <Image Source="liberal_article.png" Grid.Column="1" Aspect="Fill" IsVisible="{Binding LiberalPolicy1}" />
+                <Image Source="board_arrow.png" Grid.Column="2" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="3" Aspect="Fill" IsVisible="{Binding LiberalPolicy2}" />
+                <Image Source="board_arrow.png" Grid.Column="4" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="5" Aspect="Fill" IsVisible="{Binding LiberalPolicy3}" />
+                <Image Source="board_arrow.png" Grid.Column="6" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="7" Aspect="Fill" IsVisible="{Binding LiberalPolicy4}" />
+                <Image Source="board_arrow.png" Grid.Column="8" Aspect="Fill" />
+
+                <Image Source="liberal_article.png" Grid.Column="9" Aspect="Fill" IsVisible="{Binding LiberalPolicy5}" />
+
+            </Grid>
+        </Frame>
+
+        <!-- Fascist text -->
+        <Frame 
+            Grid.Row="4" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2" 
+            BackgroundColor="#777"
+            HeightRequest="150"
+            Margin="0,0,0,-50"
+            BorderColor="Transparent"
+            IsVisible="{Binding BoardVisibility}"
+            >
+
+            <Label 
+                HorizontalTextAlignment="Center"
+                Text="Fascist" 
+                FontSize="80"
+                FontFamily="GermanicaBold"
+                TextColor="#331800" />
+        </Frame>
+
+        <!-- Fascist board below -->
+        <Frame 
+            Margin="150,0,150,0" 
+            Padding="10,20" 
+            Grid.Row="5" 
+            Grid.Column="1" 
+            Grid.ColumnSpan="6"
+            Grid.RowSpan="2" 
+            BackgroundColor="#777"
+            BorderColor="Transparent"
+            IsVisible="{Binding BoardVisibility}"
+            >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="23"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Defining the default background images -->
+
+                <!-- 1 cell, 5-6 players -->
+                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+                <!-- 2 cells, 5-6 players -->
+                <Image Source="article_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+                <!-- 3 cells, 5-6 players-->
+                <Image Source="fascist_event_5_6_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding FiveSixPlayerGame}" />
+
+                <!-- 1 cell, 7-8 players -->
+                <Image Source="article_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+                <!-- 2 cells, 7-8 players -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+                <!-- 3 cells, 7-8 players -->
+                <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding SevenEightPlayerGame}" />
+
+                <!-- 1 cell, 9-10 players -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+                <!-- 2 cells, 9-10 players -->
+                <Image Source="fascist_event_7_10_players_1_2_nd_background.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+                <!-- 3 cells, 9-10 players -->
+                <Image Source="fascist_event_7_10_players_3_rd_background.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding NineTenPlayerGame}" />
+
+                <!-- 4,5,6 cells, any nr of players -->
+                <Image Source="fascist_event_4_th_background.png" Grid.Column="6" Aspect="Fill" />
+                <Image Source="fascist_event_5_th_background.png" Grid.Column="8" Aspect="Fill" />
+                <Image Source="fascist_article_last_background.png" Grid.Column="10" Aspect="Fill" />
+
+                <!-- Actual articles enacted -->
+
+                <Image Source="fascist_article.png" Grid.Column="0" Aspect="Fill" IsVisible="{Binding FascistPolicy1}" />
+                <Image Source="board_arrow.png" Grid.Column="1" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="2" Aspect="Fill" IsVisible="{Binding FascistPolicy2}" />
+                <Image Source="board_arrow.png" Grid.Column="3" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="4" Aspect="Fill" IsVisible="{Binding FascistPolicy3}" />
+                <Image Source="board_arrow.png" Grid.Column="5" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="6" Aspect="Fill" IsVisible="{Binding FascistPolicy4}" />
+                <Image Source="board_arrow.png" Grid.Column="7" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="8" Aspect="Fill" IsVisible="{Binding FascistPolicy5}" />
+                <Image Source="board_arrow.png" Grid.Column="9" Aspect="Fill" />
+
+                <Image Source="fascist_article.png" Grid.Column="10" Aspect="Fill" IsVisible="{Binding FascistPolicy6}" />
+
+            </Grid>
+        </Frame>
+
+        <!-- Meant as a timer in game -->
+        <ProgressBar 
+            Grid.Row="7" 
+            Grid.Column="3" 
+            Grid.ColumnSpan="2"  
+            Progress="0.5" 
+            ProgressColor="Black" 
+            IsVisible="false"
+            />
+
+        <!-- Text -->
+        <Frame 
+            Grid.Row="2" 
+            Grid.Column="1"
+            Grid.ColumnSpan="6"
+            BorderColor="Transparent"
+            BackgroundColor="Transparent"
+            IsVisible="{Binding EventLabelVisibility}"
+            >
+
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
+                
+                <Label
+                    Text="{Binding EventLabel}" 
+                    FontSize="50"
+                    FontFamily="Comic Sans MS"
+                    TextColor="Black"
+                    />
+            
+            </HorizontalStackLayout>
+        </Frame>
+
+        <!-- Voting -->
+        <Frame 
+             BackgroundColor="Transparent"
+             BorderColor="Transparent"
+             Grid.Row="4"
+             Grid.RowSpan="3"
+             Grid.Column="2"
+             Grid.ColumnSpan="4"
+             IsVisible="{Binding VotingVisibility}"
+             >
+
+            <Grid
+                ColumnSpacing="50"
+                >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ImageButton 
+                    x:Name="ja_image"
+                    Source="voting_ja.png"
+                    Grid.Column="0"
+                    CornerRadius="20"
+                    Command="{Binding VotingJaCommand}"
+                    />
+
+                <ImageButton 
+                    x:Name="nein_image"
+                    Source="voting_nein.png"
+                    Grid.Column="1"
+                    CornerRadius="20"
+                    Command="{Binding VotingNeinCommand}"
+                    />
+
+            </Grid>
+        </Frame>
+
+        <!--Card picker-->
+        <Frame 
+             BackgroundColor="Transparent"
+             BorderColor="Transparent"
+             Grid.Row="4"
+             Grid.RowSpan="3"
+             Grid.Column="2"
+             Grid.ColumnSpan="4"
+             IsVisible="{Binding CardPickerVisibility}"
+             >
+
+            <Grid ColumnSpacing="50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <ImageButton
+                    x:Name="picking_card1"
+                    Grid.Column="0"
+                    Source="{Binding Card1}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card1}}"
+                    />
+                
+                <ImageButton
+                    x:Name="picking_card2"
+                    Grid.Column="1"
+                    Source="{Binding Card2}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card2}}"
+                    />
+                
+                <ImageButton
+                    x:Name="picking_card3"
+                    Grid.Column="2"
+                    Source="{Binding Card3}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card3}}"
+                    IsEnabled="{Binding Card3Enabled}"
+                    />
+            </Grid>
+        </Frame>
+
+        <!-- Picking up a player for a specific event (choosing a chancellor for example) -->
+        <CollectionView
+            ItemsSource="{Binding GameManager.SignalRService.Players}"
+            Grid.Column="1"
+            Grid.Row="3"
+            Grid.RowSpan="3"
+            Grid.ColumnSpan="6"
+            HorizontalOptions="Center"
+            IsVisible="{Binding PlayerSelectionVisibility}">
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout
+                    Orientation="Horizontal"
+                    ItemSpacing="20"
+                />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate 
+                    x:DataType="{x:Type model:Player}"
+                    >
+
+                    <StackLayout IsVisible="{Binding CanBeSelected}" VerticalOptions="Center" HorizontalOptions="Start">
+
+                        <Label
+                            Text="{Binding Username}"
+                            TextColor="#855E42" 
+                            FontSize="Medium"
+                            Grid.Row="0"
+                            HorizontalOptions="Center" 
+                            VerticalOptions="Center"
+                            />
+
+                        <ImageButton
+                            x:Name="SelectPlayer"
+                            Source="{Binding ImageSource}"
+                            Grid.Row="1"
+                            CornerRadius="0"
+                            Command="{Binding PlayerSelectedCommand}"
+                            WidthRequest="150"
+                            HeightRequest="150"
+                            Aspect="AspectFill"
+                            />
+
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!--Table-->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Grid.RowSpan="7">
-            <HorizontalStackLayout>
-                <Rectangle BackgroundColor="#855E42"
-                           WidthRequest="1250"
-                           HeightRequest="900">
-                    <Rectangle.Shadow>
-                        <Shadow
-                            Brush="#331800"
-                            Offset="10,10"
-                            Radius="7"
-                            Opacity="0.3"/>
-                    </Rectangle.Shadow>
-                </Rectangle>
-            </HorizontalStackLayout>
-        </Grid>
-
-        <!-- Grid test for row 0 -->
-        <Grid Grid.Row="0" Grid.Column="1">
-            <Label Text="Grid 0,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="2">
-            <Label Text="Grid 0,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="3">
-            <Label Text="Grid 0,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="4">
-            <Label Text="Grid 0,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="0" Grid.Column="5">
-            <Label Text="Grid 0,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid test for row 1 -->
-        <Grid Grid.Row="1" Grid.Column="0">
-            <Label Text="Grid 1,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Label Text="Grid 1,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="2">
-            <Label Text="Grid 1,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="3">
-            <Label Text="Grid 1,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="4">
-            <Label Text="Grid 1,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="5">
-            <Label Text="Grid 1,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="6">
-            <Label Text="Grid 1,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="1" Grid.Column="7">
-            <Label Text="Grid 1,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid Test for row 2 -->
-        <Grid Grid.Row="2" Grid.Column="0">
-            <Label Text="Grid 2,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="1">
-            <Label Text="Grid 2,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="2">
-            <Label Text="Grid 2,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="3">
-            <Label Text="Grid 2,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="4">
-            <Label Text="Grid 2,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="5">
-            <Label Text="Grid 2,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="6">
-            <Label Text="Grid 2,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="2" Grid.Column="7">
-            <Label Text="Grid 2,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid test for row 3 -->
-        <Grid Grid.Row="3" Grid.Column="0">
-            <Label Text="Grid 3,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="1">
-            <Label Text="Grid 3,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="2">
-            <Label Text="Grid 3,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="3">
-            <Label Text="Grid 3,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="4">
-            <Label Text="Grid 3,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="5">
-            <Label Text="Grid 3,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="6">
-            <Label Text="Grid 3,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="3" Grid.Column="7">
-            <Label Text="Grid 3,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid test for row 4 -->
-        <Grid Grid.Row="4" Grid.Column="0">
-            <Label Text="Grid 4,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="1">
-            <Label Text="Grid 4,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="2">
-            <Label Text="Grid 4,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="3">
-            <Label Text="Grid 4,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="4">
-            <Label Text="Grid 4,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="5">
-            <Label Text="Grid 4,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="6">
-            <Label Text="Grid 4,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="4" Grid.Column="7">
-            <Label Text="Grid 4,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid testing for row 5 -->
-        <Grid Grid.Row="5" Grid.Column="0">
-            <Label Text="Grid 5,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="1">
-            <Label Text="Grid 5,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="2">
-            <Label Text="Grid 5,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="3">
-            <Label Text="Grid 5,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="4">
-            <Label Text="Grid 5,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="5">
-            <Label Text="Grid 5,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="6">
-            <Label Text="Grid 5,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="5" Grid.Column="7">
-            <Label Text="Grid 5,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!-- Grid testing for row 6 -->
-        <Grid Grid.Row="6" Grid.Column="0">
-            <Label Text="Grid 6,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="1">
-            <Label Text="Grid 6,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="2">
-            <Label Text="Grid 6,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="3">
-            <Label Text="Grid 6,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="4">
-            <Label Text="Grid 6,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="5">
-            <Label Text="Grid 6,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="6">
-            <Label Text="Grid 6,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="6" Grid.Column="7">
-            <Label Text="Grid 6,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-
-        <!-- Grid testing row 7 -->
-        <Grid Grid.Row="7" Grid.Column="0">
-            <Label Text="Grid 7,0 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="1">
-            <Label Text="Grid 7,1 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="2">
-            <Label Text="Grid 7,2 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="3">
-            <Label Text="Grid 7,3 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="4">
-            <Label Text="Grid 7,4 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="5">
-            <Label Text="Grid 7,5 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="6">
-            <Label Text="Grid 7,6 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-        <Grid Grid.Row="7" Grid.Column="7">
-            <Label Text="Grid 7,7 Test" HorizontalOptions="Center" VerticalOptions="Center"/>
-        </Grid>
-
-        <!--Voting-->
-        <Grid Grid.Row="0" Grid.Column="7">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                <Button Text="Ja"  WidthRequest="60"/>
-                <Button Text="Nein" WidthRequest="60"/>
-            </StackLayout>
-        </Grid>
-
-        <!--Role-->
-        <Grid Grid.Row="0" Grid.Column="6">
-            <Button Text="Role" WidthRequest="100" HeightRequest="50"/>
-        </Grid>
-
-        <!--Elected Policies-->
-        <!--<StackLayout>
-            <Label Text="Elected Policies:" />
-            <CollectionView ItemsSource="{Binding ElectedPolicies}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="{x:Type model:PolicyCard}">
-                        <Label Text="{Binding}" />
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </StackLayout> -->
     </Grid>
 </ContentPage>
+    

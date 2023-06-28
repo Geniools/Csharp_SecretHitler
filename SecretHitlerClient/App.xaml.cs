@@ -1,4 +1,6 @@
-﻿namespace SecretHitler;
+﻿using Microsoft.Maui.Controls.Platform;
+
+namespace SecretHitler;
 
 public partial class App : Application
 {
@@ -7,5 +9,5 @@ public partial class App : Application
 		InitializeComponent();
 
 		MainPage = new AppShell();
-        }
+    }
 }
