@@ -19,6 +19,8 @@ namespace SecretHitlerShared
         public Board()
         {
             this._drawDeck = new Stack<PolicyCard>();
+            this._discardDeck = new List<PolicyCard>();
+
             this.VotingResults = new Dictionary<Player, BallotType>();
             this.PolicyCardsResults = new List<PolicyCard>();
 
