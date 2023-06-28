@@ -437,46 +437,48 @@
         <CollectionView
             ItemsSource="{Binding Players}"
             Grid.Column="1"
-            Grid.Row="4"
+            Grid.Row="3"
             Grid.RowSpan="3"
             Grid.ColumnSpan="6"
             HorizontalOptions="Center"
             IsVisible="{Binding PlayerSelectionVisibility}">
 
             <CollectionView.ItemsLayout>
-                <GridItemsLayout 
+                <LinearItemsLayout
                     Orientation="Horizontal"
-                    HorizontalItemSpacing="20"
+                    ItemSpacing="20"
                 />
             </CollectionView.ItemsLayout>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate 
-                    x:DataType="{x:Type model:Player}">
+                    x:DataType="{x:Type model:Player}"
+                    >
 
-                    <Grid Padding="2" IsVisible="{Binding CanBeSelected}">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="2*" />
-                        </Grid.RowDefinitions>
+                    <StackLayout IsVisible="{Binding CanBeSelected}" VerticalOptions="Center" HorizontalOptions="Start">
 
                         <Label
                             Text="{Binding Username}"
                             TextColor="#855E42" 
-                            FontSize="Small"
+                            FontSize="Medium"
                             Grid.Row="0"
                             HorizontalOptions="Center" 
+                            VerticalOptions="Center"
                             />
 
-                        <ImageButton
+                            <ImageButton
                             x:Name="SelectPlayer"
                             Source="{Binding ImageSource}"
-                            Grid.Row ="1"
-                            CornerRadius="5"
+                            Grid.Row="1"
+                            CornerRadius="0"
                             Command="{Binding PlayerSelectedCommand}"
+                            WidthRequest="150"
+                            HeightRequest="150"
+                            Aspect="AspectFill"
                             />
 
-                    </Grid>
+                        
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
