@@ -19,7 +19,7 @@ namespace SecretHitlerShared
 
         private SecretRole _role;
 
-        public bool CanBeChancellor { get; set; }
+        public bool CanBeSelected { get; set; }
 
         // Event
         public event Action<Player> KillPlayer;

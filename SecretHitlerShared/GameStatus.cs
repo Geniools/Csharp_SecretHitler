@@ -5,8 +5,19 @@ namespace SecretHitlerShared
     {
         private LinkedList<Player> PlayingPlayers { get; set; }
 
-        public Player CurrentPresident { get; set; }
-        public Player PreviousPresident { get; set; }
+        private Player _currentPresident;
+        public Player CurrentPresident { 
+            get
+            {
+                return this._currentPresident;
+            }
+            set
+            {
+                this.PreviousPresident = this._currentPresident;
+                this._currentPresident = value;
+            }
+        }
+        public Player PreviousPresident { get; private set; }
 
         public Player CurrentChancelor { get; set; }
         public Player PreviousChancelor { get; set; }
@@ -48,8 +59,7 @@ namespace SecretHitlerShared
             // If there is no current president, then the first player in the list is the president
             if (this.CurrentPresident is null)
             {
-                this.CurrentPresident = this.PlayingPlayers.First.Value;
-                return this.CurrentPresident;
+                return this.PlayingPlayers.First.Value;
             }
 
             // If there is a current president, then the next player in the list is the president
@@ -60,8 +70,23 @@ namespace SecretHitlerShared
                 nextPresident = this.PlayingPlayers.First;
             }
 
-            this.CurrentPresident = nextPresident.Value;
-            return this.CurrentPresident;
+            return nextPresident.Value;
+        }
+
+        internal bool CanBeSelected(Player player)
+        {
+            if (
+                player.Equals(this.CurrentPresident) ||
+                player.Equals(this.PreviousPresident) ||
+                player.Equals(this.CurrentChancelor) ||
+                player.Equals(this.PreviousChancelor) ||
+                player.Equals(this.CandidateChancellor)
+            )
+            {
+                return false;
+            }
+            
+            return true;
         }
     }
 }

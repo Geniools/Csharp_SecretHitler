@@ -14,9 +14,6 @@ namespace SecretHitler
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
         public byte FailedElectionTracker { get; private set; }
-        
-        // Event
-
 
         public GameManager()
         {
@@ -43,9 +40,15 @@ namespace SecretHitler
             this.GameStatus = new GameStatus();
             this.FailedElectionTracker = 0;
             this.Chat = new Chat();
+        }
 
-            // Test commands
-            //this.AddTestPlayers();
+        internal void UpdateSelectablePlayers()
+        {
+            // Loop through all the players and change the CanBeSelected property
+            foreach (Player player in this.SignalRService.Players)
+            {
+                player.CanBeSelected = this.GameStatus.CanBeSelected(player);
+            }
         }
     }
 
@@ -151,7 +154,8 @@ namespace SecretHitler
 
         private void ChancellorSelected(Player currentChancellor)
         {
-            this.GameStatus.CurrentChancelor = currentChancellor;
+            //this.GameStatus.CurrentChancelor = currentChancellor;
+            this.GameStatus.EnactCandidateChancellor();
             // TODO: Change the icon of the player
         }
 
@@ -180,21 +184,6 @@ namespace SecretHitler
 
         // Game logic ==========================================================================================================
 
-        public async Task PlayNextRound()
-        {
-            if (this.IsPrimary)
-            {
-                // Election phase
-                Player president = this.GameStatus.GetNextPresident();
-                // Clear the voting results
-                this.Board.VotingResults.Clear();
-                // Set the status to chancellor selection
-                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName, this.SignalRService.ThisPlayer.LobbyCode, PlayerSelectionStatus.ChancellorSelection);
-                // Notify players of the selected president
-                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
-            }
-        }
-
         private async void PlayerSelected(Player player)
         {
             if (this.GameStatus.PlayerSelectionStatus is PlayerSelectionStatus.ChancellorSelection)
@@ -205,7 +194,7 @@ namespace SecretHitler
         }
 
         // This function is only called by the primary player
-        private void BallotVotes(Player player, BallotType type)
+        private async void BallotVotes(Player player, BallotType type)
         {
             this.Board.VotingResults.Add(player, type);
 
@@ -231,10 +220,14 @@ namespace SecretHitler
                 // If the vote was accepted, the player is elected
                 if (ja > nein)
                 {
-                    // TODO: Notify the players that the player is elected
-                    this.GameStatus.EnactCandidateChancellor();
-                    this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorSelectedName, this.GameStatus.CurrentChancelor);
-                    Shell.Current.DisplayAlert("Election", "The election was successful", "OK");
+                    // Notify the players that the player is elected
+                    await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorSelectedName, this.GameStatus.CurrentChancelor);
+                    // When interacting with the UI, use the dispatcher (has something to do with Threading...)
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        await Shell.Current.DisplayAlert("Election", "The election was successful", "OK");
+                    });
+
                     // TODO: Start the process of enacting a policy
                 }
                 else
@@ -270,22 +263,6 @@ namespace SecretHitler
             }
 
             return false;
-        }
-
-        // TEST FUNCTIONS =====================================================================================================
-
-        // Test function to add players
-        private void AddTestPlayers()
-        {
-            this.SignalRService.Players.Add(new Player("Test1"));
-            this.SignalRService.Players.Add(new Player("Test2"));
-            this.SignalRService.Players.Add(new Player("Test3"));
-            this.SignalRService.Players.Add(new Player("Test4"));
-            this.SignalRService.Players.Add(new Player("Test5"));
-            this.SignalRService.Players.Add(new Player("Test6"));
-            this.SignalRService.Players.Add(new Player("Test7"));
-            this.SignalRService.Players.Add(new Player("Test8"));
-            this.SignalRService.Players.Add(new Player("Test9"));
         }
     }
 }

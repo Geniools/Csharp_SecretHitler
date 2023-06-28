@@ -332,23 +332,25 @@
             IsVisible="false"
             />
 
-        <!--Voting text-->
+        <!-- Text -->
         <Frame 
             Grid.Row="2" 
-            Grid.Column="2"
-            Grid.ColumnSpan="4"
+            Grid.Column="1"
+            Grid.ColumnSpan="6"
             BorderColor="Transparent"
             BackgroundColor="Transparent"
             IsVisible="{Binding EventLabelVisibility}"
             >
 
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="20">
-                <Label 
+                
+                <Label
                     Text="{Binding EventLabel}" 
                     FontSize="60"
                     FontFamily="GermanicaBold"
                     TextColor="#FBB969"
                     />
+            
             </HorizontalStackLayout>
         </Frame>
 
@@ -401,26 +403,27 @@
              IsVisible="{Binding CardPickerVisibility}"
              >
 
-            <Grid
-                ColumnSpacing="50"
-                >
+            <Grid ColumnSpacing="50">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
                 <ImageButton
                     x:Name="picking_card1"
                     Grid.Column="0"
                     Source="{Binding Card1}"
                     Command="{Binding SelectCard1Command}"
                     />
+                
                 <ImageButton
                     x:Name="picking_card2"
                     Grid.Column="1"
                     Source="{Binding Card2}"
                     Command="{Binding SelectCard2Command}"
                     />
+                
                 <ImageButton
                     x:Name="picking_card3"
                     Grid.Column="2"
@@ -430,8 +433,9 @@
             </Grid>
         </Frame>
 
-        <CollectionView 
-            ItemsSource="{Binding Players}" 
+        <!-- Picking up a player for a specific event (choosing a chancellor for example) -->
+        <CollectionView
+            ItemsSource="{Binding Players}"
             Grid.Column="1"
             Grid.Row="4"
             Grid.ColumnSpan="6"

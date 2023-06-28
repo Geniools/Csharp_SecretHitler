@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.SignalR.Client;
 using SecretHitlerShared;
 
 namespace SecretHitler.ViewModel
@@ -124,11 +125,7 @@ namespace SecretHitler.ViewModel
 
         private void ChancellorVoting(Player player)
         {
-            // If this is the primary player, set the candidate chancellor
-            if(this.GameManager.IsPrimary)
-            {
-                this.GameManager.GameStatus.CandidateChancellor = player;
-            }
+            this.GameManager.GameStatus.CandidateChancellor = player;
 
             // Update the UI
             this.BoardVisibility = false;
@@ -179,7 +176,38 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task PlayNextRound()
         {
-            await this.GameManager.PlayNextRound(); 
+            if (this.GameManager.IsPrimary)
+            {
+                // Election phase
+                Player president = this.GameManager.GameStatus.GetNextPresident();
+                // Clear the voting results
+                this.GameManager.Board.VotingResults.Clear();
+                // Set the status to chancellor selection
+                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName, this.GameManager.SignalRService.ThisPlayer.LobbyCode, PlayerSelectionStatus.ChancellorSelection);
+                // Notify players of the selected president
+                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
+            }
+        }
+
+        private async void PresidentSelected(Player currentPresident)
+        {
+            this.GameManager.PresidentSelected(currentPresident);
+            // Update the players that can be selected
+            this.GameManager.UpdateSelectablePlayers();
+
+            // If this is the president, change the UI
+            if (this.GameManager.SignalRService.ThisPlayer.Equals(currentPresident))
+            {
+                // Change the UI based on the selected president
+                this.BoardVisibility = false;
+                this.VotingVisibility = false;
+                this.CardPickerVisibility = false;
+                // Change the visibility of the player selection
+                this.PlayerSelectionVisibility = true;
+                // Update the label
+                this.EventLabelVisibility = true;
+                this.EventLabel = "Propose a new chancellor";
+            }
         }
 
         private bool IsDisplayingDefaultPictures()
@@ -208,25 +236,6 @@ namespace SecretHitler.ViewModel
             else
             {
                 player.ImageSource = picture;
-            }
-        }
-
-        private async void PresidentSelected(Player currentPresident)
-        {
-            this.GameManager.PresidentSelected(currentPresident);
-
-            // If this is the president, change the UI
-            if(this.GameManager.SignalRService.ThisPlayer.Equals(currentPresident))
-            {
-                // Change the UI based on the selected president
-                this.BoardVisibility = false;
-                this.VotingVisibility = false;
-                this.CardPickerVisibility = false;
-                // Change the visibility of the player selection
-                this.PlayerSelectionVisibility = true;
-                // Update the label
-                this.EventLabelVisibility = true;
-                this.EventLabel = "Propose a candidate chancellor";
             }
         }
 
