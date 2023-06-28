@@ -438,6 +438,7 @@
             ItemsSource="{Binding Players}"
             Grid.Column="1"
             Grid.Row="4"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="6"
             HorizontalOptions="Center"
             IsVisible="{Binding PlayerSelectionVisibility}">
@@ -445,7 +446,7 @@
             <CollectionView.ItemsLayout>
                 <GridItemsLayout 
                     Orientation="Horizontal"
-                    HorizontalItemSpacing="10"
+                    HorizontalItemSpacing="20"
                 />
             </CollectionView.ItemsLayout>
 
@@ -453,7 +454,7 @@
                 <DataTemplate 
                     x:DataType="{x:Type model:Player}">
 
-                    <Grid IsVisible="{Binding CanBeSelected}">
+                    <Grid Padding="2" IsVisible="{Binding CanBeSelected}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
                             <RowDefinition Height="2*" />

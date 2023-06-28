@@ -25,12 +25,6 @@ namespace SecretHitler
             SignalRService.OnPlayerDisconnected += this.DisconnectPlayer;
             SignalRService.OnClearAllPlayers += this.ClearAllPlayers;
             SignalRService.OnGameStarted += this.StartLocalGame;
-
-            foreach (Player player in this.SignalRService.Players)
-            {
-                player.OnPlayerSelected += this.PlayerSelected;
-            }
-
             SignalRService.OnPlayerSelectionStatus += this.PlayerSelectionStatusChange;
             SignalRService.OnBallotVoted += this.BallotVotes;
             SignalRService.OnChancellorSelected += this.ChancellorSelected;
@@ -40,6 +34,14 @@ namespace SecretHitler
             this.GameStatus = new GameStatus();
             this.FailedElectionTracker = 0;
             this.Chat = new Chat();
+        }
+
+        internal void BindEventToPlayers()
+        {
+            foreach (Player player in this.SignalRService.Players)
+            {
+                player.OnPlayerSelected += this.PlayerSelected;
+            }
         }
 
         internal void UpdateSelectablePlayers()
@@ -135,10 +137,11 @@ namespace SecretHitler
             // Will prevent other players from joining
             this.GameStarted = true;
 
-            // Add all players to the game status
+            // Add all players to the game status and subscribe to the events
             foreach (Player player in this.SignalRService.Players)
             {
                 this.GameStatus.AddPlayer(player);
+                player.OnPlayerSelected += this.PlayerSelected;
             }
 
             // When interacting with the UI, use the dispatcher (has something to do with Threading...)
