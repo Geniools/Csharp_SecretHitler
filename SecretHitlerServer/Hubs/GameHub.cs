@@ -19,11 +19,6 @@ namespace Server.Hubs
             await Clients.OthersInGroup(connectingPlayer.LobbyCode).SendAsync(ServerCallbacks.PlayerConnectedName, connectingPlayer);
         }
 
-        public async Task SetPrimaryPlayer(Player primaryPlayer)
-        {
-            await Clients.Group(primaryPlayer.LobbyCode).SendAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
-        }
-
         public async Task PlayerDisconnected(Player disconnectedPlayer)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, disconnectedPlayer.LobbyCode);
@@ -33,6 +28,11 @@ namespace Server.Hubs
         {
             // Notify other players that a player has disconnected
             await Clients.Client(disconnectingPlayer.ConnectionId).SendAsync(ServerCallbacks.DisconnectPlayerName, disconnectingPlayer, message);
+        }
+
+        public async Task SetPrimaryPlayer(Player primaryPlayer)
+        {
+            await Clients.Group(primaryPlayer.LobbyCode).SendAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
         }
 
 
@@ -47,30 +47,6 @@ namespace Server.Hubs
             await Clients.OthersInGroup(lobbyCode).SendAsync(ServerCallbacks.ClearAllPlayersName);
         }
 
-        public async Task EndGame(string lobbyCode)
-        {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EndGameName);
-        }
-
-        public async Task VotingBallot(Player votingPlayer, string primaryPlayerConnectionId, BallotType ballotCard)
-        {
-            await Clients.Client(primaryPlayerConnectionId).SendAsync(ServerCallbacks.VotingBallotName, votingPlayer, ballotCard);
-        }
-
-        public async Task ChancellorVoting(Player player)
-        {
-            await Clients.Group(player.LobbyCode).SendAsync(ServerCallbacks.ChancellorVotingName, player);
-        }
-
-        public async Task ChancellorSelected(Player currentChancellor)
-        {
-            await Clients.Group(currentChancellor.LobbyCode).SendAsync(ServerCallbacks.ChancellorSelectedName, currentChancellor);
-        }
-
-        public async Task PlayerSelectionStatus(string lobbyCode, PlayerSelectionStatus status)
-        {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.PlayerSelectionStatusName, status);
-        }
 
 
         public async Task PresidentSelected(Player currentPresident)
@@ -78,9 +54,38 @@ namespace Server.Hubs
             await Clients.Group(currentPresident.LobbyCode).SendAsync(ServerCallbacks.PresidentSelectedName, currentPresident);
         }
 
-        public async Task SendElectionVote(string lobbyCode, Player player, bool vote)
+        public async Task ChancellorVoting(Player player)
         {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ElectionVoteName, player, vote);
+            await Clients.Group(player.LobbyCode).SendAsync(ServerCallbacks.ChancellorVotingName, player);
+        }
+
+        public async Task ChancellorSelected(string lobbyCode)
+        {
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChancellorSelectedName);
+        }
+
+        public async Task PlayerSelectionStatus(string lobbyCode, EntitySelectionStatus status)
+        {
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.PlayerSelectionStatusName, status);
+        }
+
+        public async Task VotingBallot(Player votingPlayer, string primaryPlayerConnectionId, BallotType ballotCard)
+        {
+            await Clients.Client(primaryPlayerConnectionId).SendAsync(ServerCallbacks.VotingBallotName, votingPlayer, ballotCard);
+        }
+
+
+
+        public async Task PolicySelection(Player presidentOrChancellor, PolicyCard card1, PolicyCard card2, PolicyCard card3)
+        {
+            await Clients.Client(presidentOrChancellor.ConnectionId).SendAsync(ServerCallbacks.PolicySelectionName, card1, card2, card3);
+        }
+
+
+
+        public async Task SendPopUp(string lobbyCode, string title, string message)
+        {
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.SendPopUpName, title, message);
         }
     }
 }

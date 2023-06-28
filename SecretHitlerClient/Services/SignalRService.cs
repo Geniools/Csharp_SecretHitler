@@ -21,10 +21,11 @@ namespace SecretHitler.Services
         public event Action OnGameStarted;
         public event Action OnClearAllPlayers;
         public event Action<Player> OnPresidentSelected;
+        public event Action OnChancellorSelected;
         public event Action<Player> OnChancellorVoting;
-        public event Action<Player> OnChancellorSelected;
+        public event Action<EntitySelectionStatus> OnPlayerSelectionStatus;
         public event Action<Player, BallotType> OnBallotVoted;
-        public event Action<PlayerSelectionStatus> OnPlayerSelectionStatus;
+        public event Action<PolicyCard, PolicyCard, PolicyCard> OnPolicySelection;
 
         // Other properties
         internal Player ThisPlayer { get; set; }
@@ -117,15 +118,30 @@ namespace SecretHitler.Services
             });
 
             // Handle the ChancellorSelected event
-            this.HubConnection.On<Player>(ServerCallbacks.ChancellorSelectedName, currentChancellor =>
+            this.HubConnection.On(ServerCallbacks.ChancellorSelectedName, () =>
             {
-                this.OnChancellorSelected?.Invoke(currentChancellor);
+                this.OnChancellorSelected?.Invoke();
             });
 
             // Handle the VotingBallot event
             this.HubConnection.On<Player, BallotType>(ServerCallbacks.VotingBallotName, (player, card) =>
             {
                 this.OnBallotVoted?.Invoke(player, card);
+            });
+
+            // Handle the Policy Selection event
+            this.HubConnection.On<PolicyCard, PolicyCard, PolicyCard>(ServerCallbacks.PolicySelectionName, (card1, card2, card3) =>
+            {
+                this.OnPolicySelection?.Invoke(card1, card2, card3);
+            });
+
+            // Handle the Pop up message
+            this.HubConnection.On<string, string>(ServerCallbacks.SendPopUpName, async (title, message) =>
+            {
+                await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                {
+                    await Shell.Current.DisplayAlert(title, message, "Ok");
+                });
             });
 
             // Set the default connection limit

@@ -347,7 +347,7 @@
                 <Label
                     Text="{Binding EventLabel}" 
                     FontSize="50"
-                    FontFamily="GermanicaBold"
+                    FontFamily="Comic Sans MS"
                     TextColor="Black"
                     />
             
@@ -414,21 +414,24 @@
                     x:Name="picking_card1"
                     Grid.Column="0"
                     Source="{Binding Card1}"
-                    Command="{Binding SelectCard1Command}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card1}}"
                     />
                 
                 <ImageButton
                     x:Name="picking_card2"
                     Grid.Column="1"
                     Source="{Binding Card2}"
-                    Command="{Binding SelectCard2Command}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card2}}"
                     />
                 
                 <ImageButton
                     x:Name="picking_card3"
                     Grid.Column="2"
                     Source="{Binding Card3}"
-                    Command="{Binding SelectCard3Command}"
+                    Command="{Binding SelectCardCommand}"
+                    CommandParameter="{Binding Source, Source={x:Reference picking_card3}}"
                     />
             </Grid>
         </Frame>

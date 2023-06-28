@@ -14,17 +14,17 @@ namespace SecretHitlerShared
         public const string StartGameName = "StartGame";
         public const string ClearAllPlayersName = "ClearAllPlayers";
         
-        public const string SessionStartedName = "SessionStarted";
         public const string PresidentSelectedName = "PresidentSelected";
-        public const string EndGameName = "EndGame";
         public const string ChancellorVotingName = "ChancellorVoting";
         public const string ChancellorSelectedName = "ChancellorSelected";
         public const string VotingBallotName = "VotingBallot";
         public const string PlayerSelectionStatusName = "PlayerSelectionStatus";
 
+        public const string PolicySelectionName = "PolicySelection";
+
         public const string ChatMessageName = "ChatMessage";
         public const string ElectionVoteName = "ElectionVote";
-
-        public const string GetConnectionIdName = "GetConnectionId";
+        public const string SendPopUpName = "SendPopUp";
+        
     }
 }

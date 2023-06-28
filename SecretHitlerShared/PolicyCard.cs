@@ -29,5 +29,17 @@ namespace SecretHitlerShared
         {
             this.Party = party;
         }
+
+        public override string ToString()
+        {
+            if(this.Party is PartyMembership.Fascist)
+            {
+                return "Fascist";
+            }
+            else
+            {
+                return "Liberal";
+            }
+        }
     }
 }

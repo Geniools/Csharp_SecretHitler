@@ -11,8 +11,8 @@ namespace SecretHitlerShared
 
         public Dictionary<Player, BallotType> VotingResults { get; private set; }
 
-        public byte PlayedLiberalCards { get; private set; }
-        public byte PlayedFascistsCards { get; private set; }
+        public byte PlayedLiberalCards { get; set; }
+        public byte PlayedFascistsCards { get; set; }
 
         public Board()
         {

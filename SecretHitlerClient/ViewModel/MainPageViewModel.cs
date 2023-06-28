@@ -19,6 +19,7 @@ namespace SecretHitler.ViewModel
         public bool IsPrimary => this.GameManager.IsPrimary;
 
         // Policies
+        private Dictionary<int, bool> _policyVisibility;
 
         // Liberal policies visibility
         [ObservableProperty]
@@ -57,12 +58,13 @@ namespace SecretHitler.ViewModel
         // Card picker visibility and cards
         [ObservableProperty]
         private bool _cardPickerVisibility;
+
         [ObservableProperty]
-        private String _card1;
+        private string _card1;
         [ObservableProperty]
-        private String _card2;
+        private string _card2;
         [ObservableProperty]
-        private String _card3;
+        private string _card3;
 
         // Player selection visibility
         [ObservableProperty]
@@ -85,10 +87,20 @@ namespace SecretHitler.ViewModel
             // Subscibe to events
             this.GameManager.SignalRService.OnPresidentSelected += this.PresidentSelected;
             this.GameManager.SignalRService.OnChancellorVoting += this.ChancellorVoting;
+            this.GameManager.SignalRService.OnPolicySelection += this.PolicySelection;
+            this.GameManager.OnPolicyEnacted += this.PolicyEnacted;
 
             // Get the needed properties from the GameManager
             this.Players = this.GameManager.SignalRService.Players;
             this.ElectionTracker = this.GameManager.FailedElectionTracker;
+
+            this._policyVisibility = new Dictionary<int, bool>();
+            this._policyVisibility.Add(1, false);
+            this._policyVisibility.Add(2, false);
+            this._policyVisibility.Add(3, false);
+            this._policyVisibility.Add(4, false);
+            this._policyVisibility.Add(5, false);
+            this._policyVisibility.Add(6, false);
 
             // Assign the (default) visibility of the policies
             this.LiberalPolicy1 = false;
@@ -105,22 +117,107 @@ namespace SecretHitler.ViewModel
             this.FascistPolicy6 = false;
 
             // Assign the (default) visibility of the board
-            this.BoardVisibility = true;
+            this.BoardVisibility = false;
 
             // Assign the (default) visibility of the voting buttons
             this.VotingVisibility = false;
 
             // Assign the (default) visibility of the card picker and card images
-            this.CardPickerVisibility = false;
-            this.Card1 = "liberal_article";
-            this.Card2 = "fascist_article";
-            this.Card3 = "liberal_article";
+            this.CardPickerVisibility = true;
 
             // Assign the (default) visibility of the player selection
             this.PlayerSelectionVisibility = false;
 
             //this.SetPlayerPicture();
             this.EventLabel = "Default event";
+        }
+
+        private void PolicySelection(PolicyCard card1, PolicyCard card2, PolicyCard card3)
+        {
+            this.CardPickerVisibility = true;
+            this.Card1 = card1.Image;
+            this.Card2 = card2.Image;
+            this.Card3 = card3.Image;
+        }
+
+        private void PolicyEnacted(PolicyCard card)
+        {
+            if(card.Party is PartyMembership.Liberal)
+            {
+                this.GameManager.Board.PlayedLiberalCards++;
+            }
+            else
+            {
+                this.GameManager.Board.PlayedFascistsCards++;
+            }
+
+            // Update the UI for liberal policies
+            switch(this.GameManager.Board.PlayedLiberalCards)
+            {
+                case 1:
+                    this.LiberalPolicy1 = true;
+                    break;
+                case 2:
+                    this.LiberalPolicy1 = true;
+                    this.LiberalPolicy2 = true;
+                    break;
+                case 3:
+                    this.LiberalPolicy1 = true;
+                    this.LiberalPolicy2 = true;
+                    this.LiberalPolicy3 = true;
+                    break;
+                case 4:
+                    this.LiberalPolicy1 = true;
+                    this.LiberalPolicy2 = true;
+                    this.LiberalPolicy3 = true;
+                    this.LiberalPolicy4 = true;
+                    break;
+                case 5:
+                    this.LiberalPolicy1 = true;
+                    this.LiberalPolicy2 = true;
+                    this.LiberalPolicy3 = true;
+                    this.LiberalPolicy4 = true;
+                    this.LiberalPolicy5 = true;
+                    break;
+            }
+
+            // Update the UI for fascist policies
+            switch(this.GameManager.Board.PlayedFascistsCards)
+            {
+                case 1:
+                    this.FascistPolicy1 = true;
+                    break;
+                case 2:
+                    this.FascistPolicy1 = true;
+                    this.FascistPolicy2 = true;
+                    break;
+                case 3:
+                    this.FascistPolicy1 = true;
+                    this.FascistPolicy2 = true;
+                    this.FascistPolicy3 = true;
+                    break;
+                case 4:
+                    this.FascistPolicy1 = true;
+                    this.FascistPolicy2 = true;
+                    this.FascistPolicy3 = true;
+                    this.FascistPolicy4 = true;
+                    break;
+                case 5:
+                    this.FascistPolicy1 = true;
+                    this.FascistPolicy2 = true;
+                    this.FascistPolicy3 = true;
+                    this.FascistPolicy4 = true;
+                    this.FascistPolicy5 = true;
+                    break;
+                case 6:
+                    this.FascistPolicy1 = true;
+                    this.FascistPolicy2 = true;
+                    this.FascistPolicy3 = true;
+                    this.FascistPolicy4 = true;
+                    this.FascistPolicy5 = true;
+                    this.FascistPolicy6 = true;
+                    break;
+            }
         }
 
         private void ChancellorVoting(Player player)
@@ -242,21 +339,23 @@ namespace SecretHitler.ViewModel
         }
 
         [RelayCommand]
-        private async Task SelectCard1()
+        private async Task SelectCard(FileImageSource cardSource)
         {
-            this.CardPickerVisibility = false;
-        }
+            PolicyCard card = new PolicyCard(PartyMembership.Liberal);
+            string cardName = cardSource.ToString();
 
-        [RelayCommand]
-        private async Task SelectCard2()
-        {
-            this.CardPickerVisibility = false;
-        }
+            // Create a policy card based on the source of the card image
+            if(cardName.Contains("fascist"))
+            {
+                card = new PolicyCard(PartyMembership.Liberal);
+            }
 
-        [RelayCommand]
-        private async Task SelectCard3()
-        {
-            this.CardPickerVisibility = false;
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
+            {
+                await Shell.Current.DisplayAlert("Card selected", card.ToString(), "OK");
+            });
+
+            //this.CardPickerVisibility = false;
         }
     }
 }

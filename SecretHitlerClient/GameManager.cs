@@ -142,12 +142,12 @@ namespace SecretHitler
             );
         }
 
-        private void PlayerSelectionStatusChange(PlayerSelectionStatus status)
+        private void PlayerSelectionStatusChange(EntitySelectionStatus status)
         {
             this.GameStatus.PlayerSelectionStatus = status;
         }
 
-        private void ChancellorSelected(Player currentChancellor)
+        private void ChancellorSelected()
         {
             //this.GameStatus.CurrentChancelor = currentChancellor;
             this.GameStatus.EnactCandidateChancellor();
@@ -177,11 +177,13 @@ namespace SecretHitler
     {        
         public GameStatus GameStatus { get; private set; }
 
+        public event Action<PolicyCard> OnPolicyEnacted;
+
         // Game logic ==========================================================================================================
 
         private async void PlayerSelected(Player player)
         {
-            if (this.GameStatus.PlayerSelectionStatus is PlayerSelectionStatus.ChancellorSelection)
+            if (this.GameStatus.PlayerSelectionStatus is EntitySelectionStatus.ChancellorSelection)
             {
                 // Perform voting logic
                 await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorVotingName, player);
@@ -192,11 +194,6 @@ namespace SecretHitler
         private async void BallotVotes(Player player, BallotType type)
         {
             this.Board.VotingResults.Add(player, type);
-            
-            await Shell.Current.Dispatcher.DispatchAsync(async () =>
-            {
-                await Shell.Current.DisplayAlert("Election", $"Recieved: {nameof(type)}. Players: {this.SignalRService.Players.Count}, Votes: {this.Board.VotingResults.Count}", "OK");
-            });
 
             // Check if all players have voted
             if (this.SignalRService.Players.Count == this.Board.VotingResults.Count)
@@ -204,10 +201,13 @@ namespace SecretHitler
                 // Check if the vote was accepted
                 int ja = 0;
                 int nein = 0;
+                string returnMessage = string.Empty;
+                string title = "Chancellor results";
 
-                foreach (BallotType ballot in this.Board.VotingResults.Values)
+                foreach (KeyValuePair<Player, BallotType> entry in this.Board.VotingResults)
                 {
-                    if (ballot is BallotType.Ja)
+                    returnMessage += $"{entry.Key.Username.ToUpper()}: {entry.Value}\n";
+                    if (entry.Value is BallotType.Ja)
                     {
                         ja++;
                     }
@@ -221,19 +221,32 @@ namespace SecretHitler
                 if (ja > nein)
                 {
                     // Notify the players that the player is elected
-                    await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorSelectedName, this.GameStatus.CurrentChancelor);
+                    await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorSelectedName, this.SignalRService.ThisPlayer.LobbyCode);
+                    returnMessage += "\n\nThe vote was accepted";
+                    // Start the process of enacting a policy
+                    PolicyCard[] cards = this.Board.GetThreePolicies();
 
-                    // TODO: Start the process of enacting a policy
+                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
+                    {
+                        // Display the policies for testing purposes
+                        await Shell.Current.DisplayAlert("Policies", $"The policies are:\n{cards[0]}\n{cards[1]}\n{cards[2]}", "OK");
+                    });
+
+                    await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicySelectionName, this.GameStatus.CurrentPresident, cards[0], cards[1], cards[2]);
                 }
                 else
                 {
                     this.FailedElectionTracker++;
+                    returnMessage += "\n\nThe vote was rejected";
                     // Check if the election tracker is at 3 (country is thrown into chaos)
                     if (this.FailedElectionTracker == 3)
                     {
                         // TODO: Reveal and enact the first policy from the top of the deck
                     }
                 }
+
+                // Let the players know the results of the vote
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.SendPopUpName, title, returnMessage);
             }
         }
 
