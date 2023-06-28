@@ -214,7 +214,6 @@ namespace SecretHitler.ViewModel
         private async void PresidentSelected(Player currentPresident)
         {
             this.GameManager.PresidentSelected(currentPresident);
-            await Shell.Current.DisplayAlert("President selected", $"{currentPresident.Username} is the new president", "OK");
 
             // If this is the president, change the UI
             if(this.GameManager.SignalRService.ThisPlayer.Equals(currentPresident))

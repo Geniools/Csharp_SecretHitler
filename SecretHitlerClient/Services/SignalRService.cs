@@ -158,8 +158,8 @@ namespace SecretHitler.Services
             await this.HubConnection.InvokeAsync(ServerCallbacks.ClearAllPlayersName, this.ThisPlayer.LobbyCode);
 
             // Randomly assign roles to players
-            List<Player> finalPlayers = this.AssignRandomRolesToPlayers();
-            this.Players = new ObservableCollection<Player>(finalPlayers);
+            //List<Player> finalPlayers = this.AssignRandomRolesToPlayers();
+            //this.Players = new ObservableCollection<Player>(finalPlayers);
 
             // Set the primary player (the one who started the game)
             await this.HubConnection.InvokeAsync(ServerCallbacks.SetPrimaryPlayerName, this.ThisPlayer);

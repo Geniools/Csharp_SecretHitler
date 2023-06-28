@@ -64,7 +64,7 @@ namespace Server.Hubs
 
         public async Task ChancellorSelected(Player currentChancellor)
         {
-            await Clients.OthersInGroup(currentChancellor.LobbyCode).SendAsync(ServerCallbacks.ChancellorSelectedName, currentChancellor);
+            await Clients.Group(currentChancellor.LobbyCode).SendAsync(ServerCallbacks.ChancellorSelectedName, currentChancellor);
         }
 
         public async Task PlayerSelectionStatus(string lobbyCode, PlayerSelectionStatus status)
@@ -75,7 +75,7 @@ namespace Server.Hubs
 
         public async Task PresidentSelected(Player currentPresident)
         {
-            await Clients.OthersInGroup(currentPresident.ConnectionId).SendAsync(ServerCallbacks.PresidentSelectedName, currentPresident);
+            await Clients.Group(currentPresident.LobbyCode).SendAsync(ServerCallbacks.PresidentSelectedName, currentPresident);
         }
 
         public async Task SendElectionVote(string lobbyCode, Player player, bool vote)
