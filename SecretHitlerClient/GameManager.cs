@@ -28,12 +28,53 @@ namespace SecretHitler
             SignalRService.OnPlayerSelectionStatus += this.PlayerSelectionStatusChange;
             SignalRService.OnBallotVoted += this.BallotVotes;
             SignalRService.OnChancellorSelected += this.ChancellorSelected;
+            SignalRService.OnPolicyCardSelected += this.PolicyCardSelected;
 
             // Create a new game
             this.Board = new Board();
             this.GameStatus = new GameStatus();
             this.FailedElectionTracker = 0;
             this.Chat = new Chat();
+        }
+
+        private async void PolicyCardSelected(PolicyCard card)
+        {
+            if (this.GameStatus.CurrentStatus is EntitySelectionStatus.DiscardingPolicy)
+            {
+                PolicyCard discardedCard;
+
+                foreach (PolicyCard drawnCard in this.Board.PolicyCardsResults)
+                {
+                    if (drawnCard.Party == card.Party)
+                    {
+                        discardedCard = card;
+                        this.Board.PolicyCardsResults.Remove(drawnCard);
+                        this.Board.AddToDiscard(discardedCard);
+                        break;
+                    }
+                }
+
+                PolicyCard[] cards = this.Board.PolicyCardsResults.ToArray();
+
+                this.GameStatus.CurrentStatus = EntitySelectionStatus.EnactingPolicy;
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicySelectionName, this.GameStatus.CurrentChancelor, cards[0], cards[1]);
+            }
+            else if (this.GameStatus.CurrentStatus is EntitySelectionStatus.EnactingPolicy)
+            {
+                this.OnPolicyEnacted?.Invoke(card);
+
+                foreach (PolicyCard drawnCard in this.Board.PolicyCardsResults)
+                {
+                    if (drawnCard.Party == card.Party)
+                    {
+                        this.Board.PolicyCardsResults.Remove(drawnCard);
+                    }
+                    else
+                    {
+                        this.Board.AddToDiscard(drawnCard);
+                    }
+                }
+            }
         }
 
         internal void UpdateSelectablePlayers()
@@ -144,7 +185,7 @@ namespace SecretHitler
 
         private void PlayerSelectionStatusChange(EntitySelectionStatus status)
         {
-            this.GameStatus.PlayerSelectionStatus = status;
+            this.GameStatus.CurrentStatus = status;
         }
 
         private void ChancellorSelected()
@@ -183,7 +224,7 @@ namespace SecretHitler
 
         private async void PlayerSelected(Player player)
         {
-            if (this.GameStatus.PlayerSelectionStatus is EntitySelectionStatus.ChancellorSelection)
+            if (this.GameStatus.CurrentStatus is EntitySelectionStatus.ChancellorSelection)
             {
                 // Perform voting logic
                 await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorVotingName, player);
@@ -225,12 +266,17 @@ namespace SecretHitler
                     returnMessage += "\n\nThe vote was accepted";
                     // Start the process of enacting a policy
                     PolicyCard[] cards = this.Board.GetThreePolicies();
-
+                    this.GameStatus.CurrentStatus = EntitySelectionStatus.DiscardingPolicy;
                     await Shell.Current.Dispatcher.DispatchAsync(async () =>
                     {
                         // Display the policies for testing purposes
                         await Shell.Current.DisplayAlert("Policies", $"The policies are:\n{cards[0]}\n{cards[1]}\n{cards[2]}", "OK");
                     });
+
+                    foreach(PolicyCard card in cards)
+                    {
+                        this.Board.PolicyCardsResults.Add(card);
+                    }
 
                     await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicySelectionName, this.GameStatus.CurrentPresident, cards[0], cards[1], cards[2]);
                 }

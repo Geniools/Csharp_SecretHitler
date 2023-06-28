@@ -21,6 +21,7 @@ namespace SecretHitlerShared
         public const string PlayerSelectionStatusName = "PlayerSelectionStatus";
 
         public const string PolicySelectionName = "PolicySelection";
+        public const string PolicyCardSelectedName = "PolicyCardSelected";
 
         public const string ChatMessageName = "ChatMessage";
         public const string ElectionVoteName = "ElectionVote";

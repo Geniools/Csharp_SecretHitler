@@ -24,7 +24,7 @@ namespace SecretHitlerShared
         public Player CandidateChancellor { get; set; }
 
         public PresidentialsPowers PresidentialPower { get; set; }
-        public EntitySelectionStatus PlayerSelectionStatus { get; set; }
+        public EntitySelectionStatus CurrentStatus { get; set; }
 
         public GameStatus()
         {

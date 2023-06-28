@@ -78,14 +78,16 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!--<Button 
+        <Button 
             Text="Who is who?"
+            Grid.Row="1"
             Grid.Column="7"
             FontFamily="GermanicaBold"
             TextColor="Black"
+            BackgroundColor="White"
             FontSize="Medium"
             Command="{Binding RevealFascistPlayerIconsCommand}"
-            />-->
+            />
 
         <Button
             Text="Next round"
@@ -432,6 +434,7 @@
                     Source="{Binding Card3}"
                     Command="{Binding SelectCardCommand}"
                     CommandParameter="{Binding Source, Source={x:Reference picking_card3}}"
+                    IsEnabled="{Binding Card3Enabled}"
                     />
             </Grid>
         </Frame>

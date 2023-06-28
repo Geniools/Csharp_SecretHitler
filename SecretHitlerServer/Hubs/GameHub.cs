@@ -76,9 +76,14 @@ namespace Server.Hubs
 
 
 
-        public async Task PolicySelection(Player presidentOrChancellor, PolicyCard card1, PolicyCard card2, PolicyCard card3)
+        public async Task PolicySelection(Player presidentOrChancellor, PolicyCard card1, PolicyCard card2, PolicyCard? card3 = null)
         {
             await Clients.Client(presidentOrChancellor.ConnectionId).SendAsync(ServerCallbacks.PolicySelectionName, card1, card2, card3);
+        }
+
+        public async Task PolicyCardSelected(Player primaryPlayer, PolicyCard card)
+        {
+            await Clients.Client(primaryPlayer.ConnectionId).SendAsync(ServerCallbacks.PolicyCardSelectedName, card);
         }
 
 

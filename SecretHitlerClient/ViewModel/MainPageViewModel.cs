@@ -66,6 +66,9 @@ namespace SecretHitler.ViewModel
         [ObservableProperty]
         private string _card3;
 
+        [ObservableProperty]
+        private bool _card3Enabled;
+
         // Player selection visibility
         [ObservableProperty]
         private bool _playerSelectionVisibility;
@@ -137,7 +140,15 @@ namespace SecretHitler.ViewModel
             this.CardPickerVisibility = true;
             this.Card1 = card1.Image;
             this.Card2 = card2.Image;
-            this.Card3 = card3.Image;
+            if(card3 != null)
+            {
+                this.Card3Enabled = true;
+                this.Card3 = card3.Image;
+            }
+            else
+            {
+                this.Card3Enabled = false;
+            }
         }
 
         private void PolicyEnacted(PolicyCard card)
@@ -350,12 +361,10 @@ namespace SecretHitler.ViewModel
                 card = new PolicyCard(PartyMembership.Fascist);
             }
 
-            await Shell.Current.Dispatcher.DispatchAsync(async () =>
-            {
-                await Shell.Current.DisplayAlert("Card selected", card.ToString(), "OK");
-            });
+            this.CardPickerVisibility = false;
 
-            //this.CardPickerVisibility = false;
+            // Notify the server of the selected card
+            await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicyCardSelectedName, this.GameManager.SignalRService.PrimaryPlayer, card);
         }
     }
 }

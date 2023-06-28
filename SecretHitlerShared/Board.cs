@@ -8,8 +8,10 @@ namespace SecretHitlerShared
     public class Board
     {
         private Stack<PolicyCard> _drawDeck;
+        private List<PolicyCard> _discardDeck;
 
         public Dictionary<Player, BallotType> VotingResults { get; private set; }
+        public List<PolicyCard> PolicyCardsResults { get; set; }
 
         public byte PlayedLiberalCards { get; set; }
         public byte PlayedFascistsCards { get; set; }
@@ -18,6 +20,7 @@ namespace SecretHitlerShared
         {
             this._drawDeck = new Stack<PolicyCard>();
             this.VotingResults = new Dictionary<Player, BallotType>();
+            this.PolicyCardsResults = new List<PolicyCard>();
 
             this.CreateDeck();
         }
@@ -38,6 +41,11 @@ namespace SecretHitlerShared
 
             // Shuffle the deck
             this.ShuffleDeck();
+        }
+
+        public void AddToDiscard(PolicyCard card)
+        {
+            this._discardDeck.Add(card);
         }
 
         private void ShuffleDeck()
@@ -61,6 +69,7 @@ namespace SecretHitlerShared
             {
                 CreateDeck();
             }
+
             return this._drawDeck.Pop();
         }
 
