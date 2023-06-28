@@ -29,16 +29,29 @@ namespace SecretHitlerShared
 
         private void CreateDeck()
         {
-            // 11 fascist policies
-            for(byte i = 0; i < 11; i++ )
+            // First check if the discard pile is empty
+            if (this._discardDeck.Count == 0)
             {
-                this._drawDeck.Push(new PolicyCard(PartyMembership.Fascist));
-            }
+                // 11 fascist policies
+                for (byte i = 0; i < 11; i++)
+                {
+                    this._drawDeck.Push(new PolicyCard(PartyMembership.Fascist));
+                }
 
-            // 6 liberal policies
-            for(byte i = 0; i < 6; i++ )
+                // 6 liberal policies
+                for (byte i = 0; i < 6; i++)
+                {
+                    this._drawDeck.Push(new PolicyCard(PartyMembership.Liberal));
+                }
+            }
+            else
             {
-                this._drawDeck.Push(new PolicyCard(PartyMembership.Liberal));
+                PolicyCard[] discardedCards = this._discardDeck.ToArray();
+                PolicyCard[] leftDeckCards = this._drawDeck.ToArray();
+
+                // Combine the two arrays
+                PolicyCard[] allCards = discardedCards.Concat(leftDeckCards).ToArray();
+                this._drawDeck = new Stack<PolicyCard>(allCards);
             }
 
             // Shuffle the deck

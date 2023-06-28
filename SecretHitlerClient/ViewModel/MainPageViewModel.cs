@@ -19,7 +19,6 @@ namespace SecretHitler.ViewModel
         public bool IsPrimary => this.GameManager.IsPrimary;
 
         // Policies
-        private Dictionary<int, bool> _policyVisibility;
 
         // Liberal policies visibility
         [ObservableProperty]
@@ -97,14 +96,6 @@ namespace SecretHitler.ViewModel
             this.Players = this.GameManager.SignalRService.Players;
             this.ElectionTracker = this.GameManager.FailedElectionTracker;
 
-            this._policyVisibility = new Dictionary<int, bool>();
-            this._policyVisibility.Add(1, false);
-            this._policyVisibility.Add(2, false);
-            this._policyVisibility.Add(3, false);
-            this._policyVisibility.Add(4, false);
-            this._policyVisibility.Add(5, false);
-            this._policyVisibility.Add(6, false);
-
             // Assign the (default) visibility of the policies
             this.LiberalPolicy1 = false;
             this.LiberalPolicy2 = false;
@@ -120,7 +111,7 @@ namespace SecretHitler.ViewModel
             this.FascistPolicy6 = false;
 
             // Assign the (default) visibility of the board
-            this.BoardVisibility = false;
+            this.BoardVisibility = true;
 
             // Assign the (default) visibility of the voting buttons
             this.VotingVisibility = false;
@@ -131,7 +122,8 @@ namespace SecretHitler.ViewModel
             // Assign the (default) visibility of the player selection
             this.PlayerSelectionVisibility = false;
 
-            //this.SetPlayerPicture();
+            // Assign the (default) visibility of the event label
+            this.EventLabelVisibility = false;
             this.EventLabel = "Default event";
         }
 

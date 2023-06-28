@@ -80,6 +80,7 @@
         
         <!--Buttons that aid the game-->
         <Frame
+            Grid.Row="1"
             Grid.RowSpan="2"
             Grid.Column="7"
             BackgroundColor="Transparent"
@@ -103,8 +104,8 @@
                     />
 
                 <Button 
-                    Text="Who is who?"
                     Grid.Row="1"                    
+                    Text="Who is who?"
                     FontFamily="GermanicaBold"
                     TextColor="Black"
                     BackgroundColor="White"

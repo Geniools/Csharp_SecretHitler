@@ -285,7 +285,10 @@ namespace SecretHitler
                     // Check if the election tracker is at 3 (country is thrown into chaos)
                     if (this.FailedElectionTracker == 3)
                     {
-                        // TODO: Reveal and enact the first policy from the top of the deck
+                        returnMessage += "\n3 Failed elections! The country is in CHAOS!\nFirst policy is enacted.";
+                        // Reveal and enact the first policy from the top of the deck
+                        PolicyCard card = this.Board.DrawNextPolicy();
+                        await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicyCardEnactedName, this.SignalRService.ThisPlayer.LobbyCode, card);
                     }
                 }
 
