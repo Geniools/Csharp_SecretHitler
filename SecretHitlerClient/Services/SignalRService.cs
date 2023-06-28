@@ -106,7 +106,7 @@ namespace SecretHitler.Services
             });
 
             // Handle the PlayerSelectionStatus event
-            this.HubConnection.On<PlayerSelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
+            this.HubConnection.On<EntitySelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
             {
                 this.OnPlayerSelectionStatus?.Invoke(status);
             });

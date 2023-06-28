@@ -21,8 +21,6 @@ namespace SecretHitlerShared
 
         public bool CanBeSelected { get; set; }
 
-        // Event
-        public event Action<Player> KillPlayer;
 
         public SecretRole Role { 
             get

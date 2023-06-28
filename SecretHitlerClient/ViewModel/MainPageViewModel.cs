@@ -123,7 +123,7 @@ namespace SecretHitler.ViewModel
             this.VotingVisibility = false;
 
             // Assign the (default) visibility of the card picker and card images
-            this.CardPickerVisibility = true;
+            this.CardPickerVisibility = false;
 
             // Assign the (default) visibility of the player selection
             this.PlayerSelectionVisibility = false;
@@ -282,7 +282,7 @@ namespace SecretHitler.ViewModel
                 // Clear the voting results
                 this.GameManager.Board.VotingResults.Clear();
                 // Set the status to chancellor selection
-                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName, this.GameManager.SignalRService.ThisPlayer.LobbyCode, PlayerSelectionStatus.ChancellorSelection);
+                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName, this.GameManager.SignalRService.ThisPlayer.LobbyCode, EntitySelectionStatus.ChancellorSelection);
                 // Notify players of the selected president
                 await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
             }
