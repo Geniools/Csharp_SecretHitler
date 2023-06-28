@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace SecretHitlerShared
 {
-    public partial class Player
+    public partial class Player : ObservableObject
     {
         // Events
         public Action<Player> OnPlayerSelected;
