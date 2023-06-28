@@ -79,7 +79,7 @@
         </CollectionView>
         
         <!--Buttons that aid the game-->
-        <Frame
+        <!--<Frame
             Grid.Column="6"
             Grid.ColumnSpan="2"
             BackgroundColor="Transparent"
@@ -108,9 +108,9 @@
                     Command="{Binding RevealFascistPlayerIconsCommand}"
                     />
             </HorizontalStackLayout>
-        </Frame>
+        </Frame>-->
 
-        <!--<Button
+        <Button
             Grid.Column="7"
             Text="Next round"
             FontFamily="GermanicaBold"
@@ -119,7 +119,7 @@
             BackgroundColor="Black"
             Command="{Binding PlayNextRoundCommand}"
             IsVisible="{Binding IsPrimary}"
-            />-->
+            />
 
         <!-- Failed elections tracker -->
         <Grid Grid.RowSpan="2">
