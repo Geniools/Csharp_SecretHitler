@@ -21,7 +21,7 @@ namespace Server.Hubs
 
         public async Task SetPrimaryPlayer(Player primaryPlayer)
         {
-            await Clients.OthersInGroup(primaryPlayer.LobbyCode).SendAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
+            await Clients.Group(primaryPlayer.LobbyCode).SendAsync(ServerCallbacks.SetPrimaryPlayerName, primaryPlayer);
         }
 
         public async Task PlayerDisconnected(Player disconnectedPlayer)

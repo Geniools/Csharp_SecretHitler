@@ -36,14 +36,6 @@ namespace SecretHitler
             this.Chat = new Chat();
         }
 
-        internal void BindEventToPlayers()
-        {
-            foreach (Player player in this.SignalRService.Players)
-            {
-                player.OnPlayerSelected += this.PlayerSelected;
-            }
-        }
-
         internal void UpdateSelectablePlayers()
         {
             // Loop through all the players and change the CanBeSelected property
@@ -200,6 +192,11 @@ namespace SecretHitler
         private async void BallotVotes(Player player, BallotType type)
         {
             this.Board.VotingResults.Add(player, type);
+            
+            await Shell.Current.Dispatcher.DispatchAsync(async () =>
+            {
+                await Shell.Current.DisplayAlert("Election", $"Recieved: {nameof(type)}. Players: {this.SignalRService.Players.Count}, Votes: {this.Board.VotingResults.Count}", "OK");
+            });
 
             // Check if all players have voted
             if (this.SignalRService.Players.Count == this.Board.VotingResults.Count)
@@ -225,11 +222,6 @@ namespace SecretHitler
                 {
                     // Notify the players that the player is elected
                     await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.ChancellorSelectedName, this.GameStatus.CurrentChancelor);
-                    // When interacting with the UI, use the dispatcher (has something to do with Threading...)
-                    await Shell.Current.Dispatcher.DispatchAsync(async () =>
-                    {
-                        await Shell.Current.DisplayAlert("Election", "The election was successful", "OK");
-                    });
 
                     // TODO: Start the process of enacting a policy
                 }

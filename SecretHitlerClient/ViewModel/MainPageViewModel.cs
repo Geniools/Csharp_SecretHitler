@@ -134,7 +134,7 @@ namespace SecretHitler.ViewModel
             this.PlayerSelectionVisibility = false;
             // Label text
             this.EventLabelVisibility = true;
-            this.EventLabel = $"Vote for {player.Username} as chancellor";
+            this.EventLabel = $"Vote for -{player.Username.ToUpper()}- as chancellor";
         }
 
         [RelayCommand]
@@ -142,6 +142,7 @@ namespace SecretHitler.ViewModel
         {
             // When the players votes ja, this will be executed
             this.VotingVisibility = false;
+            this.EventLabel = "Waiting for others...";
             await this.GameManager.SignalRService.VoteBallot(BallotType.Ja);
         }
 
@@ -150,6 +151,7 @@ namespace SecretHitler.ViewModel
         {
             // When the players votes nein, this will be executed
             this.VotingVisibility = false;
+            this.EventLabel = "Waiting for others...";
             await this.GameManager.SignalRService.VoteBallot(BallotType.Nein);
         }
 

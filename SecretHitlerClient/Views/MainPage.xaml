@@ -346,9 +346,9 @@
                 
                 <Label
                     Text="{Binding EventLabel}" 
-                    FontSize="60"
+                    FontSize="50"
                     FontFamily="GermanicaBold"
-                    TextColor="#FBB969"
+                    TextColor="Black"
                     />
             
             </HorizontalStackLayout>
