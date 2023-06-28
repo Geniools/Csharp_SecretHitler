@@ -65,6 +65,7 @@
                 Text="{Binding Username}"
                 BackgroundColor="White" 
                 IsSpellCheckEnabled="False"
+                IsEnabled="{Binding IsEnabled}"
                 />
             
             <Entry 
@@ -76,6 +77,7 @@
                 BackgroundColor="White"
                 IsSpellCheckEnabled="False"
                 ClearButtonVisibility="WhileEditing"
+                IsEnabled="{Binding IsEnabled}"
                 />
 
             <Grid Grid.Row="6" ColumnSpacing="10">
@@ -92,7 +94,7 @@
                     BackgroundColor="#525252"
                     FontAttributes="Bold"
                     TextColor="#FBB969"
-                    IsEnabled="False"
+                    IsEnabled="{Binding IsEnabled}"
                     Command="{Binding JoinLobbyCommand}"
                     />
                 
@@ -103,7 +105,7 @@
                     BackgroundColor="#525252"
                     FontAttributes="Bold"
                     TextColor="#FBB969"
-                    IsEnabled="True"
+                    IsEnabled="{Binding IsEnabled}"
                     Command="{Binding CreateLobbyCommand}"
                     />
             </Grid>

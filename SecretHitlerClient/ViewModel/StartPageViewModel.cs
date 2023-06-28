@@ -19,6 +19,9 @@ public partial class StartPageViewModel : ViewModel
     [ObservableProperty]
     private string _title;
 
+    [ObservableProperty]
+    private bool _isEnabled;
+
     public StartPageViewModel(GameManager gameManager) : base(gameManager) 
     {
         // Make sure the connection to the server is closed
@@ -27,11 +30,14 @@ public partial class StartPageViewModel : ViewModel
         // Set the title and game name
         this.GameName = "Stealth Führer";
         this.Title = "Join or Create a Game:";
+        this.IsEnabled = true;
     }
 
     [RelayCommand]
     private async Task JoinLobby()
     {
+        this.Title = "Joining the Lobby...";
+        this.IsEnabled = false;
         Player player = new Player(this.Username, this.LobbyCode);
         try
         {
@@ -52,6 +58,8 @@ public partial class StartPageViewModel : ViewModel
     [RelayCommand]
     private async Task CreateLobby()
     {
+        this.Title = "Creating the Lobby...";
+        this.IsEnabled = false;
         Player player = new Player(this.Username, this.LobbyCode);
         try
         {

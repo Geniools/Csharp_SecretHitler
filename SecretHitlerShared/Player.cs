@@ -70,6 +70,7 @@ namespace SecretHitlerShared
                 this._party = value;
             }
         }
+
         public string PartyMembershipImage { get; set; }
 
         public Player(
