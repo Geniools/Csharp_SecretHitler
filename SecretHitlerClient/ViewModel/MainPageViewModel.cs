@@ -179,7 +179,7 @@ namespace SecretHitler.ViewModel
         [RelayCommand]
         private async Task PlayNextRound()
         {
-            await this.GameManager.PlayNextRound();
+            await this.GameManager.PlayNextRound(); 
         }
 
         private bool IsDisplayingDefaultPictures()

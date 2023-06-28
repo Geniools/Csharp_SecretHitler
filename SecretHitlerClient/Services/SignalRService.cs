@@ -2,6 +2,7 @@
 using System.Net;
 using SecretHitlerShared;
 using System.Collections.ObjectModel;
+using SecretHitler.Views;
 
 namespace SecretHitler.Services
 {
@@ -80,7 +81,7 @@ namespace SecretHitler.Services
             });
             
             // Handle the GameStarted event
-            this.HubConnection.On(ServerCallbacks.StartGameName, () =>
+            this.HubConnection.On(ServerCallbacks.StartGameName, async () =>
             {
                 this.OnGameStarted?.Invoke();
             });

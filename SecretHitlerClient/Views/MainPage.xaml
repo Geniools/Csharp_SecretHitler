@@ -78,21 +78,20 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button 
+        <!--<Button 
             Text="Who is who?"
             Grid.Column="7"
             FontFamily="GermanicaBold"
             TextColor="Black"
             FontSize="Medium"
             Command="{Binding RevealFascistPlayerIconsCommand}"
-            />
+            />-->
 
         <Button
             Text="Next round"
-            Grid.Row="1"
             Grid.Column="7"
             FontFamily="GermanicaBold"
-            TextColor="Black"
+            TextColor="#FBB969"
             FontSize="Medium"
             Command="{Binding PlayNextRoundCommand}"
             IsVisible="{Binding IsPrimary}"
