@@ -246,7 +246,7 @@ namespace SecretHitler
                 }
 
                 // Let the players know the results of the vote
-                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.SendPopUpName, title, returnMessage);
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.SendPopUpName, this.SignalRService.ThisPlayer.LobbyCode, title, returnMessage);
             }
         }
 
