@@ -3,12 +3,14 @@ using System.Net;
 using SecretHitlerShared;
 using System.Collections.ObjectModel;
 using SecretHitler.Views;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SecretHitler.Services
 {
-    public class SignalRService
+    public partial class SignalRService : ObservableObject
     {
-        public ObservableCollection<Player> Players { get; set; }
+        [ObservableProperty]
+        private ObservableCollection<Player> _players;
 
         // Connection to the server
         public HubConnection HubConnection { get; private set; }

@@ -4,7 +4,7 @@ namespace SecretHitler.ViewModel
 {
     public class ViewModel : ObservableObject
     {
-        protected GameManager GameManager { get; private set; }
+        public GameManager GameManager { get; private set; }
 
         protected ViewModel(GameManager gameManager)
         {

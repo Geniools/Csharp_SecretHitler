@@ -2,6 +2,7 @@
 using SecretHitler.Views;
 using Microsoft.AspNetCore.SignalR.Client;
 using SecretHitlerShared;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace SecretHitler
 {
@@ -9,11 +10,13 @@ namespace SecretHitler
     /// For better code readability, the GameManager class is split into multiple classes.
     /// The GameManager class is the main class of the application.
     /// </summary>
-    public partial class GameManager : BindableObject
+    public partial class GameManager : ObservableObject
     {
         public Board Board { get; private set; }
         public Chat Chat { get; private set; }
-        public byte FailedElectionTracker { get; private set; }
+
+        [ObservableProperty]
+        private byte _failedElectionTracker;
 
         public GameManager()
         {
@@ -90,7 +93,7 @@ namespace SecretHitler
     /// For better code readability, the GameManager class is split into multiple classes
     /// This file contains the SignalR related functions
     /// </summary>
-    public partial class GameManager : BindableObject
+    public partial class GameManager
     {
         // Services
         public SignalRService SignalRService { get; private set; }
@@ -214,7 +217,7 @@ namespace SecretHitler
     /// For better code readability, the GameManager class is split into multiple classes
     /// This file contains the game logic
     /// </summary>
-    public partial class GameManager : BindableObject
+    public partial class GameManager
     {        
         public GameStatus GameStatus { get; private set; }
 
