@@ -57,23 +57,22 @@ namespace SecretHitler
                 PolicyCard[] cards = this.Board.PolicyCardsResults.ToArray();
 
                 this.GameStatus.CurrentStatus = EntitySelectionStatus.EnactingPolicy;
-                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicySelectionName, this.GameStatus.CurrentChancelor, cards[0], cards[1]);
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicySelectionName, this.GameStatus.CurrentChancelor, cards[0], cards[1], null);
             }
             else if (this.GameStatus.CurrentStatus is EntitySelectionStatus.EnactingPolicy)
             {
                 this.OnPolicyEnacted?.Invoke(card);
 
-                foreach (PolicyCard drawnCard in this.Board.PolicyCardsResults)
+                if (card.Party == this.Board.PolicyCardsResults[0].Party)
                 {
-                    if (drawnCard.Party == card.Party)
-                    {
-                        this.Board.PolicyCardsResults.Remove(drawnCard);
-                    }
-                    else
-                    {
-                        this.Board.AddToDiscard(drawnCard);
-                    }
+                    this.Board.AddToDiscard(this.Board.PolicyCardsResults[1]);
                 }
+                else
+                {
+                    this.Board.AddToDiscard(this.Board.PolicyCardsResults[1]);
+                }
+
+                this.Board.PolicyCardsResults.Clear();
             }
         }
 

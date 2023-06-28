@@ -153,6 +153,8 @@ namespace SecretHitler.ViewModel
 
         private void PolicyEnacted(PolicyCard card)
         {
+            this.BoardVisibility = true;
+
             if(card.Party is PartyMembership.Liberal)
             {
                 this.GameManager.Board.PlayedLiberalCards++;
