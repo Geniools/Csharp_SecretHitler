@@ -29,18 +29,19 @@ namespace SecretHitlerShared
             }
             set
             {
-                if(value is SecretRole.Fascist)
-                {
-                    this.ImageSource = GameImages.FascistIcon;
-                }
-                else if(value is SecretRole.Liberal)
-                {
-                    this.ImageSource = GameImages.PlayerIcon;
-                }
-                else if (value is SecretRole.Hitler)
-                {
-                    this.ImageSource = GameImages.HitlerIcon;
-                }
+                //if(value is SecretRole.Fascist)
+                //{
+                //    this.ImageSource = GameImages.FascistIcon;
+                //}
+                //else if(value is SecretRole.Liberal)
+                //{
+                //    this.ImageSource = GameImages.PlayerIcon;
+                //}
+                //else if (value is SecretRole.Hitler)
+                //{
+                //    this.ImageSource = GameImages.HitlerIcon;
+                //}
+                this.ImageSource = GameImages.PlayerIcon;
 
                 this._role = value;
             }

@@ -91,7 +91,7 @@ namespace SecretHitler.ViewModel
             this.GameManager.SignalRService.OnPresidentSelected += this.PresidentSelected;
             this.GameManager.SignalRService.OnChancellorVoting += this.ChancellorVoting;
             this.GameManager.SignalRService.OnPolicySelection += this.PolicySelection;
-            this.GameManager.OnPolicyEnacted += this.PolicyEnacted;
+            this.GameManager.SignalRService.OnPolicyEnacted += this.PolicyEnacted;
 
             // Get the needed properties from the GameManager
             this.Players = this.GameManager.SignalRService.Players;
@@ -153,9 +153,14 @@ namespace SecretHitler.ViewModel
 
         private void PolicyEnacted(PolicyCard card)
         {
+            // Change the UI
             this.BoardVisibility = true;
+            this.VotingVisibility = false;
+            this.CardPickerVisibility = false;
+            this.PlayerSelectionVisibility = false;
+            this.EventLabelVisibility = false;
 
-            if(card.Party is PartyMembership.Liberal)
+            if (card.Party is PartyMembership.Liberal)
             {
                 this.GameManager.Board.PlayedLiberalCards++;
             }
@@ -275,11 +280,11 @@ namespace SecretHitler.ViewModel
                     // Check if the picture is already changed
                     if(this.IsDisplayingDefaultPictures())
                     {
-                        this.SetPlayerPicture(picture: GameImages.FascistIcon);
+                        this.SetPlayersPicture(true);
                     }
                     else
                     {
-                        this.SetPlayerPicture();
+                        this.SetPlayersPicture();
                     }
                 }
             });
@@ -295,7 +300,7 @@ namespace SecretHitler.ViewModel
                 // Clear the voting results
                 this.GameManager.Board.VotingResults.Clear();
                 // Set the status to chancellor selection
-                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PlayerSelectionStatusName, this.GameManager.SignalRService.ThisPlayer.LobbyCode, EntitySelectionStatus.ChancellorSelection);
+                await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.EntitySelectionStatusName, this.GameManager.SignalRService.ThisPlayer.LobbyCode, EntitySelectionStatus.ChancellorSelection);
                 // Notify players of the selected president
                 await this.GameManager.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PresidentSelectedName, president);
             }
@@ -335,19 +340,32 @@ namespace SecretHitler.ViewModel
             return true;
         }
 
-        private void SetPlayerPicture(Player player = null, string picture = GameImages.PlayerIcon)
+        private void SetPlayersPicture(bool actual = false)
         {
-            if (player is null)
+            if (actual)
             {
-                // Change the picture of the players
                 foreach (Player pl in this.Players)
                 {
-                    pl.ImageSource = picture;
+                    pl.ImageSource = GameImages.PlayerIcon;
                 }
             }
             else
             {
-                player.ImageSource = picture;
+                foreach (Player pl in this.Players)
+                {
+                    if (pl.Role is SecretRole.Fascist)
+                    {
+                        pl.ImageSource = GameImages.FascistIcon;
+                    }
+                    else if (pl.Role is SecretRole.Liberal)
+                    {
+                        pl.ImageSource = GameImages.PlayerIcon;
+                    }
+                    else if (pl.Role is SecretRole.Hitler)
+                    {
+                        pl.ImageSource = GameImages.HitlerIcon;
+                    }
+                }
             }
         }
 

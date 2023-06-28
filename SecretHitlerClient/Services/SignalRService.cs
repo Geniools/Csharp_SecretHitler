@@ -27,6 +27,8 @@ namespace SecretHitler.Services
         public event Action<Player, BallotType> OnBallotVoted;
         public event Action<PolicyCard, PolicyCard, PolicyCard> OnPolicySelection;
         public event Action<PolicyCard> OnPolicyCardSelected;
+        public event Action<PolicyCard> OnPolicyEnacted;
+
 
         // Other properties
         internal Player ThisPlayer { get; set; }
@@ -107,7 +109,7 @@ namespace SecretHitler.Services
             });
 
             // Handle the PlayerSelectionStatus event
-            this.HubConnection.On<EntitySelectionStatus>(ServerCallbacks.PlayerSelectionStatusName, (status) =>
+            this.HubConnection.On<EntitySelectionStatus>(ServerCallbacks.EntitySelectionStatusName, (status) =>
             {
                 this.OnPlayerSelectionStatus?.Invoke(status);
             });
@@ -140,6 +142,12 @@ namespace SecretHitler.Services
             this.HubConnection.On<PolicyCard>(ServerCallbacks.PolicyCardSelectedName, (card) =>
             {
                 this.OnPolicyCardSelected?.Invoke(card);
+            });
+
+            // Handle the Policy Enacted event
+            this.HubConnection.On<PolicyCard>(ServerCallbacks.PolicyCardEnactedName, (card) =>
+            {
+                this.OnPolicyEnacted?.Invoke(card);
             });
 
             // Handle the Pop up message

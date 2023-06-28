@@ -61,7 +61,7 @@ namespace SecretHitler
             }
             else if (this.GameStatus.CurrentStatus is EntitySelectionStatus.EnactingPolicy)
             {
-                this.OnPolicyEnacted?.Invoke(card);
+                await this.SignalRService.HubConnection.InvokeAsync(ServerCallbacks.PolicyCardEnactedName, this.SignalRService.ThisPlayer.LobbyCode, card);
 
                 if (card.Party == this.Board.PolicyCardsResults[0].Party)
                 {
@@ -189,15 +189,16 @@ namespace SecretHitler
 
         private void ChancellorSelected()
         {
-            //this.GameStatus.CurrentChancelor = currentChancellor;
             this.GameStatus.EnactCandidateChancellor();
-            // TODO: Change the icon of the player
+            // Change the icon of the player
+            this.GameStatus.CurrentChancelor.ImageSource = GameImages.ChancelorIcon;
         }
 
         internal void PresidentSelected(Player currentPresident)
         {
             this.GameStatus.CurrentPresident = currentPresident;
-            // TODO: Change the icon of the player
+            // Change the icon of the player
+            this.GameStatus.CurrentPresident.ImageSource = GameImages.PresidentIcon;
         }
 
         private void ClearAllPlayers()
@@ -216,8 +217,6 @@ namespace SecretHitler
     public partial class GameManager : BindableObject
     {        
         public GameStatus GameStatus { get; private set; }
-
-        public event Action<PolicyCard> OnPolicyEnacted;
 
         // Game logic ==========================================================================================================
 

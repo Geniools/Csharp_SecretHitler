@@ -77,27 +77,42 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <!--<Button 
-            Text="Who is who?"
-            Grid.Row="1"
+        
+        <!--Buttons that aid the game-->
+        <Frame
+            Grid.RowSpan="2"
             Grid.Column="7"
-            FontFamily="GermanicaBold"
-            TextColor="Black"
-            BackgroundColor="White"
-            FontSize="Medium"
-            Command="{Binding RevealFascistPlayerIconsCommand}"
-            />-->
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
+            Padding="10"
+            >
+            <Grid RowSpacing="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <Button
-            Text="Next round"
-            Grid.Column="7"
-            FontFamily="GermanicaBold"
-            TextColor="#FBB969"
-            FontSize="Medium"
-            Command="{Binding PlayNextRoundCommand}"
-            IsVisible="{Binding IsPrimary}"
-            />
+                <Button
+                    Text="Next round"
+                    FontFamily="GermanicaBold"
+                    TextColor="#FBB969"
+                    FontSize="Medium"
+                    BackgroundColor="Black"
+                    Command="{Binding PlayNextRoundCommand}"
+                    IsVisible="{Binding IsPrimary}"
+                    />
+
+                <Button 
+                    Text="Who is who?"
+                    Grid.Row="1"                    
+                    FontFamily="GermanicaBold"
+                    TextColor="Black"
+                    BackgroundColor="White"
+                    FontSize="Medium"
+                    Command="{Binding RevealFascistPlayerIconsCommand}"
+                    />
+            </Grid>
+        </Frame>
 
         <!-- Failed elections tracker -->
         <Grid Grid.RowSpan="2">

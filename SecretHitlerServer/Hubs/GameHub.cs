@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SecretHitlerShared;
+using System.Formats.Asn1;
 
 namespace Server.Hubs
 {
@@ -64,9 +65,9 @@ namespace Server.Hubs
             await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.ChancellorSelectedName);
         }
 
-        public async Task PlayerSelectionStatus(string lobbyCode, EntitySelectionStatus status)
+        public async Task EntitySelectionStatus(string lobbyCode, EntitySelectionStatus status)
         {
-            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.PlayerSelectionStatusName, status);
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.EntitySelectionStatusName, status);
         }
 
         public async Task VotingBallot(Player votingPlayer, string primaryPlayerConnectionId, BallotType ballotCard)
@@ -84,6 +85,11 @@ namespace Server.Hubs
         public async Task PolicyCardSelected(Player primaryPlayer, PolicyCard card)
         {
             await Clients.Client(primaryPlayer.ConnectionId).SendAsync(ServerCallbacks.PolicyCardSelectedName, card);
+        }
+
+        public async Task PolicyCardEnacted(string lobbyCode, PolicyCard card)
+        {
+            await Clients.Group(lobbyCode).SendAsync(ServerCallbacks.PolicyCardEnactedName, card);
         }
 
 
